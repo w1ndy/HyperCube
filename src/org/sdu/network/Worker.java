@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
  * Worker class creates a thread to pass the data in / out over a socket,
  * separating every incoming packet. 
  * 
- * @version 0.1 rev 8000 Dec. 17, 2012.
+ * @version 0.1 rev 8001 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Worker extends Observable implements Runnable
@@ -43,6 +43,10 @@ public class Worker extends Observable implements Runnable
 		istream = s.getInputStream();
 		ostream = s.getOutputStream();
 		socket 	= s;
+		
+		socket.setKeepAlive(true);
+		socket.setTcpNoDelay(true);
+		
 		(new Thread(this)).start();
 	}
 
