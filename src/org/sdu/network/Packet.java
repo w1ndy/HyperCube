@@ -1,12 +1,14 @@
 package org.sdu.network;
 
+import java.net.Socket;
+
 /**
  * Warp byte stream data into abstract cloneable Packet class.
  * 
  * @version 0.1 rev 8000 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public abstract class Packet implements Cloneable
+public abstract class Packet
 {
 	/**
 	 * Retrive byte data from packet.
@@ -16,7 +18,9 @@ public abstract class Packet implements Cloneable
 	public abstract byte[] getData();
 	
 	/**
-	 * Clone a packet object.
+	 * Get packet's socket.
+	 * 
+	 * @return	Socket provided the packet.
 	 */
-	public abstract Packet clone();
+	public abstract Socket getSocket();
 }

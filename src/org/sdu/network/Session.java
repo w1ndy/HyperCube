@@ -3,9 +3,10 @@ package org.sdu.network;
 import org.sdu.util.DebugFramework;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.security.InvalidParameterException;
-import java.util.Observer;
+import java.util.Observable;
 
 /**
  * Session class allows servers or clients to post and receive the data
@@ -14,11 +15,10 @@ import java.util.Observer;
  * @version 0.1 rev 8000 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class Session
+public class Session extends Observable implements Runnable
 {
 	private DebugFramework 	debugger;
 	private Socket 			socket;
-	private Worker			worker;
 
 	/**
 	 * Delimiter identifies the beginning of a packet.
@@ -38,9 +38,8 @@ public class Session
 		if(s == null)
 			throw new InvalidParameterException();
 		
-		debugger = DebugFramework.getFramework();
-		socket = s;
-		worker = new Worker(socket);
+		debugger 	= DebugFramework.getFramework();
+		socket 		= s;
 		
 		debugger.print("Session begin: " + s.getInetAddress());
 	}
@@ -53,21 +52,7 @@ public class Session
 	 */
 	public boolean post(Packet p)
 	{
-		if(worker == null) return false;
-		worker.addPacket(p);
-		return true;
-	}
-	
-	/**
-	 * Add a observer which observes incoming packet.
-	 * 
-	 * @param o	Observer
-	 * @return	If the operation is successful
-	 */
-	public boolean addIncomingPacketObserver(Observer o)
-	{
-		if(worker == null) return false;
-		worker.addObserver(o);
+		// TODO add a postman.
 		return true;
 	}
 	
@@ -86,7 +71,42 @@ public class Session
 	 */
 	public void close()
 	{
-		worker.shutdown();
-		worker = null;
+		if(socket != null) {
+			try {
+				socket.close();
+			} catch (Throwable t) {}
+		}
+	}
+
+	@Override
+	public void run()
+	{
+		InputStream istream;
+		byte[] data;
+		int length;
+		
+		byte b;
+		
+		try {
+			istream = socket.getInputStream();
+			while(!socket.isClosed()) {
+				while((b = (byte) istream.read()) == delimiter) {
+					length = (istream.read() << 4) + istream.read();
+					data = new byte[length];
+					istream.read(data, 0, length);
+					IncomingPacket p = new IncomingPacket(socket, data);
+					notifyObservers(p);
+					debugger.print("" + super.countObservers() + " observer(s) notified.");
+				}
+				System.out.print(b);
+			}
+		} catch(Exception e) {
+			if(socket.isClosed()) debugger.print("Session with " + socket.getInetAddress() + " finished.");
+			else {
+				debugger.print(e);
+				debugger.print("Session with " + socket.getInetAddress() + " ended unexpectedly.");
+			}
+		}
+		b = (byte) 0x02;
 	}
 }

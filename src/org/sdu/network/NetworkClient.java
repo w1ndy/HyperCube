@@ -2,10 +2,8 @@ package org.sdu.network;
 
 import org.sdu.util.DebugFramework;
 
-import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.InvalidParameterException;
 
 /**
  * NetworkClient class provide an interface for clients to communicate with server.
@@ -38,21 +36,17 @@ public class NetworkClient
 		Socket s;
 		
 		try {
-			s = new Socket(address, port);
-		} catch (UnknownHostException e) {
-			debugger.print("Cannot reach server " + address + " at port " + port + ".");
-			return false;
-		} catch (IOException e) {
+			s = new Socket();
+			s.connect(new InetSocketAddress(address, port), 10000);
+			Session session = new Session(s);
+			if(!h.onNewSession(session)) return false;
+			(new Thread(session)).start();
+		} catch (Exception e) {
 			debugger.print(e);
+			debugger.print("Failed to connect to server " + address + " at port " + port + ".");
 			return false;
 		}
 		
-		try {
-			h.handle(new Session(s));
-			return true;
-		} catch (InvalidParameterException | IOException e) {
-			debugger.print(e);
-			return false;
-		}
+		return true;
 	}
 }

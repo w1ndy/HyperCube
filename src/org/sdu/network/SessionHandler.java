@@ -4,15 +4,17 @@ package org.sdu.network;
  * SessionHandler class is designed for the Server side to handle each session.
  * It can be implemented in either blocking way or non-blocking way.
  * 
- * @version 0.1 rev 8001 Dec. 17, 2012.
+ * @version 0.1 rev 8002 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public interface SessionHandler
 {
 	/**
 	 * When server is about to accept incoming connection.
+	 * 
+	 * @return 	Whether the server start should proceeded.
 	 */
-	public void onServerStart();
+	public boolean onServerStart();
 	
 	/**
 	 * When server is closed.
@@ -22,7 +24,8 @@ public interface SessionHandler
 	/**
 	 * Handle the incoming session.
 	 * 
-	 * @param s		Reference to a session.
+	 * @param s		Reference to a session
+	 * @return		Whether accept the session or not
 	 */
-	public void handle(Session s);
+	public boolean onNewSession(Session s);
 }

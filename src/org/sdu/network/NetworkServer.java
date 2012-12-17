@@ -3,6 +3,10 @@ package org.sdu.network;
 import org.sdu.util.DebugFramework;
 
 import java.net.ServerSocket;
+import java.security.InvalidParameterException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NetworkServer class provides an simple interface for servers.
@@ -12,10 +16,11 @@ import java.net.ServerSocket;
  */
 public class NetworkServer
 {
-	private ServerSocket 	socket		= null;
-	private DebugFramework 	debugger	= null;
-	private Connection[] 	threadList	= null;
-	private SessionHandler	handler		= null;
+	private ServerSocket 	socket;
+	private DebugFramework 	debugger;
+	private ExecutorService	pool;
+	private SessionHandler	handler;
+	private Connection[]	connList;
 	
 	/**
 	 * Initialize NetworkServer
@@ -23,6 +28,7 @@ public class NetworkServer
 	public NetworkServer()
 	{
 		debugger = DebugFramework.getFramework();
+		pool = Executors.newCachedThreadPool();
 	}
 	
 	/**
@@ -36,6 +42,9 @@ public class NetworkServer
 	 */
 	public boolean start(int port, int connNum, SessionHandler h)
 	{
+		if(connNum <= 0 || h == null)
+			throw new InvalidParameterException();
+		
 		if(socket != null) {
 			debugger.print("Server is already startup and running.");
 			return false;
@@ -44,27 +53,39 @@ public class NetworkServer
 		int i;
 		handler = h;
 		try {
-			socket = new ServerSocket(port);
-			threadList = new Connection[connNum];
+			if(!handler.onServerStart()) {
+				handler = null;
+				return false;
+			}
 			
-			handler.onServerStart();
+			socket = new ServerSocket(port);
+			connList = new Connection[connNum];
+			
 			for(i = 0; i < connNum; i++) {
-				threadList[i] = new Connection(socket, h, i + 1);
+				connList[i] = new Connection(pool, socket, handler);
 			}
 		} catch(Exception e) {
-			if(threadList != null) {
-				for(i = 0; i < threadList.length; i++) {
-					if(threadList[i] != null) threadList[i].shutdown();
-				}
-				threadList = null;
-			}
 			if(socket != null) {
 				try {
 					socket.close();
-				} catch(Exception err) {}
+				} catch(Throwable t) {}
 				socket = null;
 			}
+			
+			if(connList != null) {
+				pool.shutdown();
+				try
+				{
+					pool.awaitTermination(500, TimeUnit.MILLISECONDS);
+				} catch(Throwable t) {}
+				pool.shutdownNow();
+				
+				connList = null;
+			}
+			
+			handler = null;
 			debugger.print(e);
+			debugger.print("Failed to set up server.");
 			return false;
 		}
 		return true;
@@ -75,22 +96,22 @@ public class NetworkServer
 	 */
 	public void shutdown()
 	{
-		if(socket == null) {
+		if(socket == null || socket.isClosed()) {
 			debugger.print("Server is not running.");
+			socket = null;
 			return ;
-		}
-		
-		int i;
-		for(i = 0; i < threadList.length; i++) {
-			threadList[i].shutdown();
 		}
 		
 		try
 		{
 			socket.close();
-		} catch(Exception err) {}
+			pool.shutdown();
+			pool.awaitTermination(500, TimeUnit.MILLISECONDS);
+		} catch(Throwable t) {}
+		pool.shutdownNow();
+		
 		handler.onServerClose();
-		threadList = null;
+		connList = null;
 		socket = null;
 	}
 }

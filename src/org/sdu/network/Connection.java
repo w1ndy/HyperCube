@@ -4,11 +4,13 @@ import org.sdu.util.DebugFramework;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.InvalidParameterException;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Connection class accepts incoming socket connections and creates a session.
  * 
- * @version 0.1 rev 8000 Dec. 17, 2012.
+ * @version 0.1 rev 8001 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Connection implements Runnable
@@ -16,23 +18,25 @@ public class Connection implements Runnable
 	private ServerSocket 	socket;
 	private SessionHandler	handler;
 	private DebugFramework 	debugger;
-	
-	private int 	connid;
-	private boolean closed = false;
+	private ExecutorService pool;
 	
 	/**
-	 * Initialize a connection thread on ServerSocket s with the specified id, 
-	 * and create the sessions using handler h.
+	 * Initialize a listener thread on ServerSocket s, and create the sessions
+	 * in pool p using handler h.
 	 * 
-	 * @param s		ServerSocket
-	 * @param c		Session handler
-	 * @param id	Connection ID (random one is acceptable)
+	 * @param p		Thread pool
+	 * @param s		Socket to be listened
+	 * @param h		Session handler
 	 */
-	public Connection(ServerSocket s, SessionHandler h, int id)
+	public Connection(ExecutorService p, ServerSocket s, SessionHandler h)
 	{
-		socket = s;
+		if(p == null || s == null || h == null)
+			throw new InvalidParameterException();
+		
+		pool 	= p;
+		socket 	= s;
 		handler = h;
-		connid = id;
+		
 		debugger = DebugFramework.getFramework();
 		(new Thread(this)).start();
 	}
@@ -44,32 +48,31 @@ public class Connection implements Runnable
 	public void run()
 	{
 		Socket s;
-		while(!closed) {
-			try
-			{
-				while(!closed)
-				{
+		while(!socket.isClosed()) {
+			try {
+				while(!socket.isClosed()) {
 					synchronized(socket) {
 						s = socket.accept();
 					}
-					debugger.print("Incoming connection accepted by Thread "
-							+ connid + ": " + s.getInetAddress());
-					handler.handle(new Session(s));
+					Session session = new Session(s);
+					if(!handler.onNewSession(session)) continue;
+					debugger.print("Incoming session accepted: " + s.getInetAddress());
+					pool.execute(session);
 				}
 			} catch(Exception e) {
-				debugger.print(e);
+				if(socket.isClosed()) debugger.print("Connection closed.");
+				else debugger.print(e);
 			}
-			if(closed) debugger.print("Connection " + connid + " closed.");
 		}
 	}
 	
 	/**
 	 * Shutdown the thread.
 	 * ServerSocket must be closed later on.
+	 * 
+	 * @deprecated
 	 */
 	public void shutdown()
 	{
-		if(closed) return ;
-		closed = true;
 	}
 }
