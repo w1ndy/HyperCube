@@ -9,6 +9,12 @@ import org.sdu.util.DebugFramework;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * A echo server test.
+ * 
+ * @version 0.1 rev 8001 Dec. 17, 2012.
+ * Copyright (c) HyperCube Dev Team.
+ */
 public class EchoServerTest implements Observer, SessionHandler
 {
 	public static final int port = 21071;
@@ -22,6 +28,9 @@ public class EchoServerTest implements Observer, SessionHandler
 		new EchoServerTest();
 	}
 
+	/**
+	 * Initialize echo server.
+	 */
 	public EchoServerTest()
 	{
 		server = new NetworkServer();
@@ -44,7 +53,7 @@ public class EchoServerTest implements Observer, SessionHandler
 		debugger.print("Notification received");
 		if(session instanceof Session && p instanceof Packet) {
 			try {
-				String s = new String(((Packet)p).getData(), "ANSI");
+				String s = new String(((Packet)p).getData(), "ISO-8859-1");
 				debugger.print(s);
 			} catch (Exception e) {
 				debugger.print(e);
@@ -55,7 +64,6 @@ public class EchoServerTest implements Observer, SessionHandler
 	@Override
 	public boolean onNewSession(Session s) {
 		s.addObserver(this);
-		debugger.print("Observer added.");
 		return true;
 	}
 }

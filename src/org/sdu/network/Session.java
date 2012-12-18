@@ -12,7 +12,7 @@ import java.util.Observable;
  * Session class allows servers or clients to post and receive the data
  * in a non-blocking way.
  * 
- * @version 0.1 rev 8000 Dec. 17, 2012.
+ * @version 0.1 rev 8002 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Session extends Observable implements Runnable
@@ -40,6 +40,9 @@ public class Session extends Observable implements Runnable
 		
 		debugger 	= DebugFramework.getFramework();
 		socket 		= s;
+		
+		socket.setTcpNoDelay(true);
+		socket.setKeepAlive(true);
 		
 		debugger.print("Session begin: " + s.getInetAddress());
 	}
@@ -83,30 +86,44 @@ public class Session extends Observable implements Runnable
 	{
 		InputStream istream;
 		byte[] data;
-		int length;
-		
-		byte b;
+		int length, b, s1, s2;
 		
 		try {
 			istream = socket.getInputStream();
-			while(!socket.isClosed()) {
-				while((b = (byte) istream.read()) == delimiter) {
-					length = (istream.read() << 4) + istream.read();
-					data = new byte[length];
-					istream.read(data, 0, length);
-					IncomingPacket p = new IncomingPacket(socket, data);
-					notifyObservers(p);
-					debugger.print("" + super.countObservers() + " observer(s) notified.");
+			while(!socket.isInputShutdown() && !socket.isClosed()) {
+				while((b = istream.read()) != -1) {
+					if(b == delimiter) {
+						s1 = istream.read();
+						s2 = istream.read();
+						if(s1 == -1 || s2 == -1) {
+							b = -1;
+							break;
+						}
+						
+						length = (s1 << 4) + s2;
+						data = new byte[length];
+						b = istream.read(data, 0, length);
+						if(b == -1) break;
+						
+						IncomingPacket p = new IncomingPacket(socket, data);
+						setChanged();
+						notifyObservers(p);
+					}
 				}
+				if(b == -1) {
+					socket.close();
+					break;
+				}
+				// Debug output //
 				System.out.print(b);
 			}
 		} catch(Exception e) {
-			if(socket.isClosed()) debugger.print("Session with " + socket.getInetAddress() + " finished.");
-			else {
+			if(!socket.isClosed()) {
 				debugger.print(e);
 				debugger.print("Session with " + socket.getInetAddress() + " ended unexpectedly.");
 			}
 		}
-		b = (byte) 0x02;
+		if(socket.isClosed())
+			debugger.print("Session with " + socket.getInetAddress() + " finished.");
 	}
 }
