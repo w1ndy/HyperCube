@@ -2,6 +2,7 @@ package org.sdu.test;
 
 import org.sdu.network.NetworkServer;
 import org.sdu.network.Packet;
+import org.sdu.network.Postman;
 import org.sdu.network.Session;
 import org.sdu.network.SessionHandler;
 import org.sdu.util.DebugFramework;
@@ -12,7 +13,7 @@ import java.util.Observer;
 /**
  * A echo server test.
  * 
- * @version 0.1 rev 8001 Dec. 17, 2012.
+ * @version 0.1 rev 8002 Dec. 18, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EchoServerTest implements Observer, SessionHandler
@@ -54,6 +55,7 @@ public class EchoServerTest implements Observer, SessionHandler
 		if(session instanceof Session && p instanceof Packet) {
 			try {
 				String s = new String(((Packet)p).getData(), "ISO-8859-1");
+				Postman.postPacket((Packet)p);
 				debugger.print(s);
 			} catch (Exception e) {
 				debugger.print(e);

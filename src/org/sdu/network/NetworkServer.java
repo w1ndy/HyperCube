@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * NetworkServer class provides an simple interface for servers.
  * 
- * @version 0.1 rev 8001 Dec. 17, 2012.
+ * @version 0.1 rev 8002 Dec. 18, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class NetworkServer
@@ -27,6 +27,7 @@ public class NetworkServer
 	 */
 	public NetworkServer()
 	{
+		Postman.initialize();
 		debugger = DebugFramework.getFramework();
 		pool = Executors.newCachedThreadPool();
 	}
@@ -109,6 +110,7 @@ public class NetworkServer
 			pool.awaitTermination(500, TimeUnit.MILLISECONDS);
 		} catch(Throwable t) {}
 		pool.shutdownNow();
+		Postman.release();
 		
 		handler.onServerClose();
 		connList = null;
