@@ -13,7 +13,7 @@ import java.util.Observer;
 /**
  * A echo server test.
  * 
- * @version 0.1 rev 8002 Dec. 18, 2012.
+ * @version 0.1 rev 8003 Dec. 19, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EchoServerTest implements Observer, SessionHandler
@@ -51,12 +51,12 @@ public class EchoServerTest implements Observer, SessionHandler
 
 	@Override
 	public void update(Observable session, Object p) {
-		debugger.print("Notification received");
+		//debugger.print("Notification received");
 		if(session instanceof Session && p instanceof Packet) {
 			try {
-				String s = new String(((Packet)p).getData(), "ISO-8859-1");
+				//String s = new String(((Packet)p).getData(), "ISO-8859-1");
 				Postman.postPacket((Packet)p);
-				debugger.print(s);
+				//debugger.print(s);
 			} catch (Exception e) {
 				debugger.print(e);
 			}

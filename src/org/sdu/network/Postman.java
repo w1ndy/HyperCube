@@ -1,7 +1,8 @@
 package org.sdu.network;
 
 import java.io.OutputStream;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Postman class is static class helper sending packet asynchronously.
  * 
- * @version 0.1 rev 8000 Dec. 18, 2012.
+ * @version 0.1 rev 8001 Dec. 19, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Postman implements Runnable
@@ -20,7 +21,7 @@ public class Postman implements Runnable
 	public static final int postThreadMaxCount = 10;
 	
 	private static ExecutorService pool = null;
-	private static PriorityQueue<Packet> sendQueue = null;
+	private static List<Packet> sendQueue = null;
 	
 	/**
 	 * Initialize the postman.
@@ -30,7 +31,7 @@ public class Postman implements Runnable
 		if(pool == null)
 			pool = Executors.newFixedThreadPool(postThreadMaxCount);
 		if(sendQueue == null)
-			sendQueue = new PriorityQueue<Packet>();
+			sendQueue = new LinkedList<Packet>();
 	}
 	
 	/**
@@ -60,12 +61,14 @@ public class Postman implements Runnable
 	{
 		try {
 			synchronized(sendQueue) {
-				sendQueue.offer(p);
+				sendQueue.add(p);
 			}
 			synchronized(pool) {
-				pool.execute(new Postman());
+				pool.submit(new Postman());
 			}
-		} catch(Throwable t) {}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -74,8 +77,12 @@ public class Postman implements Runnable
 	@Override
 	public void run() {
 		try {
-			synchronized(sendQueue) {
-				Packet p = sendQueue.poll();
+			Packet p;
+			while(true) {
+				synchronized(sendQueue) {
+					if(sendQueue.isEmpty()) break;
+					p = sendQueue.remove(0);
+				}
 				OutputStream ostream = p.getSocket().getOutputStream();
 				
 				// pack the packet according to format.
@@ -84,6 +91,8 @@ public class Postman implements Runnable
 				ostream.write(p.getData().length & 0xff);
 				ostream.write(p.getData());
 			}
-		} catch(Throwable t) {}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
