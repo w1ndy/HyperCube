@@ -55,7 +55,7 @@ public class Session extends Observable implements Runnable
 	 */
 	public boolean post(Packet p)
 	{
-		// TODO add a postman.
+		Postman.postPacket(p);
 		return true;
 	}
 	
