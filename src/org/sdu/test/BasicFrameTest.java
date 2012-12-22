@@ -10,7 +10,7 @@ public class BasicFrameTest
 	public static void main(String[] args)
 	{
 		UIHelper.loadResource();
-		BasicFrame frame = new BasicFrame("²âÊÔ´°¿Ú", "HyperCube");
+		BasicFrame frame = new BasicFrame("æµ‹è¯•çª—å£", "HyperCube");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(0, 0);
 		frame.setVisible(true);
