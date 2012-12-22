@@ -1,11 +1,16 @@
 package org.sdu.ui;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
  * GaussianBlur class implements the Gaussian Blur effect.
  * 
- * @version 0.1 rev 8000 Dec. 21, 2012.
+ * @version 0.1 rev 8001 Dec. 22, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class GaussianBlur
@@ -80,6 +85,32 @@ public class GaussianBlur
 						+ (((int)gv << 8) & 0x0000ff00) + (((int)bv) & 0x000000ff));
 			}
 		}
+	}
+	
+	/**
+	 * Generate a shadowed text image.
+	 * 
+	 * @param text			Text
+	 * @param font			Font
+	 * @param metrics		Font metrics
+	 * @param shadow		Shadow color
+	 * @param foreground	Text color
+	 * @return
+	 */
+	public BufferedImage generateShadowText(String text, Font font, FontMetrics metrics, Color shadow, Color foreground)
+	{
+		BufferedImage buf = new BufferedImage(radius * 2 + metrics.stringWidth(text), radius * 2 + metrics.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = (Graphics2D)buf.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g.setFont(font);
+		g.setColor(shadow);
+		g.drawString(text, radius, radius + metrics.getAscent());
+		blur(buf);
+		g.setColor(foreground);
+		g.drawString(text, radius, radius + metrics.getAscent());
+		g.dispose();
+		return buf;		
 	}
 	
 	private static GaussianBlur r4blur = null;
