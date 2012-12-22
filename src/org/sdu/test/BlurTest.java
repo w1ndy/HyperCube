@@ -36,7 +36,7 @@ public class BlurTest
 		g.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 18));
 		g.setColor(Color.BLACK);
 		g.drawString("µÇÂ¼", 5, 17);
-		GaussianBlur.getFourRadiusBlur().blur(image);
+		GaussianBlur.getDefaultBlur().blur(image);
 		g.setColor(Color.WHITE);
 		g.drawString("µÇÂ¼", 5, 17);
 		g.dispose();

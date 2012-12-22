@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 /**
  * GaussianBlur class implements the Gaussian Blur effect.
  * 
- * @version 0.1 rev 8001 Dec. 22, 2012.
+ * @version 0.1 rev 8002 Dec. 22, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class GaussianBlur
@@ -113,18 +113,18 @@ public class GaussianBlur
 		return buf;		
 	}
 	
-	private static GaussianBlur r4blur = null;
+	private static GaussianBlur default_blur = null;
 	
 	/**
 	 * Get Gaussian Blur in radius 4.
 	 * 
 	 * @return Gaussian Blur handle
 	 */
-	public static GaussianBlur getFourRadiusBlur()
+	public static GaussianBlur getDefaultBlur()
 	{
-		if(r4blur == null) {
-			r4blur = new GaussianBlur(4, 1.3);
+		if(default_blur == null) {
+			default_blur = new GaussianBlur(UIHelper.defaultBlurRadius, UIHelper.defaultBlurRadius);
 		}
-		return r4blur;
+		return default_blur;
 	}
 }
