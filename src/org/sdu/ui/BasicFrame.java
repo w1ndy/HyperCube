@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8001 Dec. 22, 2012.
+ * @version 0.1 rev 8002 Dec. 23, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -275,7 +275,6 @@ public class BasicFrame extends JFrame
 		setMeasurement();
 		makeMovable();
 		
-		setLayout(null);
 		setUndecorated(true);
 		setBackground(new Color(0, 0, 0, 0));
 
@@ -298,5 +297,7 @@ public class BasicFrame extends JFrame
 				}
 			}
 		});
+		
+		setLayout(null);
 	}
 }
