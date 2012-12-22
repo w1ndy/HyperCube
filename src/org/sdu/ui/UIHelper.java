@@ -67,13 +67,13 @@ public class UIHelper
 			image = ImageIO.read(new File("art/ui/avatar/none.png"));
 			mapper.put("ui.avatar.none", (Object)image);
 			
-			font = new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 28);
+			font = new Font("å¾®è½¯é›…é»‘", Font.BOLD, 28);
 			mapper.put("ui.font.title", (Object)font);
 			
-			font = new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 14);
+			font = new Font("å¾®è½¯é›…é»‘", Font.BOLD, 14);
 			mapper.put("ui.font.subtitle", (Object)font);
 			
-			font = new Font("Î¢ÈíÑÅºÚ", 0, 10);
+			font = new Font("å¾®è½¯é›…é»‘", 0, 10);
 			mapper.put("ui.font.text", (Object)font);
 		} catch(Exception e) {
 			debugger.print(e);

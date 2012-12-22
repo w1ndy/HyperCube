@@ -33,12 +33,12 @@ public class BlurTest
 		        RenderingHints.KEY_TEXT_ANTIALIASING,
 		        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setBackground(new Color(0, true));		
-		g.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 18));
+		g.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 18));
 		g.setColor(Color.BLACK);
-		g.drawString("µÇÂ¼", 5, 17);
+		g.drawString("ç™»å½•", 5, 17);
 		GaussianBlur.getDefaultBlur().blur(image);
 		g.setColor(Color.WHITE);
-		g.drawString("µÇÂ¼", 5, 17);
+		g.drawString("ç™»å½•", 5, 17);
 		g.dispose();
 		
 		JLabel label = new JLabel(new ImageIcon(image));
