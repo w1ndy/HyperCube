@@ -32,7 +32,7 @@ public class BlurTest
 		g.setRenderingHint(
 		        RenderingHints.KEY_TEXT_ANTIALIASING,
 		        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g.setBackground(new Color(0, true));		
+		g.setBackground(new Color(0, true));
 		g.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 18));
 		g.setColor(Color.BLACK);
 		g.drawString("µÇÂ¼", 5, 17);
