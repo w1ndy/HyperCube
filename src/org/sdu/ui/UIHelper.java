@@ -20,7 +20,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8002 Dec. 25, 2012.
+ * @version 0.1 rev 8003 Dec. 25, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -167,6 +167,7 @@ public class UIHelper
 					Element elem = (Element)node;
 					name = elem.getAttribute("name");
 					type = elem.getAttribute("type");
+					debugger.print("Loading resource \"" + name + "\" of type \"" + type + "\"...");
 					
 					if(type.equals("image")) {
 						if(!loadImage(elem, name, folder)) return false;
