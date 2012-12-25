@@ -7,6 +7,12 @@ import java.net.URL;
 
 import javax.swing.*;
 
+/**
+ * Demo of database management application.
+ * 
+ * @version 0.1 rev 8002 Dec. 25, 2012.
+ * Copyright (c) HyperCube Dev Team.
+ */
 public class Main extends JFrame {
 
 	private JList list;
@@ -127,20 +133,16 @@ public class Main extends JFrame {
 				}
 			}
 		});
+
+		// Lay out
 		JScrollPane listScroller = new JScrollPane(list);
-		listScroller.setPreferredSize(new Dimension(250, 80));
 		listScroller.setAlignmentX(LEFT_ALIGNMENT);
 
-		// Create a container so that we can add a title around
-		// the scroll pane. Can't add a title directly to the
-		// scroll pane because its background would be white.
-		// Lay out the label and scroll pane from top to bottom.
 		JPanel listPane = new JPanel();
 		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
 		listPane.add(listScroller);
 		listPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-		// Lay out
 		JPanel topPane = new JPanel();
 		topPane.setLayout(new BoxLayout(topPane, BoxLayout.LINE_AXIS));
 		topPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));

@@ -1,8 +1,15 @@
 package org.sdu.database;
+
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Build database connection.
+ * 
+ * @version 0.1 rev 8001 Dec. 25, 2012.
+ * Copyright (c) HyperCube Dev Team.
+ */
 public class Database {
 
 	/**
