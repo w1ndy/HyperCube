@@ -15,7 +15,7 @@ import javax.swing.Timer;
 /**
  * AvatarBox class implements an avatar box with switchable status icon.
  * 
- * @version 0.1 rev 8000 Dec. 23, 2012.
+ * @version 0.1 rev 8001 Dec. 25, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class AvatarBox extends JLabel
@@ -35,10 +35,10 @@ public class AvatarBox extends JLabel
 		super();
 		
 		// Fetch resources.
-		imageAvatarFrame = (Image)UIHelper.getResource("ui.avatar.frame");
-		imageNoAvatar = (Image)UIHelper.getResource("ui.avatar.none");
-		imageOnline = (Image)UIHelper.getResource("ui.avatar.online");
-		imageInvisible = (Image)UIHelper.getResource("ui.avatar.invisible");
+		imageAvatarFrame = (Image)UIHelper.getResource("ui.avatarbox.frame");
+		imageNoAvatar = (Image)UIHelper.getResource("ui.avatarbox.none");
+		imageOnline = (Image)UIHelper.getResource("ui.avatarbox.online");
+		imageInvisible = (Image)UIHelper.getResource("ui.avatarbox.invisible");
 		
 		isInvisible = false;
 		statusOpacity = 220;

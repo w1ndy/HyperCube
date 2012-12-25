@@ -3,9 +3,16 @@ package org.sdu.ui;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import org.sdu.util.DebugFramework;
 
@@ -13,7 +20,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8001 Dec. 23, 2012.
+ * @version 0.1 rev 8002 Dec. 25, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -79,44 +86,101 @@ public class UIHelper
 	public static final int normalFadeRate = 20;
 	
 	/**
+	 * Load image resources.
+	 */
+	public static boolean loadImage(Element elem, String name, File folder)
+	{
+		try {
+			Image image = ImageIO.read(new File(folder, elem.getTextContent()));
+			mapper.put(name, (Object)image);
+		} catch(Exception e) {
+			debugger.print("Failed to load resource \"" + name + "\": " + e);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Load font resources.
+	 */
+	public static boolean loadFont(Element elem, String name, File folder)
+	{
+		try {
+			String fontface, size_str, bold_str, italic_str;
+			fontface = elem.getElementsByTagName("fontface").item(0).getTextContent();
+			size_str = elem.getElementsByTagName("size").item(0).getTextContent();
+			bold_str = elem.getElementsByTagName("bold").item(0).getTextContent();
+			italic_str = elem.getElementsByTagName("italic").item(0).getTextContent();
+			
+			Font font = new Font(fontface,
+					(Boolean.valueOf(bold_str).booleanValue() ? Font.BOLD : 0)
+						| (Boolean.valueOf(italic_str).booleanValue() ? Font.ITALIC : 0),
+					Integer.valueOf(size_str).intValue());
+			mapper.put(name, (Object)font);
+		} catch(Exception e) {
+			debugger.print("Failed to load resource \"" + name + "\": " + e);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Load string resources.
+	 */
+	public static boolean loadString(Element elem, String name, File folder)
+	{
+		try {
+			mapper.put(name, (Object)elem.getTextContent());
+		} catch(Exception e) {
+			debugger.print("Failed to load resource \"" + name + "\": " + e);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Load all resources.
-	 * 
 	 * @return
 	 */
-	public static boolean loadResource()
+	public static boolean loadResource(String resourceIndex)
 	{
-		Image image;
-		Font font;
+		File fileIndex = new File(resourceIndex);
+		if(!fileIndex.exists()) return false;
+		File folder = new File("./art");
+		if(!folder.exists() || !folder.isDirectory()) return false;
+		
 		try {
-			image = ImageIO.read(new File("art/ui/common/frame.png"));
-			mapper.put("ui.common.frame", (Object)image);
+			Document doc = (DocumentBuilderFactory.newInstance()).newDocumentBuilder().parse(fileIndex);
+			doc.getDocumentElement().normalize();
 			
-			image = ImageIO.read(new File("art/ui/avatar/frame.png"));
-			mapper.put("ui.avatar.frame", (Object)image);
+			Node node;
+			String name, type;
 			
-			image = ImageIO.read(new File("art/ui/avatar/online.png"));
-			mapper.put("ui.avatar.online", (Object)image);
+			node = doc.getElementsByTagName("resource").item(0);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				throw new InvalidParameterException("No resource archive found.");
+			NodeList nodeList = ((Element)node).getElementsByTagName("entry");
 			
-			image = ImageIO.read(new File("art/ui/avatar/invisible.png"));
-			mapper.put("ui.avatar.invisible", (Object)image);
-			
-			image = ImageIO.read(new File("art/ui/avatar/none.png"));
-			mapper.put("ui.avatar.none", (Object)image);
-			
-			font = new Font("微软雅黑", Font.BOLD, 28);
-			mapper.put("ui.font.title", (Object)font);
-			
-			font = new Font("微软雅黑", Font.BOLD, 14);
-			mapper.put("ui.font.subtitle", (Object)font);
-			
-			font = new Font("微软雅黑", 0, 10);
-			mapper.put("ui.font.text", (Object)font);
-			
-			mapper.put("ui.string.login.title", (Object)"登录");
-			mapper.put("ui.string.login.subtitle", (Object)"HyperCube™");
+			for(int i = 0; i < nodeList.getLength(); i++) {
+				node = nodeList.item(i);
+				if(node.getNodeType() == Node.ELEMENT_NODE) {
+					Element elem = (Element)node;
+					name = elem.getAttribute("name");
+					type = elem.getAttribute("type");
+					
+					if(type.equals("image")) {
+						if(!loadImage(elem, name, folder)) return false;
+					} else if(type.equals("font")) {
+						if(!loadFont(elem, name, folder)) return false;
+					} else if(type.equals("string")) {
+						if(!loadString(elem, name, folder)) return false;
+					} else {
+						debugger.print("Invalid resource type: " + type);
+					}
+				}
+			}
 		} catch(Exception e) {
-			debugger.print(e);
-			debugger.print("Failed to read resource.");
+			debugger.print("Failed to read resource file \"" + resourceIndex + "\": " + e);
 			return false;
 		}
 		return true;
@@ -130,17 +194,25 @@ public class UIHelper
 	 */
 	public static void addResource(String index, Object resource)
 	{
-		mapper.put(index, resource);
+		Object obj = mapper.put(index, resource);
+		if(obj != null) {
+			debugger.print("Resource overwritten: " + index);
+		}
 	}
 	
 	/**
-	 * Get a resource by its index
+	 * Get a resource by its index.
+	 * return null if resource not found.
 	 * 
 	 * @param index
 	 * @return
 	 */
 	public static Object getResource(String index)
 	{
-		return mapper.get(index);
+		Object obj = mapper.get(index);
+		if(obj == null) {
+			debugger.print("Resource not found: " + index);
+		}
+		return obj;
 	}
 }
