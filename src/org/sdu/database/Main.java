@@ -4,28 +4,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.ResultSet;
 
 import javax.swing.*;
 
 /**
  * Demo of database management application.
  * 
- * @version 0.1 rev 8002 Dec. 25, 2012.
- * Copyright (c) HyperCube Dev Team.
+ * @version 0.1 rev 8003 Dec. 26, 2012
+ * Copyright (c) HyperCube Dev Team
  */
 public class Main extends JFrame {
 
 	private JList list;
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);
+	String[] name = new String[1000], idList = new String[1000],
+			faculty = new String[1000], pic = new String[1000],
+			idnum = new String[1000];
 
 	class pictextlist extends JPanel implements ListCellRenderer {
 		private boolean isSelected;
-		
+		private int index;
+
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index,
-			      boolean isSelected, boolean cellHasFocus) {
-			this.isSelected=isSelected;
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			this.isSelected = isSelected;
+			this.index = index;
 			return this;
 		}
 
@@ -33,21 +39,28 @@ public class Main extends JFrame {
 			if (isSelected) {
 				g.setColor(UIManager.getColor("controlHighlight"));
 				g.fillRect(0, 0, 200, 100);
+				g.setColor(new Color(0xFFFFFF));
 			}
-			g.drawImage(new ImageIcon("art/database/nopic.png").getImage(), 0, 0, this);
-			try {
-				URL picURL = new URL("http://127.0.0.1/pic/1.jpg");
-				g.drawImage(
-						new ImageIcon(new ImageIcon(picURL).getImage()
-								.getScaledInstance(75, 100,
-										java.awt.Image.SCALE_SMOOTH))
-								.getImage(), 0, 0, this);
-			} catch (MalformedURLException e) {}
-			g.setColor(new Color(0x000000));
-			g.drawString("zgy", 80, 20);
-			g.drawString("sdfkj", 80, 40);
-			g.drawString("sdfkj", 80, 60);
-			g.drawString("sdfkj", 80, 80);
+			g.drawImage(new ImageIcon("art/database/nopic.png").getImage(), 0,
+					0, this);
+			if (pic[index].length() == 32)
+				try {
+					URL picURL = new URL("http://127.0.0.1/pic/"
+							+ pic[index].substring(0, pic[index].length() - 5)
+							+ "/"
+							+ pic[index].substring(pic[index].length() - 5)
+							+ ".jpg");
+					g.drawImage(
+							new ImageIcon(new ImageIcon(picURL).getImage()
+									.getScaledInstance(75, 100,
+											java.awt.Image.SCALE_SMOOTH))
+									.getImage(), 0, 0, this);
+				} catch (MalformedURLException e) {
+				}
+			g.drawString(name[index], 80, 20);
+			g.drawString(idList[index], 80, 40);
+			g.drawString(faculty[index], 80, 60);
+			g.drawString("山东大学", 80, 80);
 		}
 
 		public Dimension getPreferredSize() {
@@ -74,13 +87,13 @@ public class Main extends JFrame {
 
 		JMenuItem importData = new JMenuItem("导入数据库...");
 		dataMenu.add(importData);
-		
-		JMenuItem exportData=new JMenuItem("导出数据库...");
+
+		JMenuItem exportData = new JMenuItem("导出数据库...");
 		dataMenu.add(exportData);
-		
-		JMenuItem exportCurrentData=new JMenuItem("导出当前条目...");
+
+		JMenuItem exportCurrentData = new JMenuItem("导出当前条目...");
 		dataMenu.add(exportCurrentData);
-		
+
 		// Buttons
 		JButton statButton = new JButton("统计");
 		// statButton.addActionListener(this);
@@ -89,39 +102,69 @@ public class Main extends JFrame {
 		// filterButton.addActionListener(this);
 		getRootPane().setDefaultButton(filterButton);
 
-		JButton addButton = new JButton(new ImageIcon("art/database/addicon.png"));
+		JButton addButton = new JButton(new ImageIcon(
+				"art/database/addicon.png"));
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 
-		JButton deleleButton = new JButton(new ImageIcon("art/database/deleteicon.png"));
+		JButton deleleButton = new JButton(new ImageIcon(
+				"art/database/deleteicon.png"));
 		deleleButton.setPreferredSize(dataButton);
 
 		JToggleButton textmode = new JToggleButton(new ImageIcon(
 				"art/database/texticon.png"), true);
-		textmode.setSelectedIcon(new ImageIcon("art/database/texticonselected.png"));
+		textmode.setSelectedIcon(new ImageIcon(
+				"art/database/texticonselected.png"));
 		textmode.setPreferredSize(modeButton);
 
 		JToggleButton pictextmode = new JToggleButton(new ImageIcon(
 				"art/database/pictexticon.png"));
-		pictextmode.setSelectedIcon(new ImageIcon("art/database/pictexticonselected.png"));
+		pictextmode.setSelectedIcon(new ImageIcon(
+				"art/database/pictexticonselected.png"));
 		pictextmode.setPreferredSize(modeButton);
 
 		JToggleButton picmode = new JToggleButton(new ImageIcon(
 				"art/database/picicon.png"));
-		picmode.setSelectedIcon(new ImageIcon("art/database/piciconselected.png"));
+		picmode.setSelectedIcon(new ImageIcon(
+				"art/database/piciconselected.png"));
 		picmode.setPreferredSize(modeButton);
 
+		String listLabel = "";
+		String[] id = new String[1000];
+		try {
+			Database stuData = new Database("stu");
+			ResultSet rs = stuData.getAll();
+			int i = 0;
+			while (rs.next() && (i < 1000)) {
+				name[i] = rs.getString("name");
+				id[i] = rs.getString("id");
+				faculty[i] = rs.getString("faculty");
+				pic[i] = rs.getString("pic");
+				i++;
+			}
+			if (i == 1000) {
+				listLabel = "1~1000 of " + stuData.getAllCount();
+				idList = id;
+			} else {
+				listLabel = "All " + i;
+				idList = new String[i];
+				for (int j = 0; j < i; j++)
+					idList[j] = id[j];
+			}
+			rs.close();
+			stuData.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
 		// Label
-		JLabel totalNum = new JLabel("Showing 1~1000 of 47362");
+		JLabel totalNum = new JLabel(listLabel);
 
 		// List
-		String[] name = new String[1000];
-		for (int i = 0; i < 1000; i++)
-			name[i] = "1";
-		list = new JList(name);
+		list = new JList(idList);
 		list.setCellRenderer(new pictextlist());
 		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -176,7 +219,8 @@ public class Main extends JFrame {
 			public void run() {
 				try {
 					Main frame = new Main();
-					frame.setIconImage(new ImageIcon("art/database/icon.png").getImage());
+					frame.setIconImage(new ImageIcon("art/database/icon.png")
+							.getImage());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
