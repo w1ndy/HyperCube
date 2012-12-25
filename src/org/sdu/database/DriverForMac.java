@@ -5,11 +5,11 @@ import javax.swing.*;
 import com.apple.eawt.*;
 
 /**
- * Launch the database management application on OS X.
- * Optimized for menu bar and dock.
+ * Launch the database management application on OS X. Optimized for menu bar
+ * and dock.
  * 
- * @version 0.1 rev 8001 Dec. 25, 2012.
- * Copyright (c) HyperCube Dev Team.
+ * @version 0.1 rev 8001 Dec. 25, 2012
+ * Copyright (c) HyperCube Dev Team
  */
 public class DriverForMac {
 	public static void main(String[] args) {
