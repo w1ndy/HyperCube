@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 /**
  * RectBorder class implements a rectangular border with specified color.
  *
- * @version 0.1 rev 8000 Dec. 25, 2012.
+ * @version 0.1 rev 8001 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class RectBorder implements Border
@@ -28,6 +28,17 @@ public class RectBorder implements Border
 	public RectBorder()
 	{
 		super();
+		colorBorder = Color.BLACK;
+		stroke = new BasicStroke(4);
+	}
+	
+	/**
+	 * Initialize RectBorder object with specified color.
+	 */
+	public RectBorder(Color color)
+	{
+		super();
+		colorBorder = color;
 		stroke = new BasicStroke(4);
 	}
 	

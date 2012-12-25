@@ -1,5 +1,6 @@
 package org.sdu.ui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
@@ -20,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8003 Dec. 25, 2012.
+ * @version 0.1 rev 8004 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -56,10 +57,10 @@ public class UIHelper
 	public static final int loginFrameHeight = 185;
 	
 	/**
-	 * Default avatar box offset.
+	 * Default avatar box offset in login window.
 	 */
-	public static final int avatarBoxOffsetX = 10;
-	public static final int avatarBoxOffsetY = 68;
+	public static final int avatarBoxLoginOffsetX = 10;
+	public static final int avatarBoxLoginOffsetY = 68;
 	
 	/**
 	 * Default avatar box size.
@@ -84,6 +85,30 @@ public class UIHelper
 	 */
 	public static final int normalFadeFrequency = 25;
 	public static final int normalFadeRate = 20;
+	
+	/**
+	 * Default TextBox size.
+	 */
+	public static final int textBoxWidth = 175;
+	public static final int textBoxHeight = 25;
+	
+	/**
+	 * Default username TextBox position.
+	 */
+	public static final int usernameBoxOffsetX = 110;
+	public static final int usernameBoxOffsetY = 80;
+	
+	/**
+	 * Default password TextBox position.
+	 */
+	public static final int passwordBoxOffsetX = 110;
+	public static final int passwordBoxOffsetY = 110;
+	
+	/**
+	 * Default color definition.
+	 */
+	public static final Color lightColor = new Color(0, 148, 255);
+	public static final Color darkColor = new Color(128, 128, 128);
 	
 	/**
 	 * Load image resources.
@@ -137,6 +162,8 @@ public class UIHelper
 		}
 		return true;
 	}
+	
+	// TODO load color resource here.
 	
 	/**
 	 * Load all resources.
