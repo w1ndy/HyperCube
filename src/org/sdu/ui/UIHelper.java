@@ -117,6 +117,26 @@ public class UIHelper
 	public static final int registerLinkHeight = 15;
 	
 	/**
+	 * Default progress bar size
+	 */
+	public static final int progressBarWidth = 302;
+	public static final int progressBarHeight = 5;
+	
+	/**
+	 * Default progress bar parameters
+	 */
+	public static final int progressBarFrequency = 25;
+	public static final int progressBarRate = 4;
+	public static final float progressBarInterval = 100.0f;
+	public static final Color progressBarColor = new Color(0x7fc2e2);
+	
+	/**
+	 * Default progress bar position
+	 */
+	public static final int progressBarLoginOffsetX = 4;
+	public static final int progressBarLoginOffsetY = 176;
+	
+	/**
 	 * Default color definition.
 	 */
 	public static final Color lightColor = new Color(0, 148, 255);

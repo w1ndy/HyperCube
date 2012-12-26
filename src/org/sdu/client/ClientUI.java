@@ -1,20 +1,26 @@
 package org.sdu.client;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Observable;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.BasicFrame;
 import org.sdu.ui.HyperLink;
 import org.sdu.ui.PasswordBox;
+import org.sdu.ui.ProgressBar;
 import org.sdu.ui.RectBorder;
 import org.sdu.ui.TextBox;
 import org.sdu.ui.UIHelper;
@@ -25,18 +31,23 @@ import org.sdu.ui.UIHelper;
  * @version 0.1 rev 8002 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class ClientUI
+public class ClientUI extends Observable
 {
 	private BasicFrame frame;
 	private AvatarBox avatarBox;
 	private TextBox	userBox;
 	private PasswordBox passBox;
 	private HyperLink registerLink;
+	private ProgressBar progressor;
+	private JLabel focus_null;
 	
 	private Action actionCloseOnEscape = new Action() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(frame != null) frame.dispose();
+			if(frame != null) {
+				WindowEvent wev = new WindowEvent(frame, WindowEvent.WINDOW_CLOSING);
+				Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+			}
 		}
 
 		@Override
@@ -76,6 +87,11 @@ public class ClientUI
 		frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("ESCAPE"), "on_escape");
 		
+		focus_null = new JLabel();
+		focus_null.setBounds(0, 0, 1, 1);
+		focus_null.setBackground(new Color(0, 0, 0, 0));
+		frame.add(focus_null);
+		
 		avatarBox = new AvatarBox();
 		avatarBox.setBounds(UIHelper.avatarBoxLoginOffsetX, UIHelper.avatarBoxLoginOffsetY,
 				UIHelper.avatarBoxWidth, UIHelper.avatarBoxHeight);
@@ -103,6 +119,24 @@ public class ClientUI
 		passBox.setBorder(new RectBorder(UIHelper.darkColor));
 		passBox.setBounds(UIHelper.passwordBoxOffsetX, UIHelper.passwordBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
+		passBox.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					progressor.start();
+					userBox.setEditable(false);
+					passBox.setEditable(false);
+					setChanged();
+					// TODO post a notification here.
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {}
+		});
 		frame.add(passBox);
 		
 		registerLink = new HyperLink(
@@ -112,6 +146,11 @@ public class ClientUI
 				UIHelper.registerLinkWidth, UIHelper.registerLinkHeight);
 		frame.add(registerLink);
 		
+		progressor = new ProgressBar(UIHelper.progressBarColor);
+		progressor.setBounds(UIHelper.progressBarLoginOffsetX, UIHelper.progressBarLoginOffsetY,
+				UIHelper.progressBarWidth, UIHelper.progressBarHeight);
+		frame.add(progressor);
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
