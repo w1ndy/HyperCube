@@ -13,6 +13,8 @@ import java.net.URL;
  */
 public class Show extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Launch the application.
 	 */
