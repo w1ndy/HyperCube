@@ -26,8 +26,26 @@ public class Main extends JFrame {
 	String[] name = new String[1000], idList = new String[1000],
 			faculty = new String[1000], pic = new String[1000],
 			idnum = new String[1000];
+	private BufferedImage[] bufferedImage=new BufferedImage[1000];
+	private BufferedImage nopic;
 
 	class pictextlist extends JPanel implements ListCellRenderer<Object> {
+	private BufferedImage paintPic(int index) {
+		if (!buffered[index]) 
+		try {
+			URL picURL = new URL("http://"+stuData.webserverAddress+"/pic/"
+					+ pic[index].substring(0, pic[index].length() - 5)
+					+ "/"
+					+ pic[index].substring(pic[index].length() - 5)
+					+ ".jpg");
+			BufferedImage input = ImageIO.read(picURL);
+			Image scaledImage = input.getScaledInstance(75, 100,Image.SCALE_DEFAULT);
+			bufferedImage[index] = new BufferedImage(75, 100,BufferedImage.TYPE_INT_RGB);
+			bufferedImage[index].createGraphics().drawImage(scaledImage, 0, 0, null);
+			buffered[index]=true;
+		} catch (Exception e) {}
+		return bufferedImage[index];
+	}
 		private static final long serialVersionUID = 1L;
 		
 		private boolean isSelected;
