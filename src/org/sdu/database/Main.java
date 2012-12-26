@@ -2,10 +2,12 @@ package org.sdu.database;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.net.MalformedURLException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.sdu.ui.UIHelper;
@@ -20,16 +22,17 @@ public class Main extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	private JList<?> list;
+	private JList list;
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);
-	String[] name = new String[1000], idList = new String[1000],
-			faculty = new String[1000], pic = new String[1000],
-			idnum = new String[1000];
+	private String[] name = new String[1000], idList = new String[1000],
+			faculty = new String[1000], pic = new String[1000];
+	private String listLabel="";
+	private Database stuData = new Database("stu");
+	private boolean[] buffered=new boolean[1000];
 	private BufferedImage[] bufferedImage=new BufferedImage[1000];
 	private BufferedImage nopic;
 
-	class pictextlist extends JPanel implements ListCellRenderer<Object> {
 	private BufferedImage paintPic(int index) {
 		if (!buffered[index]) 
 		try {
@@ -46,13 +49,15 @@ public class Main extends JFrame {
 		} catch (Exception e) {}
 		return bufferedImage[index];
 	}
+	
+	class PictextList extends JPanel implements ListCellRenderer {
 		private static final long serialVersionUID = 1L;
 		
 		private boolean isSelected;
 		private int index;
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value,
+		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			this.isSelected = isSelected;
 			this.index = index;
@@ -65,22 +70,8 @@ public class Main extends JFrame {
 				g.fillRect(0, 0, 200, 100);
 				g.setColor(Color.white);
 			}
-			g.drawImage(new ImageIcon("art/database/nopic.png").getImage(), 0,
-					0, this);
-			if (pic[index].length() == 32)
-				try {
-					URL picURL = new URL("http://211.87.219.40/pic/"
-							+ pic[index].substring(0, pic[index].length() - 5)
-							+ "/"
-							+ pic[index].substring(pic[index].length() - 5)
-							+ ".jpg");
-					g.drawImage(
-							new ImageIcon(new ImageIcon(picURL).getImage()
-									.getScaledInstance(75, 100,
-											java.awt.Image.SCALE_SMOOTH))
-									.getImage(), 0, 0, this);
-				} catch (MalformedURLException e) {
-				}
+			g.drawImage(nopic, 0,0, this);
+			if (pic[index].length() == 32) g.drawImage(paintPic(index), 0, 0, this);
 			g.drawString(name[index], 80, 20);
 			g.drawString(idList[index], 80, 40);
 			g.drawString(faculty[index], 80, 60);
@@ -163,7 +154,12 @@ public class Main extends JFrame {
 	public Main() {
 		// Window
 		super("数据库管理");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(WindowEvent winEvt) {
+				stuData.close();
+				System.exit(0); 
+			}
+		});
 		setBounds(100, 100, 450, 300);
 		setMinimumSize(new Dimension(450, 300));
 
@@ -221,40 +217,13 @@ public class Main extends JFrame {
 				"art/database/piciconselected.png"));
 		picmode.setPreferredSize(modeButton);
 
-		String listLabel = "";
-		String[] id = new String[1000];
-		try {
-			Database stuData = new Database("stu");
-			ResultSet rs = stuData.getAll();
-			int i = 0;
-			while (rs.next() && (i < 1000)) {
-				name[i] = rs.getString("name");
-				id[i] = rs.getString("id");
-				faculty[i] = rs.getString("faculty");
-				pic[i] = rs.getString("pic");
-				i++;
-			}
-			if (i == 1000) {
-				listLabel = "1~1000 of " + stuData.getAllCount();
-				idList = id;
-			} else {
-				listLabel = "All " + i;
-				idList = new String[i];
-				for (int j = 0; j < i; j++)
-					idList[j] = id[j];
-			}
-			rs.close();
-			stuData.close();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		// Get all students' data
+		getData(null);
 
 		// Label
 		JLabel totalNum = new JLabel(listLabel);
 
 		// List
-		list = new JList<String>(idList);
-		list.setCellRenderer(new pictextlist());
 		try {
 			nopic=ImageIO.read(new File("art/database/nopic.png"));
 		} catch (IOException e1) {
@@ -306,7 +275,7 @@ public class Main extends JFrame {
 		contentPane.add(listPane, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
 	}
-
+	
 	/**
 	 * @param args
 	 *            Launch
