@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 
 import javax.swing.*;
 
+import org.sdu.ui.UIHelper;
+
 /**
  * Demo of database management application.
  * 
@@ -16,19 +18,23 @@ import javax.swing.*;
  */
 public class Main extends JFrame {
 
-	private JList list;
+	private static final long serialVersionUID = 1L;
+	
+	private JList<?> list;
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);
 	String[] name = new String[1000], idList = new String[1000],
 			faculty = new String[1000], pic = new String[1000],
 			idnum = new String[1000];
 
-	class pictextlist extends JPanel implements ListCellRenderer {
+	class pictextlist extends JPanel implements ListCellRenderer<Object> {
+		private static final long serialVersionUID = 1L;
+		
 		private boolean isSelected;
 		private int index;
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value,
+		public Component getListCellRendererComponent(JList<?> list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			this.isSelected = isSelected;
 			this.index = index;
@@ -37,15 +43,15 @@ public class Main extends JFrame {
 
 		public void paintComponent(Graphics g) {
 			if (isSelected) {
-				g.setColor(UIManager.getColor("controlHighlight"));
+				g.setColor(UIHelper.lightColor);
 				g.fillRect(0, 0, 200, 100);
-				g.setColor(new Color(0xFFFFFF));
+				g.setColor(Color.white);
 			}
 			g.drawImage(new ImageIcon("art/database/nopic.png").getImage(), 0,
 					0, this);
 			if (pic[index].length() == 32)
 				try {
-					URL picURL = new URL("http://127.0.0.1/pic/"
+					URL picURL = new URL("http://211.87.219.40/pic/"
 							+ pic[index].substring(0, pic[index].length() - 5)
 							+ "/"
 							+ pic[index].substring(pic[index].length() - 5)
@@ -164,7 +170,7 @@ public class Main extends JFrame {
 		JLabel totalNum = new JLabel(listLabel);
 
 		// List
-		list = new JList(idList);
+		list = new JList<String>(idList);
 		list.setCellRenderer(new pictextlist());
 		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);

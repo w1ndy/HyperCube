@@ -8,3 +8,6 @@
 
 # Log Files #
 *.log
+
+# Ignore Platform-Specific Code #
+DriverForMac.java
