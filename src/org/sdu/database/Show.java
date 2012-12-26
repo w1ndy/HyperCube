@@ -11,7 +11,7 @@ import java.net.URL;
  * @version 0.1 rev 8001 Dec. 25, 2012
  * Copyright (c) HyperCube Dev Team
  */
-public class Card extends JFrame {
+public class Show extends JFrame {
 
 	/**
 	 * Launch the application.
@@ -20,7 +20,7 @@ public class Card extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Card frame = new Card();
+					Show frame = new Show();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,7 +34,7 @@ public class Card extends JFrame {
 	 * 
 	 * @throws IOException
 	 */
-	public Card() throws IOException {
+	public Show() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 600);
 		JPanel contentPane = new JPanel();
