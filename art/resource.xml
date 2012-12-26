@@ -5,6 +5,7 @@
 	<entry name="ui.avatarbox.none" type="image">ui/avatarbox/none.png</entry>
 	<entry name="ui.avatarbox.online" type="image">ui/avatarbox/online.png</entry>
 	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
+	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
 	
 	<entry name="ui.font.title" type="font">
 		<fontface>微软雅黑</fontface>
@@ -31,4 +32,6 @@
 	<entry name="ui.string.login.subtitle" type="string">HyperCube™</entry>
 	<entry name="ui.string.login.username" type="string">用户名</entry>
 	<entry name="ui.string.login.password" type="string">密码</entry>
+	<entry name="ui.string.login.register.desc" type="string">没有账号？</entry>
+	<entry name="ui.string.login.register.url" type="string">http://bksms.sdu.edu.cn</entry>
 </resource>

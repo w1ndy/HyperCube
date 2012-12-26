@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 /**
  * TextBox class implements a TextField with description.
  * 
- * @version 0.1 rev 8000 Dec. 26, 2012.
+ * @version 0.1 rev 8001 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class TextBox extends JTextField
@@ -67,9 +67,9 @@ public class TextBox extends JTextField
 				if(getText().equals(desc)) {
 					setText("");
 					setForeground(Color.BLACK);
-					if(getBorder() instanceof RectBorder) {
-						((RectBorder)getBorder()).setColor(UIHelper.lightColor);
-					}
+				}
+				if(getBorder() instanceof RectBorder) {
+					((RectBorder)getBorder()).setColor(UIHelper.lightColor);
 				}
 				repaint();
 			}
@@ -79,9 +79,9 @@ public class TextBox extends JTextField
 				if(getText().equals("")) {
 					setText(desc);
 					setForeground(Color.GRAY);
-					if(getBorder() instanceof RectBorder) {
-						((RectBorder)getBorder()).setColor(UIHelper.darkColor);
-					}
+				}
+				if(getBorder() instanceof RectBorder) {
+					((RectBorder)getBorder()).setColor(UIHelper.darkColor);
 				}
 				repaint();
 			}

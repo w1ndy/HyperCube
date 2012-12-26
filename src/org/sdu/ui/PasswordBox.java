@@ -10,7 +10,7 @@ import javax.swing.JPasswordField;
 /**
  * PasswordBox class implements a PasswordField with description.
  * 
- * @version 0.1 rev 8000 Dec. 26, 2012.
+ * @version 0.1 rev 8001 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PasswordBox extends JPasswordField
@@ -68,9 +68,9 @@ public class PasswordBox extends JPasswordField
 					setText("");
 					setEchoChar('*');
 					setForeground(Color.BLACK);
-					if(getBorder() instanceof RectBorder) {
-						((RectBorder)getBorder()).setColor(UIHelper.lightColor);
-					}
+				}
+				if(getBorder() instanceof RectBorder) {
+					((RectBorder)getBorder()).setColor(UIHelper.lightColor);
 				}
 				repaint();
 			}
@@ -81,9 +81,9 @@ public class PasswordBox extends JPasswordField
 					setText(desc);
 					setEchoChar((char)0);
 					setForeground(Color.GRAY);
-					if(getBorder() instanceof RectBorder) {
-						((RectBorder)getBorder()).setColor(UIHelper.darkColor);
-					}
+				}
+				if(getBorder() instanceof RectBorder) {
+					((RectBorder)getBorder()).setColor(UIHelper.darkColor);
 				}
 				repaint();
 			}

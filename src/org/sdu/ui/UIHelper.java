@@ -21,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8004 Dec. 26, 2012.
+ * @version 0.1 rev 8005 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -103,6 +103,18 @@ public class UIHelper
 	 */
 	public static final int passwordBoxOffsetX = 110;
 	public static final int passwordBoxOffsetY = 110;
+	
+	/**
+	 * Default register link position.
+	 */
+	public static final int registerLinkOffsetX = 225;
+	public static final int registerLinkOffsetY = 142;
+	
+	/**
+	 * Default register link size
+	 */
+	public static final int registerLinkWidth = 60;
+	public static final int registerLinkHeight = 15;
 	
 	/**
 	 * Default color definition.
