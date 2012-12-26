@@ -36,13 +36,13 @@ public class ClientUI
 				UIHelper.avatarBoxWidth, UIHelper.avatarBoxHeight);
 		frame.add(avatarBox);
 		
-		userBox = new TextBox("UserName");
+		userBox = new TextBox((String)UIHelper.getResource("ui.string.login.username"));
 		userBox.setBorder(new RectBorder(UIHelper.darkColor));
 		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		frame.add(userBox);
 		
-		passBox = new PasswordBox("Password");
+		passBox = new PasswordBox((String)UIHelper.getResource("ui.string.login.password"));
 		passBox.setBorder(new RectBorder(UIHelper.darkColor));
 		passBox.setBounds(UIHelper.passwordBoxOffsetX, UIHelper.passwordBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);

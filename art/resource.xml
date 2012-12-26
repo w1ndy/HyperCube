@@ -29,4 +29,6 @@
 	
 	<entry name="ui.string.login.title" type="string">登录</entry>
 	<entry name="ui.string.login.subtitle" type="string">HyperCube™</entry>
+	<entry name="ui.string.login.username" type="string">用户名</entry>
+	<entry name="ui.string.login.password" type="string">密码</entry>
 </resource>
