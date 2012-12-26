@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resource>
+	<entry name="ui.common.frame" type="image">ui/common/frame.png</entry>
+	<entry name="ui.avatarbox.frame" type="image">ui/avatarbox/frame.png</entry>
+	<entry name="ui.avatarbox.none" type="image">ui/avatarbox/none.png</entry>
+	<entry name="ui.avatarbox.online" type="image">ui/avatarbox/online.png</entry>
+	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
+	
+	<entry name="ui.font.title" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>28</size>
+		<bold>true</bold>
+		<italic>false</italic>
+	</entry>
+	
+	<entry name="ui.font.subtitle" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>14</size>
+		<bold>true</bold>
+		<italic>false</italic>
+	</entry>
+	
+	<entry name="ui.font.text" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>12</size>
+		<bold>false</bold>
+		<italic>false</italic>
+	</entry>
+	
+	<entry name="ui.string.login.title" type="string">登录</entry>
+	<entry name="ui.string.login.subtitle" type="string">HyperCube™</entry>
+	<entry name="ui.string.login.username" type="string">用户名</entry>
+	<entry name="ui.string.login.password" type="string">密码</entry>
+</resource>

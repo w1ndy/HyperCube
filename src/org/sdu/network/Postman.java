@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Postman class is static class helper sending packet asynchronously.
  * 
- * @version 0.1 rev 8001 Dec. 19, 2012.
+ * @version 0.1 rev 8002 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Postman implements Runnable
@@ -87,7 +87,7 @@ public class Postman implements Runnable
 				
 				// pack the packet according to format.
 				ostream.write(Session.delimiter);
-				ostream.write((p.getData().length >> 4) & 0xff);
+				ostream.write((p.getData().length >> 8) & 0xff);
 				ostream.write(p.getData().length & 0xff);
 				ostream.write(p.getData());
 			}

@@ -12,7 +12,7 @@ import java.util.Observable;
  * Session class allows servers or clients to post and receive the data
  * in a non-blocking way.
  * 
- * @version 0.1 rev 8003 Dec. 19, 2012.
+ * @version 0.1 rev 8004 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Session extends Observable implements Runnable
@@ -100,7 +100,7 @@ public class Session extends Observable implements Runnable
 							break;
 						}
 						
-						length = (s1 << 4) + s2;
+						length = (s1 << 8) + s2;
 						data = new byte[length];
 						b = istream.read(data, 0, length);
 						if(b == -1) break;
@@ -113,8 +113,6 @@ public class Session extends Observable implements Runnable
 					socket.close();
 					break;
 				}
-				// Debug output //
-				System.out.print(b);
 			}
 		} catch(Exception e) {
 			debugger.print(e);
