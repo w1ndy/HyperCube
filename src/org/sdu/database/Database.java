@@ -14,17 +14,21 @@ public class Database {
 	private Statement statement;
 	private Connection conn;
 	private String table;
+	public String webserverAddress;
 
-	public Database(String table) throws Exception {
+	public Database(String table) {
 		this.table = table;
 		// Read configuration file
+		String line, databaseAddress = "", database = "", user = "", password = "";
+		try {
 		FileReader in = new FileReader("database.conf");
 		Scanner conf = new Scanner(in);
-		String line, address = "", database = "", user = "", password = "";
 		while (conf.hasNextLine()) {
 			line = conf.nextLine();
-			if (line.equals("[address]"))
-				address = conf.next();
+			if (line.equals("[database_address]"))
+				databaseAddress = conf.next();
+			if (line.equals("[webserver_address]"))
+				webserverAddress = conf.next();
 			if (line.equals("[database]"))
 				database = conf.next();
 			if (line.equals("[user]"))
