@@ -15,7 +15,9 @@ public class InstPro {
 		cmd2 = c2;
 		switch(cmd1)
 		{
-		case 0x01: return {login loginA = new login(); loginA.Push(cmd2,ProD);}
+		case 0x01: 
+			login loginA = new login(); 
+			return loginA.Push(cmd2,ProD);
 		//case 0x02: return logout.Push(cmd2,ProD);....
 		//case 0x03: return trans.Push(cmd2,ProD);....
 		//case 0x04: return detect.Push(cmd2,ProD);....

@@ -12,5 +12,5 @@ public class PacketDataBuilder {
 		for (int i=Val.loc_Dadding;i<=Val.loc_Dadding+Val.length_Dadding;i++)
 			DataArr[i]=Dadding[i-Val.loc_Dadding+1];
 	}
-	public void Inst 
+	// TODO public void Inst 
 }
