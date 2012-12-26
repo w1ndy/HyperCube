@@ -91,7 +91,72 @@ public class Main extends JFrame {
 			return new Dimension(200, 100);
 		}
 	}
+	
+	class PicList extends JPanel implements ListCellRenderer {
+		private static final long serialVersionUID = 1L;
+		
+		private boolean isSelected;
+		private int index;
 
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			this.isSelected = isSelected;
+			this.index = index;
+			return this;
+		}
+
+		public void paintComponent(Graphics g) {
+			if (isSelected) {
+				g.setColor(UIHelper.lightColor);
+				g.fillRect(0, 0, 75, 120);
+				g.setColor(Color.white);
+			}
+			g.drawImage(nopic, 0,0, this);
+			if (pic[index].length() == 32) g.drawImage(paintPic(index), 0, 0, this);
+			g.drawString(name[index], 0, 115);
+		}
+
+		public Dimension getPreferredSize() {
+			return new Dimension(75, 120);
+		}
+	}
+	
+	private void getData(String query) {
+		String[] id = new String[1000];
+		try {
+			ResultSet rs;
+			if (query==null)
+				rs = stuData.getAll();
+			else
+				rs=stuData.getAll();
+			int i = 0;
+			while ((i < 1000)&&rs.next()) {
+				name[i] = rs.getString("name");
+				id[i] = rs.getString("id");
+				faculty[i] = rs.getString("faculty");
+				pic[i] = rs.getString("pic");
+				i++;
+			}
+			if ((i == 1000)&&rs.next()) {
+				if (query==null)
+					listLabel = stuData.getAllCount()+"个中的前1000个";
+				else
+					listLabel = stuData.getAllCount()+"个中的前1000个";
+				idList = id;
+			} else {
+				listLabel = "共" + i+"个";
+				idList = new String[i];
+				for (int j = 0; j < i; j++)
+					idList[j] = id[j];
+			}
+			rs.close();
+			stuData.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Create the frame.
 	 */
