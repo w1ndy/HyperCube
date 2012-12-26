@@ -3,6 +3,7 @@ package org.sdu.database;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import javax.swing.*;
 
 /**
  * Build database connection.
@@ -38,17 +39,28 @@ public class Database {
 		}
 		conf.close();
 		in.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "配置文件错误","启动失败",JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 
 		// Connect to database
-		String url = "jdbc:mysql://" + address + "/" + database;
+		try {
+		String url = "jdbc:mysql://" + databaseAddress + "/" + database;
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(url, user, password);
 		statement = conn.createStatement();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "数据库连接错误","启动失败",JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 	}
 
-	public void close() throws Exception {
+	public void close() {
+		try {
 		statement.close();
 		conn.close();
+		} catch (Exception e) {}
 	}
 
 	ResultSet getAll() throws Exception {

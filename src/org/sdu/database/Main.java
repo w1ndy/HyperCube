@@ -172,6 +172,14 @@ public class Main extends JFrame {
 		// List
 		list = new JList<String>(idList);
 		list.setCellRenderer(new pictextlist());
+		try {
+			nopic=ImageIO.read(new File("art/database/nopic.png"));
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, "找不到图片资源","缺少资源",JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
+		list = new JList(idList);
+		list.setCellRenderer(new PicList());
 		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
