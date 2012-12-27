@@ -1,25 +1,23 @@
 package org.sdu.command;
 
 import java.net.Socket;
-import java.nio.charset.Charset;
-
 import org.sdu.network.ModifiablePacket;
+import org.sdu.util.DebugFramework;
 
 /**
- * Build the check-version packet on the client to send to the server.
+ * Build the logout-system packet on the client to send to the server.
  * 
- * @version 0.1 rev 8002 Dec. 27, 2012.
+ * @version 0.1 rev 8000 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class PacketCheckVersion extends ModifiablePacket{
+public class PacketLogoutSystem extends ModifiablePacket{
 
-	public PacketCheckVersion(String version, Socket socket){
+	public PacketLogoutSystem(Socket socket){
 		try {
 			PacketDataFactory.makePacket(this, socket,
-					Command.cmdMainLogin, Command.cmdVerifyVersion,
-					version.getBytes("UTF-8"));
+					Command.cmdMainLogout, Command.cmdLogoutSystem);
 		} catch(Exception e) {
-			
+			DebugFramework.getFramework().print("Encoding not found: " + e);
 		}
 	}
 

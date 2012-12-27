@@ -18,7 +18,7 @@ public class PacketDataFactory{
 	 * @param list --> The list of the strings
 	 * @return The byte[] part of the new packet
 	 */
-	public static void makePacket(ModifiablePacket p, Socket s, int instMain, int instDeputy, byte[]...list){
+	public static void makePacket(ModifiablePacket p, Socket s, int instMain, int instSub, byte[]...list){
 		int length = list.length;
 		byte[] arr;
 		int length_packet = 2;
@@ -37,7 +37,7 @@ public class PacketDataFactory{
 		 */
 		arr = new byte[length_packet];
 		arr[point] = (byte) instMain; point++;
-		arr[point] = (byte) instDeputy; point++;
+		arr[point] = (byte) instSub; point++;
 
 		/**
 		 * Build the part of each param.
