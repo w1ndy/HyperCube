@@ -12,7 +12,7 @@ import java.util.Observable;
  * Session class allows servers or clients to post and receive the data
  * in a non-blocking way.
  * 
- * @version 0.1 rev 8004 Dec. 26, 2012.
+ * @version 0.1 rev 8005 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Session extends Observable implements Runnable
@@ -111,12 +111,16 @@ public class Session extends Observable implements Runnable
 				}
 				if(b == -1) {
 					socket.close();
+					setChanged();
+					notifyObservers(null);
 					break;
 				}
 			}
 		} catch(Exception e) {
 			debugger.print(e);
 			debugger.print("Session ended unexpectedly.");
+			setChanged();
+			notifyObservers(null);
 			return ;
 		}
 		if(socket.isClosed())
