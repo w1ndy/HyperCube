@@ -29,7 +29,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientUI class implements a user interface of student user.
  * 
- * @version 0.1 rev 8003 Dec. 27, 2012.
+ * @version 0.1 rev 8004 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientUI extends Observable
@@ -37,9 +37,7 @@ public class ClientUI extends Observable
 	private BasicFrame frame;
 	private AvatarBox avatarBox;
 	private TextBox	userBox;
-	private RectBorder borderUserBox;
 	private PasswordBox passBox;
-	private RectBorder borderPassBox;
 	private HyperLink registerLink;
 	private ProgressBar progressor;
 	
@@ -115,15 +113,16 @@ public class ClientUI extends Observable
 	 */
 	private void addUserBox()
 	{
-		borderUserBox = new RectBorder(UIHelper.darkColor);
 		userBox = new TextBox((String)UIHelper.getResource("ui.string.login.username"));
-		userBox.setBorder(borderUserBox);
 		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		userBox.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) passBox.requestFocus();
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if(userBox.getText().length() == 0) userBox.onFailed();
+					else passBox.requestFocus();
+				}
 			}
 
 			@Override
@@ -140,19 +139,18 @@ public class ClientUI extends Observable
 	 */
 	public void addPasswordBox()
 	{
-		borderPassBox = new RectBorder(UIHelper.darkColor);
 		passBox = new PasswordBox((String)UIHelper.getResource("ui.string.login.password"));
-		passBox.setBorder(borderPassBox);
 		passBox.setBounds(UIHelper.passwordBoxOffsetX, UIHelper.passwordBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		passBox.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					progressor.start();
-					userBox.setEditable(false);
-					passBox.setEditable(false);
-					setChanged();
+					//progressor.start();
+					//userBox.setEditable(false);
+					//passBox.setEditable(false);
+					//setChanged();
+					passBox.onWrongPassword();
 					// TODO post a notification here.
 				}
 			}

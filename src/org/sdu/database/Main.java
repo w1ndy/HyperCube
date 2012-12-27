@@ -13,10 +13,10 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8005 Dec. 27, 2012
+ * @version 0.1 rev 8006 Dec. 27, 2012
  * Copyright (c) HyperCube Dev Team
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class Main extends JFrame {
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);

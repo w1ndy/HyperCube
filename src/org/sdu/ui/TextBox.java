@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 /**
  * TextBox class implements a TextField with description.
  * 
- * @version 0.1 rev 8001 Dec. 26, 2012.
+ * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class TextBox extends JTextField
@@ -18,6 +18,8 @@ public class TextBox extends JTextField
 	private static final long serialVersionUID = 1L;
 	
 	private String desc = "";
+	private RectBorder border;
+	private BorderFlashAnimation aniFlash;
 	
 	/**
 	 * Initialize a TextBox object.
@@ -57,9 +59,14 @@ public class TextBox extends JTextField
 	
 	private void initialize()
 	{
+		border = new RectBorder(UIHelper.darkColor);
+		super.setBorder(border);
 		super.setFont((Font)UIHelper.getResource("ui.font.text"));
 		setText(desc);
 		setForeground(Color.GRAY);
+		
+		aniFlash = new BorderFlashAnimation(this, border);
+		aniFlash.setColor(UIHelper.darkColor);
 		
 		addFocusListener(new FocusListener() {
 			@Override
@@ -68,9 +75,8 @@ public class TextBox extends JTextField
 					setText("");
 					setForeground(Color.BLACK);
 				}
-				if(getBorder() instanceof RectBorder) {
-					((RectBorder)getBorder()).setColor(UIHelper.lightColor);
-				}
+				border.setColor(UIHelper.lightColor);
+				aniFlash.setColor(UIHelper.lightColor);
 				repaint();
 			}
 
@@ -80,9 +86,8 @@ public class TextBox extends JTextField
 					setText(desc);
 					setForeground(Color.GRAY);
 				}
-				if(getBorder() instanceof RectBorder) {
-					((RectBorder)getBorder()).setColor(UIHelper.darkColor);
-				}
+				border.setColor(UIHelper.darkColor);
+				aniFlash.setColor(UIHelper.darkColor);
 				repaint();
 			}
 		});
@@ -106,5 +111,13 @@ public class TextBox extends JTextField
 	public String getDescription()
 	{
 		return this.desc;
+	}
+	
+	/**
+	 * On data fails show animation.
+	 */
+	public void onFailed()
+	{
+		aniFlash.start();
 	}
 }
