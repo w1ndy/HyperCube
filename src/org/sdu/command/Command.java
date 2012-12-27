@@ -19,4 +19,8 @@ public class Command
 
 	public static final byte cmdMainRespond = 0x04;
 		public static final byte cmdRespondEnquiry = 0x00;
+		
+	public static final byte cmdMainChange = 0x11;
+		public static final byte cmdAddUser = 0x01;
+		public static final byte cmdDeleteUser = 0x01;
 }
