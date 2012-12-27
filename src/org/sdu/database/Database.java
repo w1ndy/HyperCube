@@ -77,6 +77,10 @@ public class Database {
 		return countNum;
 	}
 
+	void delete(String id) throws Exception {
+		statement.execute("delete from "+table+" where id='"+id+"'");
+	}
+
 	static boolean check(String id, String password) {
 		boolean flag = false;
 		try {

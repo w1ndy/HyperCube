@@ -21,8 +21,8 @@ public class ProgressBar extends JComponent
 	private boolean running = false;
 	private Timer timerDraw;
 	private float[] position = {0.0f, 0.4f, 0.6f, 1.0f};
-	private Color alpha = new Color(0, 0, 0, 0);
-	private Color[] colors = {alpha, alpha, alpha, alpha};
+	private Color alpha;
+	private Color[] colors = new Color[4];
 	
 	public ProgressBar(Color c)
 	{
@@ -50,8 +50,11 @@ public class ProgressBar extends JComponent
 	
 	private void initialize(Color c)
 	{
+		alpha = new Color(c.getRGB() & 0x00FFFFFF, true);
+		colors[0] = alpha;
 		colors[1] = c;
 		colors[2] = c;
+		colors[3] = alpha;
 		
 		paint = new LinearGradientPaint(0.0f, 0.0f, UIHelper.progressBarInterval, 0.0f, position, colors);
 		timerDraw = new Timer(UIHelper.progressBarFrequency, new ActionListener() {
