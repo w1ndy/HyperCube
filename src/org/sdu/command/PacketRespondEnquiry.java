@@ -10,9 +10,9 @@ import org.sdu.util.DebugFramework;
  * @version 0.1 rev 8000 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class RespondEnquiry extends ModifiablePacket{
+public class PacketRespondEnquiry extends ModifiablePacket{
 
-	public RespondEnquiry(Socket socket){
+	public PacketRespondEnquiry(Socket socket){
 		try {
 			PacketDataFactory.makePacket(this, socket,
 					Command.cmdMainRespond, Command.cmdRespondEnquiry);
