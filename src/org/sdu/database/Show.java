@@ -11,10 +11,8 @@ import java.net.URL;
  * @version 0.1 rev 8001 Dec. 25, 2012
  * Copyright (c) HyperCube Dev Team
  */
+@SuppressWarnings("serial")
 public class Show extends JFrame {
-
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Launch the application.
 	 */

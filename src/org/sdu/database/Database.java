@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8002 Dec. 26, 2012
+ * @version 0.1 rev 8003 Dec. 27, 2012
  * Copyright (c) HyperCube Dev Team
  */
 public class Database {
