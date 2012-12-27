@@ -146,11 +146,11 @@ public class ClientUI extends Observable
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//progressor.start();
-					//userBox.setEditable(false);
-					//passBox.setEditable(false);
-					//setChanged();
-					passBox.onWrongPassword();
+					progressor.start();
+					userBox.setEditable(false);
+					passBox.setEditable(false);
+					setChanged();
+					//passBox.onWrongPassword();
 					// TODO post a notification here.
 				}
 			}
