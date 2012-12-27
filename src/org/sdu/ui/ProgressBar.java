@@ -11,6 +11,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
+/**
+ * ProgressBar class implements a dynamic progress bar.
+ * 
+ * @version 0.1 rev 8000 Dec. 27, 2012.
+ * Copyright (c) HyperCube Dev Team.
+ */
 public class ProgressBar extends JComponent
 {
 	private static final long serialVersionUID = 1L;
@@ -24,6 +30,11 @@ public class ProgressBar extends JComponent
 	private Color alpha;
 	private Color[] colors = new Color[4];
 	
+	/**
+	 * Initialize ProgressBar class.
+	 * 
+	 * @param c
+	 */
 	public ProgressBar(Color c)
 	{
 		super();
@@ -32,6 +43,12 @@ public class ProgressBar extends JComponent
 		initialize(c);
 	}
 	
+	/**
+	 * Initialize ProgressBar object.
+	 * 
+	 * @param c
+	 * @param width
+	 */
 	public ProgressBar(Color c, int width)
 	{
 		super();
@@ -40,6 +57,13 @@ public class ProgressBar extends JComponent
 		initialize(c);
 	}
 	
+	/**
+	 * Initialize ProgressBar object.
+	 * 
+	 * @param c
+	 * @param width
+	 * @param height
+	 */
 	public ProgressBar(Color c, int width, int height)
 	{
 		super();
@@ -68,11 +92,19 @@ public class ProgressBar extends JComponent
 		timerDraw.setRepeats(true);
 	}
 	
+	/**
+	 * Is progress bar running.
+	 * 
+	 * @return
+	 */
 	public boolean isRunning()
 	{
 		return running;
 	}
 	
+	/**
+	 * Start rolling progress bar.
+	 */
 	public void start()
 	{
 		running = true;
@@ -80,6 +112,9 @@ public class ProgressBar extends JComponent
 		timerDraw.start();
 	}
 	
+	/**
+	 * Stop and hide progress bar.
+	 */
 	public void stop()
 	{
 		running = false;
