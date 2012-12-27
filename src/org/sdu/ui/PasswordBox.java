@@ -10,7 +10,7 @@ import javax.swing.JPasswordField;
 /**
  * PasswordBox class implements a PasswordField with description.
  * 
- * @version 0.1 rev 8001 Dec. 26, 2012.
+ * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PasswordBox extends JPasswordField
@@ -18,6 +18,8 @@ public class PasswordBox extends JPasswordField
 	private static final long serialVersionUID = 1L;
 	
 	private String desc;
+	private RectBorder border;
+	private BorderFlashAnimation aniFlash;
 	
 	/**
 	 * Initialize a PasswordBox object.
@@ -56,10 +58,15 @@ public class PasswordBox extends JPasswordField
 	
 	private void initialize()
 	{
+		border = new RectBorder(UIHelper.darkColor);
+		super.setBorder(border);
 		super.setFont((Font)UIHelper.getResource("ui.font.text"));
 		setForeground(Color.GRAY);
 		setEchoChar((char)0);
 		setText(desc);
+
+		aniFlash = new BorderFlashAnimation(this, border);
+		aniFlash.setColor(UIHelper.darkColor);
 		
 		addFocusListener(new FocusListener() {
 			@Override
@@ -69,9 +76,8 @@ public class PasswordBox extends JPasswordField
 					setEchoChar('*');
 					setForeground(Color.BLACK);
 				}
-				if(getBorder() instanceof RectBorder) {
-					((RectBorder)getBorder()).setColor(UIHelper.lightColor);
-				}
+				border.setColor(UIHelper.lightColor);
+				aniFlash.setColor(UIHelper.lightColor);
 				repaint();
 			}
 
@@ -82,9 +88,8 @@ public class PasswordBox extends JPasswordField
 					setEchoChar((char)0);
 					setForeground(Color.GRAY);
 				}
-				if(getBorder() instanceof RectBorder) {
-					((RectBorder)getBorder()).setColor(UIHelper.darkColor);
-				}
+				border.setColor(UIHelper.darkColor);
+				aniFlash.setColor(UIHelper.darkColor);
 				repaint();
 			}
 		});
@@ -108,5 +113,13 @@ public class PasswordBox extends JPasswordField
 	public String getDescription()
 	{
 		return this.desc;
+	}
+	
+	/**
+	 * Show wrong-password animation.
+	 */
+	public void onWrongPassword()
+	{
+		aniFlash.start();
 	}
 }
