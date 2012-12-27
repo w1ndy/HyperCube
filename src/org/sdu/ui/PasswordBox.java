@@ -1,7 +1,10 @@
 package org.sdu.ui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -10,16 +13,17 @@ import javax.swing.JPasswordField;
 /**
  * PasswordBox class implements a PasswordField with description.
  * 
- * @version 0.1 rev 8002 Dec. 27, 2012.
+ * @version 0.1 rev 8003 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class PasswordBox extends JPasswordField
+public class PasswordBox extends JPasswordField implements TranslucentComponent
 {
 	private static final long serialVersionUID = 1L;
 	
 	private String desc;
 	private RectBorder border;
 	private BorderFlashAnimation aniFlash;
+	private float globalOpacity = 1.0f;
 	
 	/**
 	 * Initialize a PasswordBox object.
@@ -115,11 +119,29 @@ public class PasswordBox extends JPasswordField
 		return this.desc;
 	}
 	
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, globalOpacity));
+		super.paintComponent(g);
+	}
+	
 	/**
 	 * Show wrong-password animation.
 	 */
 	public void onWrongPassword()
 	{
 		aniFlash.start();
+	}
+
+	@Override
+	public void setOpacity(float alpha) {
+		globalOpacity = alpha;
+		border.setOpacity(alpha);
+	}
+
+	@Override
+	public float getOpacity() {
+		return globalOpacity;
 	}
 }

@@ -14,13 +14,14 @@ import javax.swing.border.Border;
 /**
  * RectBorder class implements a rectangular border with specified color.
  *
- * @version 0.1 rev 8001 Dec. 26, 2012.
+ * @version 0.1 rev 8002 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class RectBorder implements Border
 {
 	private Color colorBorder;
 	private Stroke stroke;
+	private float opacity = 1.0f;
 	
 	/**
 	 * Initialize RectBorder object.
@@ -58,7 +59,7 @@ public class RectBorder implements Border
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setStroke(stroke);
 		g2d.setColor(colorBorder);
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 		g2d.drawRect(x, y, w, h);
 	}
 
@@ -74,5 +75,19 @@ public class RectBorder implements Border
 	 */
 	public void setColor(Color colorBorder) {
 		this.colorBorder = colorBorder;
+	}
+
+	/**
+	 * @return the opacity
+	 */
+	public float getOpacity() {
+		return opacity;
+	}
+
+	/**
+	 * @param opacity the opacity to set
+	 */
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
 	}
 }

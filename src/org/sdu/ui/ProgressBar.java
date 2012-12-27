@@ -119,6 +119,7 @@ public class ProgressBar extends JComponent
 	{
 		running = false;
 		timerDraw.stop();
+		repaint();
 	}
 	
 	@Override

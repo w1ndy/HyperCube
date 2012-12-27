@@ -1,6 +1,8 @@
 package org.sdu.client;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -14,22 +16,23 @@ import java.util.Observable;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.BasicFrame;
+import org.sdu.ui.ComponentFadeAnimation;
 import org.sdu.ui.HyperLink;
 import org.sdu.ui.PasswordBox;
 import org.sdu.ui.ProgressBar;
-import org.sdu.ui.RectBorder;
 import org.sdu.ui.TextBox;
 import org.sdu.ui.UIHelper;
 
 /**
  * ClientUI class implements a user interface of student user.
  * 
- * @version 0.1 rev 8004 Dec. 27, 2012.
+ * @version 0.1 rev 8005 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientUI extends Observable
@@ -40,6 +43,9 @@ public class ClientUI extends Observable
 	private PasswordBox passBox;
 	private HyperLink registerLink;
 	private ProgressBar progressor;
+	private JLabel labelLoading;
+
+	private ComponentFadeAnimation fadeAnimation;
 	
 	private Action actionCloseOnEscape = new Action() {
 		@Override
@@ -87,11 +93,44 @@ public class ClientUI extends Observable
 		frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("ESCAPE"), "on_escape");
 		
-		addAvatarBox();
-		addUserBox();
-		addPasswordBox();
-		addRegisterLink();
-		addProgressBar();
+		createAvatarBox();
+		createUserBox();
+		createPasswordBox();
+		createRegisterLink();
+		createProgressBar();
+
+		labelLoading = new JLabel("检查版本....");
+		labelLoading.setFont((Font)UIHelper.getResource("ui.font.text"));
+		labelLoading.setBounds(120, 110, 60, 15);
+		labelLoading.setBackground(new Color(0, true));
+		frame.add(labelLoading);
+		
+		frame.add(progressor);
+		progressor.start();
+
+		fadeAnimation = new ComponentFadeAnimation();
+		Timer timerDebug = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(labelLoading);
+				progressor.stop();
+				
+				frame.add(avatarBox);
+				frame.add(userBox);
+				frame.add(passBox);
+				frame.add(registerLink);
+				
+				fadeAnimation.add(avatarBox);
+				fadeAnimation.add(userBox);
+				fadeAnimation.add(passBox);
+				fadeAnimation.add(registerLink);
+				
+				fadeAnimation.reset(0.0f);
+				fadeAnimation.fadeIn();
+			}
+		});
+		timerDebug.setRepeats(false);
+		timerDebug.start();
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -100,18 +139,17 @@ public class ClientUI extends Observable
 	/**
 	 * Add avatar box control.
 	 */
-	private void addAvatarBox()
+	private void createAvatarBox()
 	{
 		avatarBox = new AvatarBox();
 		avatarBox.setBounds(UIHelper.avatarBoxLoginOffsetX, UIHelper.avatarBoxLoginOffsetY,
 				UIHelper.avatarBoxWidth, UIHelper.avatarBoxHeight);
-		frame.add(avatarBox);
 	}
 	
 	/**
 	 * Add user box control.
 	 */
-	private void addUserBox()
+	private void createUserBox()
 	{
 		userBox = new TextBox((String)UIHelper.getResource("ui.string.login.username"));
 		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
@@ -131,13 +169,12 @@ public class ClientUI extends Observable
 			@Override
 			public void keyTyped(KeyEvent arg0) {}
 		});
-		frame.add(userBox);
 	}
 	
 	/**
 	 * Add password box control.
 	 */
-	public void addPasswordBox()
+	public void createPasswordBox()
 	{
 		passBox = new PasswordBox((String)UIHelper.getResource("ui.string.login.password"));
 		passBox.setBounds(UIHelper.passwordBoxOffsetX, UIHelper.passwordBoxOffsetY,
@@ -147,6 +184,7 @@ public class ClientUI extends Observable
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					progressor.start();
+					avatarBox.setEnabled(false);
 					userBox.setEditable(false);
 					passBox.setEditable(false);
 					setChanged();
@@ -161,31 +199,28 @@ public class ClientUI extends Observable
 			@Override
 			public void keyTyped(KeyEvent arg0) {}
 		});
-		frame.add(passBox);
 	}
 	
 	/**
 	 * Add register link control.
 	 */
-	public void addRegisterLink()
+	public void createRegisterLink()
 	{
 		registerLink = new HyperLink(
 				(String)UIHelper.getResource("ui.string.login.register.desc"),
 				(String)UIHelper.getResource("ui.string.login.register.url"));
 		registerLink.setBounds(UIHelper.registerLinkOffsetX, UIHelper.registerLinkOffsetY,
 				UIHelper.registerLinkWidth, UIHelper.registerLinkHeight);
-		frame.add(registerLink);
 	}
 	
 	/**
 	 * Add progress bar control.
 	 */
-	public void addProgressBar()
+	public void createProgressBar()
 	{
 		progressor = new ProgressBar(UIHelper.progressBarColor);
 		progressor.setBounds(UIHelper.progressBarLoginOffsetX, UIHelper.progressBarLoginOffsetY,
 				UIHelper.progressBarWidth, UIHelper.progressBarHeight);
-		frame.add(progressor);
 	}
 	
 	/**
