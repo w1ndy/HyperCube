@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  * @version 0.1 rev 8102 Dec. 27, 2012
  * Copyright (c) HyperCube Dev Team
  */
-@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class Main extends JFrame {
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);
@@ -28,7 +28,7 @@ public class Main extends JFrame {
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	private BufferedImage nopic;
 	private JLabel totalNum = new JLabel("");
-	private JFrame frame = this;
+	private Main frame = this;
 	private JPanel listPane;
 	private JList list;
 	private JTable table;
@@ -38,6 +38,12 @@ public class Main extends JFrame {
 	// mode 1 = text-only; mode 2 = picture + text; mode 3 = picture-only
 	private int currentMode = 1;
 
+	/**
+	 * Buffer pictures from web-server.
+	 * 
+	 * @param index
+	 * @return
+	 */
 	private BufferedImage paintPic(int index) {
 		if (!buffered[index])
 			try {
@@ -59,6 +65,9 @@ public class Main extends JFrame {
 		return bufferedImage[index];
 	}
 
+	/**
+	 * Render picture + text list cells
+	 */
 	class PictextList extends JPanel implements ListCellRenderer {
 		private boolean isSelected;
 		private int index;
@@ -91,6 +100,9 @@ public class Main extends JFrame {
 		}
 	}
 
+	/**
+	 * Render picture list cells
+	 */
 	class PicList extends JPanel implements ListCellRenderer {
 		private boolean isSelected;
 		private int index;
@@ -120,6 +132,12 @@ public class Main extends JFrame {
 		}
 	}
 
+	/**
+	 * Wrap list or table in a scroll panel
+	 * 
+	 * @param mode
+	 * @return
+	 */
 	private JScrollPane mainList(int mode) {
 		JScrollPane listScroller;
 		if (mode == 1) {
@@ -168,6 +186,11 @@ public class Main extends JFrame {
 		return listScroller;
 	}
 
+	/**
+	 * Get data from database and update JLabel.
+	 * 
+	 * @param query
+	 */
 	private void getData(String query) {
 		String[] id = new String[1000];
 		try {
@@ -201,10 +224,20 @@ public class Main extends JFrame {
 			totalNum.setText(listLabel);
 			rs.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "数据库读取错误", "运行时错误",
+			JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
+	}
+	/**
+	 * Refresh list or table
+	 */
+	public void refresh() {
+		getData(query);
+		buffered = new boolean[1000];
+		listPane.removeAll();
+		listPane.add(mainList(currentMode));
+		listPane.validate();
 	}
 
 	/**
@@ -224,7 +257,7 @@ public class Main extends JFrame {
 		try {
 			nopic = ImageIO.read(new File("art/database/nopic.png"));
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "找不到图片", "缺少文件",
+			JOptionPane.showMessageDialog(frame, "找不到图片", "缺少文件",
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
@@ -258,8 +291,7 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
-						JOptionPane.ERROR_MESSAGE);
+				Edit.create(frame,0);
 			}
 		});
 
@@ -270,11 +302,11 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
 						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
-					JOptionPane.showMessageDialog(frame, "请选择一个或多个同学", "错误",
+					JOptionPane.showMessageDialog(frame, "请选择条目", "错误",
 							JOptionPane.INFORMATION_MESSAGE);
 				else {
 					int confirm = JOptionPane.showConfirmDialog(frame,
-							"是否删除学生？", "确认", JOptionPane.YES_NO_OPTION);
+							"是否确认删除？", "确认", JOptionPane.YES_NO_OPTION);
 					if (confirm == 0)
 						try {
 							if (currentMode == 1) {
@@ -283,11 +315,7 @@ public class Main extends JFrame {
 									stuData.delete(idList[selected[i]]);
 							} else
 								stuData.delete((String) list.getSelectedValue());
-							getData(query);
-							buffered = new boolean[1000];
-							listPane.removeAll();
-							listPane.add(mainList(currentMode));
-							listPane.validate();
+							refresh();
 						} catch (Exception e1) {
 							JOptionPane.showMessageDialog(frame, "删除失败", "错误",
 									JOptionPane.ERROR_MESSAGE);

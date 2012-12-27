@@ -8,8 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8003 Dec. 27, 2012
- * Copyright (c) HyperCube Dev Team
+ * @version 0.1 rev 8003 Dec. 27, 2012 Copyright (c) HyperCube Dev Team
  */
 public class Database {
 	private Statement statement;
@@ -22,45 +21,48 @@ public class Database {
 		// Read configuration file
 		String line, databaseAddress = "", database = "", user = "", password = "";
 		try {
-		FileReader in = new FileReader("database.conf");
-		Scanner conf = new Scanner(in);
-		while (conf.hasNextLine()) {
-			line = conf.nextLine();
-			if (line.equals("[database_address]"))
-				databaseAddress = conf.next();
-			if (line.equals("[webserver_address]"))
-				webserverAddress = conf.next();
-			if (line.equals("[database]"))
-				database = conf.next();
-			if (line.equals("[user]"))
-				user = conf.next();
-			if (line.equals("[password]"))
-				password = conf.next();
-		}
-		conf.close();
-		in.close();
+			FileReader in = new FileReader("database.conf");
+			Scanner conf = new Scanner(in);
+			while (conf.hasNextLine()) {
+				line = conf.nextLine();
+				if (line.equals("[database_address]"))
+					databaseAddress = conf.next();
+				if (line.equals("[webserver_address]"))
+					webserverAddress = conf.next();
+				if (line.equals("[database]"))
+					database = conf.next();
+				if (line.equals("[user]"))
+					user = conf.next();
+				if (line.equals("[password]"))
+					password = conf.next();
+			}
+			conf.close();
+			in.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "配置文件错误","启动失败",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "配置文件错误", "启动失败",
+					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
 
 		// Connect to database
 		try {
-		String url = "jdbc:mysql://" + databaseAddress + "/" + database;
-		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection(url, user, password);
-		statement = conn.createStatement();
+			String url = "jdbc:mysql://" + databaseAddress + "/" + database;
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, password);
+			statement = conn.createStatement();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "数据库连接错误","启动失败",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "数据库连接错误", "启动失败",
+					JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
 	}
 
 	public void close() {
 		try {
-		statement.close();
-		conn.close();
-		} catch (Exception e) {}
+			statement.close();
+			conn.close();
+		} catch (Exception e) {
+		}
 	}
 
 	ResultSet getAll() throws Exception {
@@ -78,15 +80,14 @@ public class Database {
 	}
 
 	void delete(String id) throws Exception {
-		statement.execute("delete from "+table+" where id='"+id+"'");
+		statement.execute("delete from " + table + " where id='" + id + "'");
 	}
 
-	static boolean check(String id, String password) {
+	boolean check(String id, String password) {
 		boolean flag = false;
 		try {
-			Database userData = new Database("stu");
-			ResultSet rs = userData.statement.executeQuery("select * from "
-					+ userData.table + " where id='" + id + "'");
+			ResultSet rs = statement.executeQuery("select * from " + table
+					+ " where id='" + id + "'");
 			if (rs.next()) {
 				rs.getString("password");
 				flag = true;
