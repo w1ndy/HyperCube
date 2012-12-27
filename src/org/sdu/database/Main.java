@@ -13,22 +13,22 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8101 Dec. 27, 2012
+ * @version 0.1 rev 8102 Dec. 27, 2012
  * Copyright (c) HyperCube Dev Team
  */
-@SuppressWarnings({"serial", "rawtypes", "unchecked"})
+@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Main extends JFrame {
 	private Dimension modeButton = new Dimension(30, 30);
 	private Dimension dataButton = new Dimension(25, 25);
 	private String[] name = new String[1000], idList = new String[1000],
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
-	private String listLabel = "";
 	private Database stuData = new Database("stu1");
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	private BufferedImage nopic;
-	private JFrame frame=this;
+	private JLabel totalNum = new JLabel("");
+	private JFrame frame = this;
 	private JPanel listPane;
 	private JList list;
 	private JTable table;
@@ -185,6 +185,7 @@ public class Main extends JFrame {
 				pic[i] = rs.getString("pic");
 				i++;
 			}
+			String listLabel;
 			if ((i == 1000) && rs.next()) {
 				if (query == null)
 					listLabel = stuData.getAllCount() + "个中的前1000个";
@@ -197,6 +198,7 @@ public class Main extends JFrame {
 				for (int j = 0; j < i; j++)
 					idList[j] = id[j];
 			}
+			totalNum.setText(listLabel);
 			rs.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "数据库读取错误", "运行时错误",
@@ -219,6 +221,13 @@ public class Main extends JFrame {
 		});
 		setBounds(100, 100, 450, 300);
 		setMinimumSize(new Dimension(450, 300));
+		try {
+			nopic = ImageIO.read(new File("art/database/nopic.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "找不到图片", "缺少文件",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -259,33 +268,30 @@ public class Main extends JFrame {
 		deleteButton.setPreferredSize(dataButton);
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (((currentMode==1)&&(table.getSelectedRowCount()==0))||((currentMode!=1)&&(list.getSelectedValue()==null)))
+				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
+						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
 					JOptionPane.showMessageDialog(frame, "请选择一个或多个同学", "错误",
 							JOptionPane.INFORMATION_MESSAGE);
 				else {
-				int confirm = JOptionPane.showConfirmDialog(
-					    frame,
-					    "是否删除学生？",
-					    "确认",
-					    JOptionPane.YES_NO_OPTION);
-				if (confirm==0)
-					try {
-					if (currentMode==1) {
-						int[] selected=table.getSelectedRows();
-						for (int i=0;i<selected.length;i++)
-							stuData.delete(idList[selected[i]]);
-					}
-					else
-						stuData.delete((String)list.getSelectedValue());
-					getData(query);
-					buffered = new boolean[1000];
-					listPane.removeAll();
-					listPane.add(mainList(currentMode));
-					listPane.validate();
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(frame, "删除失败", "错误",
-								JOptionPane.ERROR_MESSAGE);
-					}
+					int confirm = JOptionPane.showConfirmDialog(frame,
+							"是否删除学生？", "确认", JOptionPane.YES_NO_OPTION);
+					if (confirm == 0)
+						try {
+							if (currentMode == 1) {
+								int[] selected = table.getSelectedRows();
+								for (int i = 0; i < selected.length; i++)
+									stuData.delete(idList[selected[i]]);
+							} else
+								stuData.delete((String) list.getSelectedValue());
+							getData(query);
+							buffered = new boolean[1000];
+							listPane.removeAll();
+							listPane.add(mainList(currentMode));
+							listPane.validate();
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(frame, "删除失败", "错误",
+									JOptionPane.ERROR_MESSAGE);
+						}
 				}
 			}
 		});
@@ -344,18 +350,6 @@ public class Main extends JFrame {
 
 		// Get all students' data
 		getData(null);
-
-		// Label
-		JLabel totalNum = new JLabel(listLabel);
-
-		// List
-		try {
-			nopic = ImageIO.read(new File("art/database/nopic.png"));
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "找不到图片", "缺少资源",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
 
 		// Lay out
 		listPane = new JPanel();
