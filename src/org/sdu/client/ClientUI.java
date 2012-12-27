@@ -1,7 +1,6 @@
 package org.sdu.client;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,7 +31,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientUI class implements a user interface of student user.
  * 
- * @version 0.1 rev 8005 Dec. 27, 2012.
+ * @version 0.1 rev 8006 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientUI extends Observable
@@ -109,31 +108,34 @@ public class ClientUI extends Observable
 		progressor.start();
 
 		fadeAnimation = new ComponentFadeAnimation();
-		Timer timerDebug = new Timer(3000, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				frame.remove(labelLoading);
-				progressor.stop();
-				
-				frame.add(avatarBox);
-				frame.add(userBox);
-				frame.add(passBox);
-				frame.add(registerLink);
-				
-				fadeAnimation.add(avatarBox);
-				fadeAnimation.add(userBox);
-				fadeAnimation.add(passBox);
-				fadeAnimation.add(registerLink);
-				
-				fadeAnimation.reset(0.0f);
-				fadeAnimation.fadeIn();
-			}
-		});
-		timerDebug.setRepeats(false);
-		timerDebug.start();
+		fadeAnimation.add(avatarBox);
+		fadeAnimation.add(userBox);
+		fadeAnimation.add(passBox);
+		fadeAnimation.add(registerLink);
+		fadeAnimation.reset(0.0f);
+		
+//		Timer timerDebug = new Timer(3000, new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				frame.remove(labelLoading);
+//				progressor.stop();
+//				
+//				frame.add(avatarBox);
+//				frame.add(userBox);
+//				frame.add(passBox);
+//				frame.add(registerLink);
+//				
+//				fadeAnimation.fadeIn();
+//			}
+//		});
+//		timerDebug.setRepeats(false);
+//		timerDebug.start();
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		
+		setChanged();
+		notifyObservers(UIEvent.CheckVersion);
 	}
 
 	/**
