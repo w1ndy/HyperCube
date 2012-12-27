@@ -20,13 +20,13 @@ public class PacketDataFactory{
 		int length = list.length;
 		byte[] arr;
 		byte[] ars;
-		int length_packet = 3;
+		int length_packet = 2;
 		int point = 0;
 				
 		/**
 		 * Get the length of the whole packet to create a byte[].
 		 */
-		for (int i = 1; i <= length; i++){
+		for (int i = 0; i < length; i++){
 			length_packet += 3;
 			length_packet += list[i].length();
 		}
