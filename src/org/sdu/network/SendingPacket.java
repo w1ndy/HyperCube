@@ -2,7 +2,7 @@ package org.sdu.network;
 
 import java.net.Socket;
 
-public class SendingPacket extends Packet{
+public class SendingPacket implements Packet{
 	private final byte[] arr;
 	private final Socket socket;
 	

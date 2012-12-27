@@ -5,10 +5,10 @@ import java.net.Socket;
 /**
  * IncomingPacket class inherited from Packet class.
  * 
- * @version 0.1 rev 8001 Dec. 17, 2012.
+ * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class IncomingPacket extends Packet
+public class IncomingPacket implements Packet
 {
 	private final byte[] arr;
 	private final Socket socket;
