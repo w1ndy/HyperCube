@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8005 Dec. 27, 2012
+ * @version 0.1 rev 8101 Dec. 27, 2012
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
@@ -24,17 +24,19 @@ public class Main extends JFrame {
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
 	private String listLabel = "";
-	private Database stuData = new Database("stu");
+	private Database stuData = new Database("stu1");
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	private BufferedImage nopic;
-	private Container contentPane;
+	private JFrame frame=this;
 	private JPanel listPane;
+	private JList list;
+	private JTable table;
 	private JToggleButton textmode, pictextmode, picmode;
 	private Color chosen = new Color(0x3A70D6);
-	private int currentMode = 1;
-
+	private String query;
 	// mode 1 = text-only; mode 2 = picture + text; mode 3 = picture-only
+	private int currentMode = 1;
 
 	private BufferedImage paintPic(int index) {
 		if (!buffered[index])
@@ -118,12 +120,6 @@ public class Main extends JFrame {
 		}
 	}
 
-	/**
-	 * mode 1 = text-only mode 2 = picture + text mode 3 = picture-only
-	 * 
-	 * @param mode
-	 * @return
-	 */
 	private JScrollPane mainList(int mode) {
 		JScrollPane listScroller;
 		if (mode == 1) {
@@ -141,7 +137,7 @@ public class Main extends JFrame {
 					return false;
 				}
 			};
-			JTable table = new JTable(model);
+			table = new JTable(model);
 			table.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -151,7 +147,6 @@ public class Main extends JFrame {
 			});
 			listScroller = new JScrollPane(table);
 		} else {
-			JList list;
 			list = new JList(idList);
 			if (mode == 2)
 				list.setCellRenderer(new PictextList());
@@ -203,7 +198,6 @@ public class Main extends JFrame {
 					idList[j] = id[j];
 			}
 			rs.close();
-			stuData.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "数据库读取错误", "运行时错误",
 					JOptionPane.ERROR_MESSAGE);
@@ -255,12 +249,46 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
-		JButton deleleButton = new JButton(new ImageIcon(
+		JButton deleteButton = new JButton(new ImageIcon(
 				"art/database/deleteicon.png"));
-		deleleButton.setPreferredSize(dataButton);
+		deleteButton.setPreferredSize(dataButton);
+		deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (((currentMode==1)&&(table.getSelectedRowCount()==0))||((currentMode!=1)&&(list.getSelectedValue()==null)))
+					JOptionPane.showMessageDialog(frame, "请选择一个或多个同学", "错误",
+							JOptionPane.INFORMATION_MESSAGE);
+				else {
+				int confirm = JOptionPane.showConfirmDialog(
+					    frame,
+					    "是否删除学生？",
+					    "确认",
+					    JOptionPane.YES_NO_OPTION);
+				if (confirm==0)
+					try {
+					if (currentMode==1) {
+						int[] selected=table.getSelectedRows();
+						for (int i=0;i<selected.length;i++)
+							stuData.delete(idList[selected[i]]);
+					}
+					else
+						stuData.delete((String)list.getSelectedValue());
+					getData(query);
+					buffered = new boolean[1000];
+					listPane.removeAll();
+					listPane.add(mainList(currentMode));
+					listPane.validate();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame, "删除失败", "错误",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 
 		textmode = new JToggleButton(
 				new ImageIcon("art/database/texticon.png"), true);
@@ -348,12 +376,12 @@ public class Main extends JFrame {
 		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
 		buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 		buttonPane.add(addButton);
-		buttonPane.add(deleleButton);
+		buttonPane.add(deleteButton);
 		buttonPane.add(Box.createHorizontalGlue());
 		buttonPane.add(statButton);
 		buttonPane.add(filterButton);
 
-		contentPane = getContentPane();
+		Container contentPane = getContentPane();
 		contentPane.add(topPane, BorderLayout.NORTH);
 		contentPane.add(listPane, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
