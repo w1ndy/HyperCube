@@ -11,8 +11,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,7 +34,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientUI class implements a user interface of student user.
  * 
- * @version 0.1 rev 8006 Dec. 27, 2012.
+ * @version 0.1 rev 8007 Dec. 28, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientUI extends Observable
@@ -43,6 +46,10 @@ public class ClientUI extends Observable
 	private HyperLink registerLink;
 	private ProgressBar progressor;
 	private JLabel labelLoading;
+	
+	private static final int Focus_CheckVersion = 0x05;
+	private static final int Focus_LoginWindow = 0xB0;
+	private int currentFocus;
 
 	private ComponentFadeAnimation fadeAnimation;
 	
@@ -81,7 +88,7 @@ public class ClientUI extends Observable
 	/**
 	 * Initialize ClientUI object.
 	 */
-	public ClientUI()
+	public ClientUI(Observer listener)
 	{
 		frame = new BasicFrame((String)UIHelper.getResource("ui.string.login.title"),
 								(String)UIHelper.getResource("ui.string.login.subtitle"));
@@ -98,44 +105,30 @@ public class ClientUI extends Observable
 		createRegisterLink();
 		createProgressBar();
 
-		labelLoading = new JLabel("检查版本....");
+		labelLoading = new JLabel((String)UIHelper.getResource("ui.string.login.checkversion"), JLabel.CENTER);
 		labelLoading.setFont((Font)UIHelper.getResource("ui.font.text"));
-		labelLoading.setBounds(120, 110, 60, 15);
+		labelLoading.setBounds(
+				UIHelper.loginPromptOffsetX, UIHelper.loginPromptOffsetY, 
+				UIHelper.loginFrameWidth, UIHelper.loginFrameHeight);
 		labelLoading.setBackground(new Color(0, true));
 		frame.add(labelLoading);
 		
 		frame.add(progressor);
 		progressor.start();
 
-		fadeAnimation = new ComponentFadeAnimation();
+		fadeAnimation = new ComponentFadeAnimation(frame);
 		fadeAnimation.add(avatarBox);
 		fadeAnimation.add(userBox);
 		fadeAnimation.add(passBox);
 		fadeAnimation.add(registerLink);
-		fadeAnimation.reset(0.0f);
-		
-//		Timer timerDebug = new Timer(3000, new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				frame.remove(labelLoading);
-//				progressor.stop();
-//				
-//				frame.add(avatarBox);
-//				frame.add(userBox);
-//				frame.add(passBox);
-//				frame.add(registerLink);
-//				
-//				fadeAnimation.fadeIn();
-//			}
-//		});
-//		timerDebug.setRepeats(false);
-//		timerDebug.start();
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		currentFocus = Focus_CheckVersion;
 		
+		addObserver(listener);
 		setChanged();
-		notifyObservers(UIEvent.CheckVersion);
+		notifyObservers(new UIEvent(UIEvent.CheckVersion));
 	}
 
 	/**
@@ -157,10 +150,29 @@ public class ClientUI extends Observable
 		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		userBox.addKeyListener(new KeyListener() {
+			private boolean validate(String text)
+			{
+				int i = 0, n = 0;
+				boolean start = true;
+				if(text == null || text.length() == 0) return false;
+				for(i = 0; i < text.length(); i++) {
+					if(Character.isLetter(text.charAt(i))) {
+						if(!start) return false;
+						n++;
+						if(n > 2) return false;
+					} else if(Character.isDigit(text.charAt(i))){
+						start = false;
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+			
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					if(userBox.getText().length() == 0) userBox.onFailed();
+					if(!validate(userBox.getText())) userBox.onFailed();
 					else passBox.requestFocus();
 				}
 			}
@@ -192,6 +204,7 @@ public class ClientUI extends Observable
 					setChanged();
 					//passBox.onWrongPassword();
 					// TODO post a notification here.
+					notifyObservers(new UIEvent(UIEvent.Login));
 				}
 			}
 
@@ -224,18 +237,48 @@ public class ClientUI extends Observable
 		progressor.setBounds(UIHelper.progressBarLoginOffsetX, UIHelper.progressBarLoginOffsetY,
 				UIHelper.progressBarWidth, UIHelper.progressBarHeight);
 	}
-	
-	/**
-	 * @return the avatarBox
-	 */
-	public AvatarBox getAvatarBox() {
-		return avatarBox;
-	}
 
 	/**
-	 * @param avatarBox the avatarBox to set
+	 * Call if version is correct.
 	 */
-	public void setAvatarBox(AvatarBox avatarBox) {
-		this.avatarBox = avatarBox;
+	public void onVersionOK()
+	{
+		if(currentFocus == Focus_CheckVersion) {
+			frame.remove(labelLoading);
+			progressor.stop();
+			fadeAnimation.reset(0.0f);
+			fadeAnimation.fadeIn(true);
+			currentFocus = Focus_LoginWindow;
+		}
+	}
+	
+	/**
+	 * Call if network is disconnected.
+	 */
+	public void onDisconnected()
+	{
+		switch(currentFocus)
+		{
+		case Focus_LoginWindow:
+			progressor.start();
+			fadeAnimation.fadeOut(true);
+			
+		case Focus_CheckVersion:
+			frame.remove(labelLoading);
+			labelLoading = new JLabel(
+					(String)UIHelper.getResource("ui.string.login.waitnet"), 
+					new ImageIcon((Image)UIHelper.getResource("ui.common.net")),
+					JLabel.CENTER);
+			labelLoading.setBackground(new Color(0, true));
+			labelLoading.setFont((Font)UIHelper.getResource("ui.font.text"));
+			labelLoading.setBounds(
+					UIHelper.loginPromptOffsetX, UIHelper.loginPromptOffsetY,
+					UIHelper.loginPromptWidth, UIHelper.loginPromptHeight);
+			labelLoading.setVerticalTextPosition(JLabel.BOTTOM);
+			labelLoading.setHorizontalTextPosition(JLabel.CENTER);
+			frame.add(labelLoading);
+			frame.repaint();
+			break;
+		}
 	}
 }

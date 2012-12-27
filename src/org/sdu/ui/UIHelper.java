@@ -21,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8005 Dec. 26, 2012.
+ * @version 0.1 rev 8006 Dec. 28, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -121,6 +121,18 @@ public class UIHelper
 	 */
 	public static final int progressBarWidth = 302;
 	public static final int progressBarHeight = 5;
+	
+	/**
+	 * Default login prompt position
+	 */
+	public static final int loginPromptOffsetX = 4;
+	public static final int loginPromptOffsetY = 64;
+	
+	/**
+	 * Default login prompt size
+	 */
+	public static final int loginPromptWidth = 300;
+	public static final int loginPromptHeight = 110;
 	
 	/**
 	 * Default progress bar parameters

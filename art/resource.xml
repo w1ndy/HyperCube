@@ -6,6 +6,7 @@
 	<entry name="ui.avatarbox.online" type="image">ui/avatarbox/online.png</entry>
 	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
 	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
+	<entry name="ui.common.net" type="image">ui/common/Net.png</entry>
 	
 	<entry name="ui.font.title" type="font">
 		<fontface>微软雅黑</fontface>
@@ -34,4 +35,6 @@
 	<entry name="ui.string.login.password" type="string">密码</entry>
 	<entry name="ui.string.login.register.desc" type="string">没有账号？</entry>
 	<entry name="ui.string.login.register.url" type="string">http://bksms.sdu.edu.cn</entry>
+	<entry name="ui.string.login.checkversion" type="string">检查版本....</entry>
+	<entry name="ui.string.login.waitnet" type="string">网络故障，正在重试连接...</entry>
 </resource>
