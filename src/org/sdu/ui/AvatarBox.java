@@ -15,10 +15,10 @@ import javax.swing.Timer;
 /**
  * AvatarBox class implements an avatar box with switchable status icon.
  * 
- * @version 0.1 rev 8001 Dec. 25, 2012.
+ * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class AvatarBox extends JLabel
+public class AvatarBox extends JLabel implements TranslucentComponent
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,6 +26,7 @@ public class AvatarBox extends JLabel
 	private Timer timerInvisibleToOnline, timerOnlineToInvisible;
 	private boolean isInvisible;
 	private int statusOpacity;
+	private float globalOpacity = 1.0f;
 	
 	/**
 	 * Initialize avatar box.
@@ -100,6 +101,7 @@ public class AvatarBox extends JLabel
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				if(!AvatarBox.this.isEnabled()) return ;
 				if(isInvisible) {
 					if(timerOnlineToInvisible.isRunning())
 						timerOnlineToInvisible.stop();
@@ -128,13 +130,14 @@ public class AvatarBox extends JLabel
 	@Override
 	public void paintComponent(Graphics g)
 	{
+		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, globalOpacity));
 		g.drawImage(imageAvatarFrame, 0, 0, this);
 		if(imageAvatar != null)
 			g.drawImage(imageAvatar, UIHelper.avatarOffsetX, UIHelper.avatarOffsetY, this);
 		else
 			g.drawImage(imageNoAvatar, UIHelper.avatarOffsetX, UIHelper.avatarOffsetY, this);
 		
-		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)statusOpacity / 255));
+		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, globalOpacity * (float)statusOpacity / 255));
 		if(isInvisible)
 			g.drawImage(imageInvisible, UIHelper.avatarStatusIconOffsetX, UIHelper.avatarStatusIconOffsetY, this);
 		else
@@ -153,5 +156,15 @@ public class AvatarBox extends JLabel
 	 */
 	public void setAvatar(Image imageAvatar) {
 		this.imageAvatar = imageAvatar;
+	}
+
+	@Override
+	public void setOpacity(float alpha) {
+		globalOpacity = alpha;
+	}
+
+	@Override
+	public float getOpacity() {
+		return globalOpacity;
 	}
 }

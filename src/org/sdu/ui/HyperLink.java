@@ -1,8 +1,11 @@
 package org.sdu.ui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
@@ -15,14 +18,15 @@ import org.sdu.util.DebugFramework;
 /**
  * HyperLink class implements a web link component.
  * 
- * @version 0.1 rev 8000 Dec. 26, 2012.
+ * @version 0.1 rev 8001 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class HyperLink extends JLabel
+public class HyperLink extends JLabel implements TranslucentComponent
 {
 	private static final long serialVersionUID = 1L;
 
 	private URI	uri;
+	private float globalOpacity = 1.0f;
 	
 	/**
 	 * Initialize a HyperLink object.
@@ -97,5 +101,22 @@ public class HyperLink extends JLabel
 	{
 		if(uri == null) return "";
 		return uri.toString();
+	}
+
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, globalOpacity));
+		super.paintComponent(g);
+	}
+	
+	@Override
+	public void setOpacity(float alpha) {
+		globalOpacity = alpha;
+	}
+
+	@Override
+	public float getOpacity() {
+		return globalOpacity;
 	}
 }
