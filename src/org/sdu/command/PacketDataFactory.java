@@ -1,15 +1,13 @@
 package org.sdu.command;
 
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 import org.sdu.network.ModifiablePacket;
-import org.sdu.util.DebugFramework;
 
 /**
  * Build the packet on the client to send to the server.
  * 
- * @version 0.1 rev 8001 Dec. 27, 2012.
+ * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PacketDataFactory{
@@ -20,10 +18,9 @@ public class PacketDataFactory{
 	 * @param list --> The list of the strings
 	 * @return The byte[] part of the new packet
 	 */
-	public static void makePacket(ModifiablePacket p, Socket s, int instMain, int instDeputy, String...list){
+	public static void makePacket(ModifiablePacket p, Socket s, int instMain, int instDeputy, byte[]...list){
 		int length = list.length;
 		byte[] arr;
-		byte[] ars;
 		int length_packet = 2;
 		int point = 0;
 		
@@ -32,7 +29,7 @@ public class PacketDataFactory{
 		 */
 		for (int i = 0; i < length; i++){
 			length_packet += 3;
-			length_packet += list[i].length();
+			length_packet += list[i].length;
 		}
 		
 		/**
@@ -45,20 +42,13 @@ public class PacketDataFactory{
 		/**
 		 * Build the part of each param.
 		 */				
-		for (int i = 0; i < length; i++){
-			try {
-				ars = list[i].getBytes("UTF-8");
-			} catch (Exception e) {
-				DebugFramework.getFramework().print("Failed to convert data to UTF-8: " + e);
-				return ;
-			}
-			
+		for (int i = 0; i < length; i++){			
 			arr[point] = 0x05; point++;
-			arr[point] = (byte) ((list[i].length()>>8) & 0xff); point++;
-			arr[point] = (byte) (list[i].length() & 0xff); point++;
+			arr[point] = (byte) ((list[i].length >> 8) & 0xff); point++;
+			arr[point] = (byte) (list[i].length & 0xff); point++;
 
-			System.arraycopy(ars, 0, arr, point, ars.length);
-			point += ars.length;
+			System.arraycopy(list[i], 0, arr, point, list[i].length);
+			point += list[i].length;
 		}
 		
 		/**
