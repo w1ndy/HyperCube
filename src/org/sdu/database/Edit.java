@@ -5,7 +5,6 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
-
 import javax.swing.*;
 
 /**

@@ -3,14 +3,11 @@ package org.sdu.database;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
 import java.net.URL;
 import java.sql.ResultSet;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-import com.apple.eawt.Application;
 
 /**
  * Database management application.
