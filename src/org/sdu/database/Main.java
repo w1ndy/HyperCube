@@ -10,30 +10,32 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.apple.eawt.Application;
+
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8102 Dec. 27, 2012
+ * @version 0.1 rev 8103 Dec. 28, 2012
  * Copyright (c) HyperCube Dev Team
  */
-@SuppressWarnings({"serial", "rawtypes", "unchecked"})
+@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Main extends JFrame {
-	private Dimension modeButton = new Dimension(30, 30);
-	private Dimension dataButton = new Dimension(25, 25);
+	private final Dimension modeButton = new Dimension(30, 30);
+	private final Dimension dataButton = new Dimension(25, 25);
+	private final Color chosen = new Color(0x3A70D6);
 	private String[] name = new String[1000], idList = new String[1000],
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
 	private Database stuData = new Database("stu1");
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
-	private BufferedImage nopic;
+	BufferedImage nopic;
 	private JLabel totalNum = new JLabel("");
 	private Main frame = this;
 	private JPanel listPane;
 	private JList list;
 	private JTable table;
 	private JToggleButton textmode, pictextmode, picmode;
-	private Color chosen = new Color(0x3A70D6);
 	private String query;
 	// mode 1 = text-only; mode 2 = picture + text; mode 3 = picture-only
 	private int currentMode = 1;
@@ -229,6 +231,7 @@ public class Main extends JFrame {
 			System.exit(-1);
 		}
 	}
+
 	/**
 	 * Refresh list or table
 	 */
@@ -252,15 +255,8 @@ public class Main extends JFrame {
 				System.exit(0);
 			}
 		});
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 400);
 		setMinimumSize(new Dimension(450, 300));
-		try {
-			nopic = ImageIO.read(new File("art/database/nopic.png"));
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(frame, "找不到图片", "缺少文件",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
 
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -291,7 +287,7 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Edit.create(frame,0);
+				Edit.create(frame, 0);
 			}
 		});
 
@@ -384,6 +380,7 @@ public class Main extends JFrame {
 		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
 		listPane.add(mainList(1));
 		listPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		totalNum.setLabelFor(listPane);
 
 		JPanel topPane = new JPanel();
 		topPane.setLayout(new BoxLayout(topPane, BoxLayout.LINE_AXIS));
@@ -407,24 +404,5 @@ public class Main extends JFrame {
 		contentPane.add(topPane, BorderLayout.NORTH);
 		contentPane.add(listPane, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
-	}
-
-	/**
-	 * @param args
-	 *            Launch
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Main frame = new Main();
-					frame.setIconImage(new ImageIcon("art/database/icon.png")
-							.getImage());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 }

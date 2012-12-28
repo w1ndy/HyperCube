@@ -1,4 +1,5 @@
 *.class
+*.conf
 .DS_Store
 
 # Package Files #
@@ -8,6 +9,3 @@
 
 # Log Files #
 *.log
-
-# Ignore Platform-Specific Code #
-DriverForMac.java
