@@ -175,7 +175,7 @@ public class Main extends JFrame {
 			list.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
-
+						// TODO
 					}
 				}
 
@@ -273,10 +273,10 @@ public class Main extends JFrame {
 
 		// Buttons
 		JButton statButton = new JButton("统计");
-		// statButton.addActionListener(this);
+		// TODO statButton.addActionListener(this);
 
 		final JButton filterButton = new JButton("筛选");
-		// filterButton.addActionListener(this);
+		// TODO filterButton.addActionListener(this);
 		getRootPane().setDefaultButton(filterButton);
 
 		JButton addButton = new JButton(new ImageIcon(
