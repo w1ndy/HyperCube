@@ -11,25 +11,38 @@ import java.nio.channels.SocketChannel;
  */
 public class Session
 {
-	private SocketChannel channel;
+	private SocketChannel 	channel;
+	private Dispatcher 		dispatcher;
+	
+	private ReadQueue 	readQueue;
+	private WriteQueue 	writeQueue;
 	
 	/**
 	 * Initialize a Session object.
 	 * Do not call new directly.
 	 */
-	private Session()
+	public Session(Dispatcher d, SocketChannel c)
 	{
-		// TODO initialize the session.
+		dispatcher = d;
+		channel = c;
+		readQueue = new ReadQueue();
+		writeQueue = new WriteQueue();
 	}
 	
 	public void post(Packet p)
 	{
-		// TODO post a packet here.
+		writeQueue.push(new HeaderPacket(p));
+		writeQueue.push(p);
+		dispatcher.beginWrite(this);
 	}
 	
 	public void post(Packet ... list)
 	{
-		// TODO post packets here.
+		for(Packet p : list) {
+			writeQueue.push(new HeaderPacket(p));
+			writeQueue.push(p);
+		}
+		dispatcher.beginWrite(this);
 	}
 	
 	public SocketChannel getChannel()
@@ -37,9 +50,13 @@ public class Session
 		return channel;
 	}
 	
-	// TODO getReadQueue()
+	public ReadQueue getReadQueue()
+	{
+		return readQueue;
+	}
 	
-	// TODO getWriteQueue()
-	
-	// TODO static createSession()
+	public WriteQueue getWriteQueue()
+	{
+		return writeQueue;
+	}
 }

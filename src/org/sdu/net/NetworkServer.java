@@ -1,6 +1,8 @@
 package org.sdu.net;
 
+import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
 import org.sdu.util.DebugFramework;
 
@@ -8,12 +10,15 @@ import org.sdu.util.DebugFramework;
  * NetworkServer class listens on a specified port, accepting and processing
  * the incoming connections.
  * 
- * @version 0.1 rev 8000 Dec. 30, 2012.
+ * @version 0.1 rev 8001 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class NetworkServer implements Runnable
 {
+	private static final int DispatcherPoolDefaultSize = 16;
+	
 	private ServerSocketChannel channelServer;
+	private DispatcherPool pool;
 	private SessionHandler handler;
 	private DebugFramework debug;
 	
@@ -28,6 +33,7 @@ public class NetworkServer implements Runnable
 	{
 		this.handler = handler;
 		this.port = port;
+		this.pool = new DispatcherPool(DispatcherPoolDefaultSize);
 		this.isRunning = false;
 		this.debug = DebugFramework.getFramework();
 	}
@@ -59,12 +65,56 @@ public class NetworkServer implements Runnable
 	}
 	
 	/**
+	 * Whether the server is running.
+	 */
+	public boolean isRunning()
+	{
+		return isRunning;
+	}
+	
+	/**
 	 * Accept incoming connections and process them.
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		try {
+			channelServer.bind(new InetSocketAddress(port));
+			pool.start(handler);
+			while(isRunning) {
+				SocketChannel c = channelServer.accept();
+				if(!handler.onAcceptingSession(c)) {
+					c.close();
+					handler.onUnregisteredSession(c);
+				} else {
+					Session s = pool.nextDispatcher().register(c);
+					if(s == null)
+						handler.onUnregisteredSession(c);
+					else
+						handler.onSessionAccepted(s);
+				}
+			}
+		} catch(Exception e) {
+			System.out.println("Unexpected fatal error: " + e);
+			try {
+				pool.stop();
+			} catch (Throwable t) {}
+		}
 	}
 	
+	/**
+	 * Get the port on which server is running.
+	 * @return
+	 */
+	public int getPort()
+	{
+		return port;
+	}
+	
+	/**
+	 * Get event handler.
+	 */
+	public SessionHandler getHandler()
+	{
+		return handler;
+	}
 }

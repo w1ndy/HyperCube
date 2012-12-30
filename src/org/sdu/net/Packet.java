@@ -6,12 +6,12 @@ import java.nio.ByteBuffer;
 /**
  * Packet class warps byte buffer into a packet for network transmission.
  * 
- * @version 0.1 rev 8000 Dec. 30, 2012.
+ * @version 0.1 rev 8001 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Packet
 {
-	private ByteBuffer dataBuffer;
+	protected ByteBuffer dataBuffer;
 	
 	/**
 	 * Initialize a Packet object.
@@ -26,7 +26,8 @@ public class Packet
 	 */
 	public Packet(ByteBuffer buf)
 	{
-		dataBuffer = buf;
+		dataBuffer = buf.duplicate();
+		dataBuffer.rewind();
 	}
 	
 	/**
@@ -34,7 +35,8 @@ public class Packet
 	 */
 	public void setData(ByteBuffer buf)
 	{
-		dataBuffer = buf;
+		dataBuffer = buf.duplicate();
+		dataBuffer.rewind();
 	}
 	
 	/**
@@ -42,7 +44,12 @@ public class Packet
 	 */
 	public void setNonpersistentData(ByteBuffer buf)
 	{
-		dataBuffer = buf.duplicate();
+		dataBuffer = ByteBuffer.allocate(buf.capacity());
+		buf.mark();
+		buf.rewind();
+		dataBuffer.put(buf);
+		dataBuffer.flip();
+		buf.reset();
 	}
 	
 	/**
@@ -50,7 +57,7 @@ public class Packet
 	 */
 	public ByteBuffer getData()
 	{
-		return dataBuffer;
+		return dataBuffer.duplicate();
 	}
 	
 	/**
@@ -58,7 +65,13 @@ public class Packet
 	 */
 	public ByteBuffer getDataCopy()
 	{
-		return dataBuffer.duplicate();
+		ByteBuffer buf = ByteBuffer.allocate(dataBuffer.capacity());
+		dataBuffer.mark();
+		dataBuffer.rewind();
+		buf.put(dataBuffer);
+		buf.flip();
+		dataBuffer.reset();
+		return buf;
 	}
 	
 	/**
