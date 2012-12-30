@@ -2,9 +2,10 @@ package org.sdu.database;
 
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.Method;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import com.apple.eawt.*;
 
 /**
  * Launch the database management application on OS X. Optimized for menu bar
@@ -15,15 +16,26 @@ import com.apple.eawt.*;
  */
 public class Driver {
 	public static void main(String[] args) {
-		if (System.getProperty("os.name").equals("Mac OS X")) {
+		if (System.getProperty("os.name").startsWith("Mac OS X")) {
 			// Title
 			System.setProperty(
 					"com.apple.mrj.application.apple.menu.about.name", "数据库");
 			// Menu bar
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			// Dock Icon
-			Application.getApplication().setDockIconImage(
-					new ImageIcon("art/database/icon.png").getImage());
+			try {
+				Class<?> app = Class.forName("com.apple.eawt.Application");
+				Method getapp = app.getMethod("getApplication", new Class<?>[0]);
+				Object app_obj = getapp.invoke(null, new Object[0]);
+				Method seticon = app.getMethod("setDockIcon", new Class[] { Image.class });
+				seticon.invoke(app.cast(app_obj), new Object[] { ImageIO.read(new File("art/database/icon.png")) });
+				
+				//com.apple.eawt.Application.getApplication().setDockIconImage(
+				//		new ImageIcon("art/database/icon.png").getImage());
+			} catch(Exception e) {
+				e.printStackTrace();
+				return ;
+			}
 		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
