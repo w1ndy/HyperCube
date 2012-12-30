@@ -1,8 +1,9 @@
-package org.sdu.database;
+package org.sdu.client;
 
 import java.security.*;
 
 import org.sdu.util.DebugFramework;
+
 
 /**
  * Encrypt the password by using MD5 twice. After the first round, attach the ID
