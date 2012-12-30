@@ -1,7 +1,10 @@
 package org.sdu.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.Callable;
@@ -20,10 +23,10 @@ import org.sdu.network.Session;
  */
 public class NativeClientTest implements Runnable
 {
-	private static final String host = "211.87.218.74";
+	private static final String host = "127.0.0.1";
 	private static final int 	port = EchoServerTest.port;
 	
-	private static final int max_thread = 1000;
+	private static final int max_thread = 100;
 	private static final int post_times = 1;
 	private static final byte delimiter = Session.delimiter;
 	private static final byte[] data = {delimiter, 0x00, 0x05,
@@ -42,32 +45,65 @@ public class NativeClientTest implements Runnable
 	
 	public static void main(String[] args)
 	{
-		ExecutorService service = Executors.newFixedThreadPool(max_thread);
-		List<Callable<Object>> todo = new ArrayList<Callable<Object>>(max_thread);
-		for(int i = 0; i < max_thread; i++) {
-			todo.add(Executors.callable(new NativeClientTest()));
-		}
+		PrintWriter writer = null;
 		try {
-			service.invokeAll(todo);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			writer = new PrintWriter(new File("NativeClientTest.log"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		System.out.println();
-		System.out.println("Total Connection Time: " + tot_conn_time + "ms");
-		System.out.println("Total Send Time: " + tot_send_time + "ms");
-		System.out.println("Total Recv Time: " + tot_recv_time + "ms");
-		System.out.println();
-		System.out.println("Thread packet size: " + (post_times * packet_len));
-		System.out.println("Total Byte Sent: " + tot_send);
-		System.out.println("Total Byte Received: " + tot_recv);
-		System.out.println();
-		System.out.println("Average Connection Time: " + 
-				((float)tot_conn_time / (float)(max_thread)) + "ms");
-		System.out.println("Average Send Time: " +
-				((float)tot_send_time / (float)(max_thread)) + "ms");
-		System.out.println("Average Recv Time: " +
-				((float)tot_recv_time / (float)(max_thread)) + "ms");
-		service.shutdownNow();
+		for(int k = 0; k < 20; k++) {
+			tot_conn_time = 0;
+			tot_send_time = 0;
+			tot_recv_time = 0;
+			
+			tot_send = 0;
+			tot_recv = 0;
+			
+			ExecutorService service = Executors.newFixedThreadPool(max_thread);
+			List<Callable<Object>> todo = new ArrayList<Callable<Object>>(max_thread);
+			for(int i = 0; i < max_thread; i++) {
+				todo.add(Executors.callable(new NativeClientTest()));
+			}
+			try {
+				service.invokeAll(todo);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			writer.println("#" + k);
+			writer.println();
+			writer.println("Total Connection Time: " + tot_conn_time + "ms");
+			writer.println("Total Send Time: " + tot_send_time + "ms");
+			writer.println("Total Recv Time: " + tot_recv_time + "ms");
+			writer.println();
+			writer.println("Thread packet size: " + (post_times * packet_len));
+			writer.println("Total Byte Sent: " + tot_send);
+			writer.println("Total Byte Received: " + tot_recv);
+			writer.println();
+			writer.println("Average Connection Time: " + 
+					((float)tot_conn_time / (float)(max_thread)) + "ms");
+			writer.println("Average Send Time: " +
+					((float)tot_send_time / (float)(max_thread)) + "ms");
+			writer.println("Average Recv Time: " +
+					((float)tot_recv_time / (float)(max_thread)) + "ms");
+			System.out.println();
+			System.out.println("Total Connection Time: " + tot_conn_time + "ms");
+			System.out.println("Total Send Time: " + tot_send_time + "ms");
+			System.out.println("Total Recv Time: " + tot_recv_time + "ms");
+			System.out.println();
+			System.out.println("Thread packet size: " + (post_times * packet_len));
+			System.out.println("Total Byte Sent: " + tot_send);
+			System.out.println("Total Byte Received: " + tot_recv);
+			System.out.println();
+			System.out.println("Average Connection Time: " + 
+					((float)tot_conn_time / (float)(max_thread)) + "ms");
+			System.out.println("Average Send Time: " +
+					((float)tot_send_time / (float)(max_thread)) + "ms");
+			System.out.println("Average Recv Time: " +
+					((float)tot_recv_time / (float)(max_thread)) + "ms");
+			service.shutdownNow();
+		}
+		writer.flush();
 	}
 	
 	/**
