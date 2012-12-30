@@ -11,7 +11,7 @@ import javax.swing.*;
  * Launch the database management application on OS X. Optimized for menu bar
  * and dock.
  * 
- * @version 0.1 rev 8002 Dec. 28, 2012
+ * @version 0.1 rev 8003 Dec. 30, 2012
  * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
