@@ -10,7 +10,7 @@ import org.sdu.util.DebugFramework;
  * NetworkServer class listens on a specified port, accepting and processing
  * the incoming connections.
  * 
- * @version 0.1 rev 8001 Dec. 31, 2012.
+ * @version 0.1 rev 8002 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class NetworkServer implements Runnable
@@ -78,6 +78,8 @@ public class NetworkServer implements Runnable
 	@Override
 	public void run() {
 		try {
+			channelServer = ServerSocketChannel.open();
+			channelServer.configureBlocking(true);
 			channelServer.bind(new InetSocketAddress(port));
 			pool.start(handler);
 			while(isRunning) {
@@ -97,6 +99,7 @@ public class NetworkServer implements Runnable
 			System.out.println("Unexpected fatal error: " + e);
 			try {
 				pool.stop();
+				if(channelServer != null) channelServer.close();
 			} catch (Throwable t) {}
 		}
 	}

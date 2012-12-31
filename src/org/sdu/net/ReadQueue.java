@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 /**
  * ReadQueue class resolves byte data stream into packet format.
  * 
- * @version 0.1 rev 8000 Dec. 31, 2012.
+ * @version 0.1 rev 8001 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ReadQueue
@@ -58,7 +58,7 @@ public class ReadQueue
 					switch(headerCompletence)
 					{
 					case 0:
-						if(buf.get() == 0x02) {
+						if(buf.get() == HeaderPacket.PacketDelimiter) {
 							switch(buf.remaining())
 							{
 							case 0:
@@ -104,8 +104,10 @@ public class ReadQueue
 							leftBytes -= buf.remaining();
 							currentBuffer.put(buf);
 						} else {
-							currentBuffer.put(buf.array(), buf.position(), leftBytes);
-							buf.position(buf.position() + leftBytes);
+							int old_limit = buf.limit();
+							buf.limit(buf.position() + leftBytes);
+							currentBuffer.put(buf);
+							buf.limit(old_limit);
 							currentBuffer.flip();
 							if(handler != null)
 								handler.onPacketResolved(session, new Packet(currentBuffer));

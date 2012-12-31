@@ -6,7 +6,7 @@ import java.nio.channels.SocketChannel;
  * Session class warps a SocketChannel object into a operational transmitter
  * with asynchronized method.
  * 
- * @version 0.1 rev 8000 Dec. 30, 2012.
+ * @version 0.1 rev 8001 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Session
@@ -29,6 +29,9 @@ public class Session
 		writeQueue = new WriteQueue();
 	}
 	
+	/**
+	 * Post a packet.
+	 */
 	public void post(Packet p)
 	{
 		writeQueue.push(new HeaderPacket(p));
@@ -36,6 +39,9 @@ public class Session
 		dispatcher.beginWrite(this);
 	}
 	
+	/**
+	 * Post packets
+	 */
 	public void post(Packet ... list)
 	{
 		for(Packet p : list) {
@@ -45,16 +51,25 @@ public class Session
 		dispatcher.beginWrite(this);
 	}
 	
+	/**
+	 * Get socket channel.
+	 */
 	public SocketChannel getChannel()
 	{
 		return channel;
 	}
 	
+	/**
+	 * Get read queue of this session.
+	 */
 	public ReadQueue getReadQueue()
 	{
 		return readQueue;
 	}
 	
+	/**
+	 * Get write queue of this session.
+	 */
 	public WriteQueue getWriteQueue()
 	{
 		return writeQueue;

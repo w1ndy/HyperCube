@@ -6,12 +6,12 @@ import java.nio.ByteBuffer;
  * HeaderPacket is a 3-byte packet indicating the beginning of a data
  * packet.
  * 
- * @version 0.1 rev 8000 Dec. 31, 2012.
+ * @version 0.1 rev 8001 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class HeaderPacket extends Packet
 {
-	private static final byte PacketDelimiter = 0x02;
+	public static final byte PacketDelimiter = 0x02;
 	
 	/**
 	 * Initialize a HeaderPacket object.

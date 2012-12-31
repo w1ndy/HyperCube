@@ -12,7 +12,7 @@ import org.sdu.util.DebugFramework;
  * SessionHandler class is a super class which handles network events
  * implemented with nio.
  * 
- * @version 0.1 rev 8001 Dec. 31, 2012.
+ * @version 0.1 rev 8002 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public abstract class SessionHandler implements ReadQueueHandler
@@ -90,13 +90,15 @@ public abstract class SessionHandler implements ReadQueueHandler
 			do {
 				// Get a vacant buffer.
 				ByteBuffer buf = readBufferQueue.poll();
-				if(numBufferCreated < MaximumReadBufferCount) {
-					++numBufferCreated;
-					readBufferQueue.offer(ByteBuffer.allocateDirect(ReadBufferSize));
-					buf = readBufferQueue.poll();
-				} else {
-					buf = ByteBuffer.allocateDirect(ReadBufferSize);
-					DebugFramework.getFramework().print("Warning: Read buffers insufficient.");
+				if(buf == null) {
+					if(numBufferCreated < MaximumReadBufferCount) {
+						++numBufferCreated;
+						readBufferQueue.offer(ByteBuffer.allocateDirect(ReadBufferSize));
+						buf = readBufferQueue.poll();
+					} else {
+						buf = ByteBuffer.allocateDirect(ReadBufferSize);
+						DebugFramework.getFramework().print("Warning: Read buffers insufficient.");
+					}
 				}
 				
 				// Read data into buffer.
@@ -104,6 +106,7 @@ public abstract class SessionHandler implements ReadQueueHandler
 				k = s.getChannel().read(buf);
 				if(k > 0) {
 					// push into ReadQueue
+					buf.flip();
 					s.getReadQueue().resolve(readBufferQueue, buf);
 				} else if(k == 0) {
 					readBufferQueue.offer(buf);

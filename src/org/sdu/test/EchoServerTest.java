@@ -1,22 +1,20 @@
 package org.sdu.test;
 
-import org.sdu.network.NetworkServer;
-import org.sdu.network.Packet;
-import org.sdu.network.Postman;
-import org.sdu.network.Session;
-import org.sdu.network.SessionHandler;
+import org.sdu.net.NetworkServer;
+import org.sdu.net.Packet;
+import org.sdu.net.Session;
+import org.sdu.net.SessionHandler;
 import org.sdu.util.DebugFramework;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.nio.channels.SocketChannel;
 
 /**
  * A echo server test.
  * 
- * @version 0.1 rev 8003 Dec. 19, 2012.
+ * @version 0.1 rev 8004 Dec. 31, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
-public class EchoServerTest implements Observer, SessionHandler
+public class EchoServerTest extends SessionHandler
 {
 	public static final int port = 21071;
 	public static final DebugFramework debugger = DebugFramework.getFramework();
@@ -34,38 +32,54 @@ public class EchoServerTest implements Observer, SessionHandler
 	 */
 	public EchoServerTest()
 	{
-		server = new NetworkServer();
-		server.start(port, 1, this);
+		server = new NetworkServer(this, port);
+		server.start(true);
 	}
-	
+
 	@Override
-	public boolean onServerStart()
+	public boolean onAcceptingSession(SocketChannel c)
 	{
 		return true;
 	}
 
 	@Override
-	public void onServerClose()
+	public void onSessionAccepted(Session s)
 	{
-	}
-
-	@Override
-	public void update(Observable session, Object p) {
-		//debugger.print("Notification received");
-		if(session instanceof Session && p instanceof Packet) {
-			try {
-				//String s = new String(((Packet)p).getData(), "ISO-8859-1");
-				Postman.postPacket((Packet)p);
-				//debugger.print(s);
-			} catch (Exception e) {
-				debugger.print(e);
-			}
+		try {
+			debugger.print("Session from " + s.getChannel().getRemoteAddress() + " accepted.");
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public boolean onNewSession(Session s) {
-		s.addObserver(this);
-		return true;
+	public void onSessionClosed(Session s)
+	{
+		try {
+			debugger.print("Session from " + s.getChannel().getRemoteAddress() + " closed.");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onUnregisteredSession(SocketChannel c)
+	{
+		try {
+			debugger.print("Session from " + c.getRemoteAddress() + " failed to register.");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onPacketReceived(Session s, Packet p)
+	{
+		try {
+			debugger.print("Received " + p.getLength() + " bytes from client " + s.getChannel().getRemoteAddress() + ".");
+			s.post(p);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
