@@ -1,4 +1,4 @@
-package org.sdu.client;
+package org.sdu.command;
 
 import java.security.*;
 

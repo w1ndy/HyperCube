@@ -78,6 +78,29 @@ public class BasicFrame extends JFrame
 	}
 	
 	/**
+	 * Set title of the frame.
+	 */
+	@Override
+	public void setTitle(String title)
+	{
+		this.title = title;
+		generateResources();
+		setMeasurement();
+		super.setTitle(title);
+		repaint();
+	}
+	
+	/**
+	 * Set subtitle of the frame.
+	 */
+	public void setSubtitle(String subtitle)
+	{
+		this.subtitle = subtitle;
+		setMeasurement();
+		repaint();
+	}
+	
+	/**
 	 * Make the frame movable.
 	 */
 	private void makeMovable()
@@ -145,6 +168,10 @@ public class BasicFrame extends JFrame
 		minFrameWidth = subtitleOffsetX + stwidth + titleOffsetX + UIHelper.defaultBlurRadius;
 		minFrameWidth = (minFrameWidth < UIHelper.frameBlockSize * 2) ? UIHelper.frameBlockSize * 2 : minFrameWidth;
 		minFrameHeight = UIHelper.frameBlockSize * 2;
+		
+		int w = (getWidth() < minFrameWidth) ? minFrameWidth : getWidth();
+		int h = (getHeight() < minFrameHeight) ? minFrameHeight : getHeight();
+		super.setSize(w, h);
 	}
 	
 	/**
@@ -155,10 +182,11 @@ public class BasicFrame extends JFrame
 		imageFrame = (Image)UIHelper.getResource("ui.common.frame");
 		
 		if(title != null) {
+			Font font = (Font)UIHelper.getResource("ui.font.title");
 			imageTitle = GaussianBlur.getDefaultBlur().generateShadowText(
 					title, 
-					(Font)UIHelper.getResource("ui.font.title"),
-					this.getFontMetrics((Font) UIHelper.getResource("ui.font.title")),
+					font,
+					this.getFontMetrics(font),
 					Color.BLACK,
 					Color.WHITE);
 		}
