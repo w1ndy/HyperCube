@@ -1,17 +1,17 @@
 package org.sdu.database;
 
 import java.awt.*;
-import java.io.File;
-import java.lang.reflect.Method;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.lang.reflect.Method;
 
 /**
  * Launch the database management application. Optimized for menu bar and dock
  * on OS X.
  * 
- * @version 0.1 rev 8004 Jan. 2, 2013 Copyright (c) HyperCube Dev Team
+ * @version 0.1 rev 8004 Jan. 2, 2013
+ * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
 	public static void main(String[] args) {
@@ -38,8 +38,8 @@ public class Driver {
 			public void run() {
 				try {
 					Main frame = new Main();
-					frame.setIconImage(new ImageIcon("art/database/icon.png")
-							.getImage());
+					frame.setIconImage(ImageIO.read(new File(
+							"art/database/icon.png")));
 					frame.nopic = ImageIO.read(new File(
 							"art/database/nopic.png"));
 					frame.setVisible(true);
