@@ -1,26 +1,33 @@
 package org.sdu.server;
 
-import java.net.Socket;
 
-import org.sdu.network.PacketDataPro;
-import org.sdu.network.Val;
-import org.sdu.network.IncomingPacket;
-import org.sdu.network.SendingPacket;
-import org.sdu.network.Session;
-import org.sdu.server.ProcessTools.InstPro;
+import org.sdu.database.Database;
+import org.sdu.net.Packet;
+import org.sdu.net.Session;
+import org.sdu.server.ProcessTools.SecPro.login;
+import java.nio.ByteBuffer;
 
 public class process {
-	private static IncomingPacket indata;
-	
-	public static void Push(IncomingPacket p){
+	private static ByteBuffer indata;
+	private static Database db1;
+	public static void Push(ByteBuffer p,Database db){
 		indata = p;
+		db1 = db;
 	}
 	
-	public static SendingPacket GetData(){
+	public static Packet GetData(){
 		PacketDataPro ProD = new PacketDataPro(indata);
-		byte[] tmp = InstPro.Push(ProD.GetFInst(),ProD.GetSInst(),ProD.GetParam());
-		SendingPacket a = new SendingPacket(indata.getSocket(),tmp);
-		return a;
+		switch(ProD.GetFInst())
+		{
+		case 0x01: 
+			 if(ProD.GetSInst() == 0x01) {return login.Push(ProD,db1);}
+		//case 0x02: return logout.Push(cmd2,ProD);....
+		//case 0x03: return trans.Push(cmd2,ProD);....
+		//case 0x04: return detect.Push(cmd2,ProD);....
+		//default : return Warming....;
+		}
+		return null;
+		
 
 	}
 }

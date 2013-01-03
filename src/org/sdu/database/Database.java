@@ -83,7 +83,7 @@ public class Database {
 		statement.execute("delete from " + table + " where id='" + id + "'");
 	}
 
-	boolean check(String id, String password) {
+	public boolean check(String id, String password) {
 		boolean flag = false;
 		try {
 			ResultSet rs = statement.executeQuery("select * from " + table
