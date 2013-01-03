@@ -11,7 +11,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Dispatcher class dispatches network event from sessions to handler.
  * 
- * @version 0.1 rev 8001 Jan. 1, 2013.
+ * @version 0.1 rev 8002 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Dispatcher implements Runnable
@@ -53,6 +53,7 @@ public class Dispatcher implements Runnable
 		
 		handler = h;
 		bRunning = true;
+		selector = Selector.open();
 		(new Thread(this)).start();
 	}
 	
@@ -61,7 +62,10 @@ public class Dispatcher implements Runnable
 	 */
 	public void stop() throws IOException
 	{
-		bRunning = false;
+		if(selector != null) {
+			bRunning = false;
+			selector.wakeup();
+		}
 	}
 
 	/**
@@ -131,7 +135,6 @@ public class Dispatcher implements Runnable
 	@Override
 	public void run() {
 		try {
-			selector = Selector.open();
 			while(bRunning) {
 				synchronized(selectorGuard) {}
 				selector.select();

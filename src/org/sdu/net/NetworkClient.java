@@ -11,7 +11,7 @@ import org.sdu.util.DebugFramework;
  * NetworkClient class connects to specified address, and obtains a
  * Session handle.
  * 
- * @version 0.1 rev 8000 Jan. 3, 2013.
+ * @version 0.1 rev 8001 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class NetworkClient implements Runnable
@@ -29,17 +29,30 @@ public class NetworkClient implements Runnable
 		dispatcher = new Dispatcher();
 	}
 	
+	public void shutdown()
+	{
+		try {
+			dispatcher.stop();
+		} catch (IOException e) {}
+	}
+	
 	/**
 	 * Connect to hostname:port.
 	 */
-	public void connect(String hostname, int port, SessionHandler handler)
+	public boolean connect(String hostname, int port, SessionHandler handler)
 	{
 		this.hostname = hostname;
 		this.port = port;
 		this.handler = handler;
-		if(!dispatcher.isRunning())
-			dispatcher.run();
+		try {
+			if(!dispatcher.isRunning())
+				dispatcher.start(handler);
+		} catch (IOException e) {
+			DebugFramework.getFramework().print("Failed to create dispatcher: " + e);
+			return false;
+		}
 		(new Thread(this)).start();
+		return true;
 	}
 
 	@Override
