@@ -10,7 +10,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientUI class implements a user interface of student user.
  * 
- * @version 0.1 rev 8008 Jan. 1, 2013.
+ * @version 0.1 rev 8009 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientUI
@@ -25,7 +25,7 @@ public class ClientUI
 	{
 		frame = new ClientFrame();
 		frame.setIconImage((Image)UIHelper.getResource("ui.common.icon"));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		fadeAnimation = new ComponentFadeAnimation(frame);
 	}
