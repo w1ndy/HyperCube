@@ -1,20 +1,19 @@
 package org.sdu.command;
 
-import java.net.Socket;
-import org.sdu.network.ModifiablePacket;
+import org.sdu.net.Packet;
 import org.sdu.util.DebugFramework;
 
 /**
  * Build the add-user packet on the client to send to the server.
  * 
- * @version 0.1 rev 8000 Dec. 27, 2012.
+ * @version 0.1 rev 8001 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
-public class PacketAddUser extends ModifiablePacket{
+public class PacketAddUser extends Packet{
 
-	public PacketAddUser(String username, String password, String nickname, Socket socket){
+	public PacketAddUser(String username, String password, String nickname){
 		try {
-			PacketDataFactory.makePacket(this, socket,
+			dataBuffer = PacketBufferFactory.makePacket(
 					Command.cmdMainChange, Command.cmdAddUser,
 					username.getBytes("UTF-8"),
 					password.getBytes("UTF-8"),
@@ -24,16 +23,5 @@ public class PacketAddUser extends ModifiablePacket{
 		}
 	}
 
-	@Override
-	public byte[] getData() {
-		// TODO Auto-generated method stub
-		return arr;
-	}
-
-	@Override
-	public Socket getSocket() {
-		// TODO Auto-generated method stub
-		return s;
-	}
 	
 }
