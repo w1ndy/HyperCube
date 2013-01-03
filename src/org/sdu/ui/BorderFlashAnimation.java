@@ -10,7 +10,7 @@ import javax.swing.Timer;
 /**
  * BorderFlashAnimation class implements a animation flashing the border of textbox.
  * 
- * @version 0.1 rev 8000 Dec. 27, 2012.
+ * @version 0.1 rev 8001 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BorderFlashAnimation implements ActionListener
@@ -18,7 +18,7 @@ public class BorderFlashAnimation implements ActionListener
 	private RectBorder border;
 	private Timer timerFlash;
 	
-	private int stage = 0, times = 0;
+	private int stage = 128, times = 0;
 	private int r = 0, g = 0, b = 0;
 	private int rw = 0xFF0000, gw = 0, bw = 0;
 	private boolean uprise = true;
@@ -76,7 +76,7 @@ public class BorderFlashAnimation implements ActionListener
 	public void stop()
 	{
 		// End animation.
-		stage = 0;
+		stage = 128;
 		times = 0;
 		border.setColor(new Color((0xff << 24) | r | g | b));
 		timerFlash.stop();
@@ -95,19 +95,24 @@ public class BorderFlashAnimation implements ActionListener
 			}
 		} else {
 			stage -= UIHelper.normalFadeRate;
-			if(stage < 0) {
-				stage = 0;
+			if(stage < 128) {
+				stage = 128;
 				uprise = true;
 				times++;
-				if(times == 2) stop();
+				if(times == 2) {
+					stop();
+					comp.repaint();
+					return ;
+				}
 			}
 		}
 		
 		int rs, gs, bs;
-		rs = (int) (r + (float)((rw - r) * stage) / 256.0f) & 0xFF0000;
-		gs = (int) (g + (float)((gw - g) * stage) / 256.0f) & 0x00FF00;
-		bs = (int) (b + (float)((bw - b) * stage) / 256.0f) & 0x0000FF;
-		border.setColor(new Color((0xff << 24) | rs | gs | bs));
+		rs = (int) (r + (float)((rw - r) * stage) / 255.0f) & 0xFF0000;
+		gs = (int) (g + (float)((gw - g) * stage) / 255.0f) & 0x00FF00;
+		bs = (int) (b + (float)((bw - b) * stage) / 255.0f) & 0x0000FF;
+		//System.out.printf("RO=%d GO=%d BO=%d, RS=%d GS=%d BS=%d\n", r >> 16, g >> 8, b, rs >> 16, gs >> 8, bs);
+		border.setColor(new Color(rs | gs | bs, false));
 		comp.repaint();
 	}
 }

@@ -5,19 +5,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 import javax.swing.Timer;
 
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.HyperLink;
 import org.sdu.ui.PasswordBox;
 import org.sdu.ui.StatusNotifier;
+import org.sdu.ui.StatusNotifier.NotifyType;
 import org.sdu.ui.TextBox;
 import org.sdu.ui.UIHelper;
 
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8001 Jan. 3, 2013.
+ * @version 0.1 rev 8002 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler implements UIHandler
@@ -29,7 +32,36 @@ public class LoginUIHandler implements UIHandler
 	private HyperLink registerLink;
 	private StatusNotifier notifier;
 	
-	KeyListener userBoxKeyListener = new KeyListener() {
+	private InputVerifier userBoxVerifier = new InputVerifier() {
+		private boolean check(String str)
+		{
+			if(str.length() < 2) return false;
+			for(int i = 2; i < str.length(); i++) {
+				if(!Character.isDigit(str.charAt(i))) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean verify(JComponent arg0) {
+			if(arg0 instanceof TextBox) {
+				TextBox box = (TextBox) arg0;
+				if(!check(box.getText())) {
+					box.onFailed();
+					notifier.stop();
+					notifier.setNotifyType(NotifyType.Error);
+					notifier.setStatus(new String[] {
+							(String)UIHelper.getResource("ui.string.login.notify.incorrectname"),
+							(String)UIHelper.getResource("ui.string.login.notify.usageprompt")});
+					notifier.start();
+					return false;
+				}
+			}
+			return true;
+		}
+	};
+	
+	private KeyListener userBoxKeyListener = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -44,7 +76,7 @@ public class LoginUIHandler implements UIHandler
 		public void keyTyped(KeyEvent e) {}
 	};
 	
-	KeyListener passBoxKeyListener = new KeyListener() {
+	private KeyListener passBoxKeyListener = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -92,6 +124,7 @@ public class LoginUIHandler implements UIHandler
 		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		userBox.addKeyListener(userBoxKeyListener);
+		userBox.setInputVerifier(userBoxVerifier);
 	}
 	
 	/**
@@ -136,9 +169,8 @@ public class LoginUIHandler implements UIHandler
 		ui.getFader().fadeIn(true);
 		
 		notifier = new StatusNotifier();
-		notifier.setBounds(4, 35, 280, 50);
-		notifier.setStatus(new String[] { "服务器无响应", "请检查网络连接"});
-		notifier.start();
+		notifier.setBounds(UIHelper.NotifyOffsetX, UIHelper.NotifyOffsetY,
+				UIHelper.NotifyWidth, UIHelper.NotifyHeight);
 		frame.add(notifier);
 	}
 

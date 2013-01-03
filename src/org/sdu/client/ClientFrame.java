@@ -16,7 +16,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientFrame class handles basic stuffs in frame.
  * 
- * @version 0.1 rev 8001 Jan. 3, 2013.
+ * @version 0.1 rev 8002 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientFrame extends BasicFrame
@@ -67,6 +67,7 @@ public class ClientFrame extends BasicFrame
 		progressor = new ProgressBar(UIHelper.progressBarColor);
 		progressor.setBounds(UIHelper.progressBarLoginOffsetX, UIHelper.progressBarLoginOffsetY,
 				UIHelper.progressBarWidth, UIHelper.progressBarHeight);
+		this.add(progressor);
 	}
 	
 	/**
