@@ -11,14 +11,14 @@ import org.sdu.util.DebugFramework;
 /**
  * Dispatcher class dispatches network event from sessions to handler.
  * 
- * @version 0.1 rev 8000 Dec. 31, 2012.
+ * @version 0.1 rev 8002 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Dispatcher implements Runnable
 {
 	private Selector selector;
 	private Object selectorGuard;
-	private boolean isRunning;
+	private boolean bRunning;
 	private int numSession;
 	private SessionHandler handler;
 	
@@ -29,7 +29,7 @@ public class Dispatcher implements Runnable
 	{
 		selector = null;
 		selectorGuard = new Object();
-		isRunning = false;
+		bRunning = false;
 		numSession = 0;
 	}
 	
@@ -46,13 +46,14 @@ public class Dispatcher implements Runnable
 	 */
 	public void start(SessionHandler h) throws IOException
 	{
-		if(isRunning) {
+		if(bRunning) {
 			DebugFramework.getFramework().print("Dispatcher is already running.");
 			return ;
 		}
 		
 		handler = h;
-		isRunning = true;
+		bRunning = true;
+		selector = Selector.open();
 		(new Thread(this)).start();
 	}
 	
@@ -61,7 +62,10 @@ public class Dispatcher implements Runnable
 	 */
 	public void stop() throws IOException
 	{
-		isRunning = false;
+		if(selector != null) {
+			bRunning = false;
+			selector.wakeup();
+		}
 	}
 
 	/**
@@ -131,8 +135,7 @@ public class Dispatcher implements Runnable
 	@Override
 	public void run() {
 		try {
-			selector = Selector.open();
-			while(isRunning) {
+			while(bRunning) {
 				synchronized(selectorGuard) {}
 				selector.select();
 				Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
@@ -162,5 +165,13 @@ public class Dispatcher implements Runnable
 	public Selector getSelector()
 	{
 		return selector;
+	}
+	
+	/**
+	 * Is dispatcher running.
+	 */
+	public boolean isRunning()
+	{
+		return bRunning;
 	}
 }

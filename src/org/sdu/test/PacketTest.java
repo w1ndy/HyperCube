@@ -1,23 +1,20 @@
 package org.sdu.test;
 
-import java.net.Socket;
-
-import org.sdu.command.PacketLoginSystem;
-import org.sdu.network.Packet;
+import org.sdu.command.*;
+import org.sdu.net.Packet;
 
 
 /**
  * Test the classes of building a new packet and print out the packet.
  * 
- * @version 0.1 rev 8001 Dec. 27, 2012.
+ * @version 0.1 rev 8002 Jan. 3. 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PacketTest {
 	
 	public static void main(String[] args){
-		Socket s = null;
-		Packet p = new PacketLoginSystem("姓名","密码","隐身",s);
-		byte[] b = p.getData();
+		Packet p = new PacketLoginSystem((byte)1, (byte)2, "姓名","密码", (byte)1);
+		byte[] b = p.getDataArray();
 		
 		for (int i = 0; i < b.length; i++)
 			System.out.printf("0x%02X ", b[i]);

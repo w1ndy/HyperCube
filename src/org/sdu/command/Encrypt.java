@@ -1,4 +1,4 @@
-package org.sdu.client;
+package org.sdu.command;
 
 import java.security.*;
 
@@ -9,7 +9,7 @@ import org.sdu.util.DebugFramework;
  * Encrypt the password by using MD5 twice. After the first round, attach the ID
  * after the string.
  * 
- * @version 0.1 rev 8002 Dec. 26, 2012.
+ * @version 0.1 rev 8003 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Encrypt {

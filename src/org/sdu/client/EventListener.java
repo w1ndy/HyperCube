@@ -4,28 +4,28 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.sdu.network.IncomingPacket;
-import org.sdu.network.NetworkClient;
 import org.sdu.network.Session;
 import org.sdu.network.SessionHandler;
 
 /**
  * EventListener class processes the data received from UI or network.
  * 
- * @version 0.1 rev 8001 Dec. 28, 2012.
+ * @deprecated
+ * @version 0.1 rev 8002 Jan. 1, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EventListener implements Observer, SessionHandler
 {
-	private NetworkClient client;
-	private Session session;
+	//private NetworkClient client;
+	//private Session session;
 	private boolean isRunning = true;
 	
 	@Override
 	public void update(Observable observ, Object obj)
 	{
-		if(observ instanceof ClientUI) {
-			onUIEvent((ClientUI)observ, ((UIEvent)obj).getEventId());
-		} else {
+		//if(observ instanceof ClientUI) {
+			//onUIEvent((ClientUI)observ, ((UIEvent)obj).getEventId());
+		//} else {
 			if(obj == null) {
 				if(isRunning) {
 					if(!onConnect()) {
@@ -35,7 +35,7 @@ public class EventListener implements Observer, SessionHandler
 			} else if(obj instanceof IncomingPacket){
 				onNetworkEvent((IncomingPacket)obj);
 			}
-		}
+		//}
 	}
 	
 	public void onUIEvent(ClientUI ui, int eventId)
@@ -43,10 +43,10 @@ public class EventListener implements Observer, SessionHandler
 		switch(eventId)
 		{
 		case UIEvent.CheckVersion:
-			ui.onVersionOK();
+			//ui.onVersionOK();
 			break;
 		case UIEvent.Login:
-			ui.onDisconnected();
+			//ui.onDisconnected();
 			break;
 		}
 	}
@@ -70,7 +70,7 @@ public class EventListener implements Observer, SessionHandler
 
 	@Override
 	public boolean onNewSession(Session s) {
-		session = s;
+		//session = s;
 		return true;
 	}
 }

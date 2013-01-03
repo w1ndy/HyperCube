@@ -1,4 +1,4 @@
-package org.sdu.command;
+package org.sdu.commandOLD;
 
 import java.net.Socket;
 
@@ -7,6 +7,7 @@ import org.sdu.network.ModifiablePacket;
 /**
  * Build the packet on the client to send to the server.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

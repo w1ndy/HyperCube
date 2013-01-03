@@ -5,6 +5,7 @@ import java.net.Socket;
 /**
  * Warp byte stream data into abstract cloneable Packet class.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

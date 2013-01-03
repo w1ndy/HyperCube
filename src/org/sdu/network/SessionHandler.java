@@ -4,6 +4,7 @@ package org.sdu.network;
  * SessionHandler class is designed for the Server side to handle each session.
  * It can be implemented in either blocking way or non-blocking way.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 17, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

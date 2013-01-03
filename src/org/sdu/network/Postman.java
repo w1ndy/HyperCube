@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Postman class is static class helper sending packet asynchronously.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

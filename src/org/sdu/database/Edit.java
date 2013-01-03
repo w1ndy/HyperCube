@@ -1,11 +1,12 @@
 package org.sdu.database;
 
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
-import javax.swing.*;
+import javax.imageio.ImageIO;
 
 /**
  * Create and edit information.
@@ -68,8 +69,8 @@ public class Edit extends JFrame {
 		try {
 			URL picURL = new URL("http://127.0.0.1/pic/1.jpg");
 			JLabel pic = new JLabel(new ImageIcon(
-					((new ImageIcon(picURL)).getImage()).getScaledInstance(150,
-							200, java.awt.Image.SCALE_SMOOTH)));
+					(ImageIO.read(picURL)).getScaledInstance(150, 200,
+							java.awt.Image.SCALE_SMOOTH)));
 			pic.setBounds(35, 25, 150, 200);
 			basicInfo.add(pic);
 		} catch (Exception e) {

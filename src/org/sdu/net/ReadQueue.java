@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 /**
  * ReadQueue class resolves byte data stream into packet format.
  * 
- * @version 0.1 rev 8001 Dec. 31, 2012.
+ * @version 0.1 rev 8002 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ReadQueue
@@ -43,6 +43,15 @@ public class ReadQueue
 	{
 		handler = h;
 		session = s;
+	}
+	
+	/**
+	 * Release worker executor.
+	 */
+	public void releaseExecutor()
+	{
+		if(readerExecutor != null)
+			readerExecutor.shutdown();
 	}
 	
 	/**

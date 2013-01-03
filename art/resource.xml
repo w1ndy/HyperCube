@@ -6,6 +6,7 @@
 	<entry name="ui.avatarbox.online" type="image">ui/avatarbox/online.png</entry>
 	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
 	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
+	<entry name="ui.status.notify" type="image">ui/status/notify.png</entry>
 	<entry name="ui.common.net" type="image">ui/common/Net.png</entry>
 	
 	<entry name="ui.font.title" type="font">
@@ -29,12 +30,19 @@
 		<italic>false</italic>
 	</entry>
 	
+	<entry name="ui.font.notify" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>11</size>
+		<bold>true</bold>
+		<italic>false</italic>
+	</entry>
+	
 	<entry name="ui.string.login.title" type="string">登录</entry>
 	<entry name="ui.string.login.subtitle" type="string">HyperCube™</entry>
 	<entry name="ui.string.login.username" type="string">用户名</entry>
 	<entry name="ui.string.login.password" type="string">密码</entry>
 	<entry name="ui.string.login.register.desc" type="string">没有账号？</entry>
 	<entry name="ui.string.login.register.url" type="string">http://bksms.sdu.edu.cn</entry>
-	<entry name="ui.string.login.checkversion" type="string">检查版本....</entry>
-	<entry name="ui.string.login.waitnet" type="string">网络故障，正在重试连接...</entry>
+	<entry name="ui.string.login.notify.incorrectname" type="string">账号格式错误</entry>
+	<entry name="ui.string.login.notify.usageprompt" type="string">请使用您的学号登录</entry>
 </resource>

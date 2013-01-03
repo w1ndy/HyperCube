@@ -11,7 +11,7 @@ import java.nio.channels.SocketChannel;
 /**
  * A echo server test.
  * 
- * @version 0.1 rev 8004 Dec. 31, 2012.
+ * @version 0.1 rev 8005 Jan. 1, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EchoServerTest extends SessionHandler
@@ -82,4 +82,10 @@ public class EchoServerTest extends SessionHandler
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void onConnected(Session s) {}
+
+	@Override
+	public void onConnectFailure(SocketChannel c) {}
 }

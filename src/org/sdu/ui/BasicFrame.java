@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8002 Dec. 23, 2012.
+ * @version 0.1 rev 8003 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -75,6 +75,29 @@ public class BasicFrame extends JFrame
 		if(width < minFrameWidth) width = minFrameWidth;
 		if(height < minFrameHeight) height = minFrameHeight;
 		super.setSize(width, height);
+	}
+	
+	/**
+	 * Set title of the frame.
+	 */
+	@Override
+	public void setTitle(String title)
+	{
+		this.title = title;
+		generateResources();
+		setMeasurement();
+		super.setTitle(title);
+		repaint();
+	}
+	
+	/**
+	 * Set subtitle of the frame.
+	 */
+	public void setSubtitle(String subtitle)
+	{
+		this.subtitle = subtitle;
+		setMeasurement();
+		repaint();
 	}
 	
 	/**
@@ -145,6 +168,10 @@ public class BasicFrame extends JFrame
 		minFrameWidth = subtitleOffsetX + stwidth + titleOffsetX + UIHelper.defaultBlurRadius;
 		minFrameWidth = (minFrameWidth < UIHelper.frameBlockSize * 2) ? UIHelper.frameBlockSize * 2 : minFrameWidth;
 		minFrameHeight = UIHelper.frameBlockSize * 2;
+		
+		int w = (getWidth() < minFrameWidth) ? minFrameWidth : getWidth();
+		int h = (getHeight() < minFrameHeight) ? minFrameHeight : getHeight();
+		super.setSize(w, h);
 	}
 	
 	/**
@@ -155,10 +182,11 @@ public class BasicFrame extends JFrame
 		imageFrame = (Image)UIHelper.getResource("ui.common.frame");
 		
 		if(title != null) {
+			Font font = (Font)UIHelper.getResource("ui.font.title");
 			imageTitle = GaussianBlur.getDefaultBlur().generateShadowText(
 					title, 
-					(Font)UIHelper.getResource("ui.font.title"),
-					this.getFontMetrics((Font) UIHelper.getResource("ui.font.title")),
+					font,
+					this.getFontMetrics(font),
 					Color.BLACK,
 					Color.WHITE);
 		}
@@ -177,6 +205,9 @@ public class BasicFrame extends JFrame
 		int uy = UIHelper.frameBlockSize;
 		int by = height - UIHelper.frameBlockSize;
 		int x, y;
+		
+		g.setColor(new Color(0, 0, 0, 0));
+		g.clearRect(0, 0, width, height);
 		
 		// Draw background.
 		g.setColor(background);
