@@ -28,6 +28,7 @@ public class EventDispatcher extends SessionHandler
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 			client.shutdown();
+			System.exit(0);
 		}
 
 		@Override
