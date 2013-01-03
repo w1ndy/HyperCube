@@ -5,6 +5,7 @@ import java.net.Socket;
 /**
  * IncomingPacket class inherited from Packet class.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

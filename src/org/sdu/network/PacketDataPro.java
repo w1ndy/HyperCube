@@ -1,5 +1,8 @@
 package org.sdu.network;
 
+/**
+ * @deprecated
+ */
 public class PacketDataPro {
 	private byte[] opt;
 	public PacketDataPro(IncomingPacket indata){
@@ -8,6 +11,7 @@ public class PacketDataPro {
 	public byte GetDelimiter(){
 		return opt[Val.loc_delimiter];
 	}
+	@SuppressWarnings("null")
 	public byte[] GetDadding(){
 		byte[] temp = null;
 		for (int i=1;i>=Val.length_Dadding;i++)
@@ -25,6 +29,7 @@ public class PacketDataPro {
 	public int GetSInst(){
 		return opt[Val.loc_Inst+1];
 	}
+	@SuppressWarnings("null")
 	public String[] GetParam(){
 		int count = 1;
 		int point = Val.loc_Inst+Val.length_Inst;

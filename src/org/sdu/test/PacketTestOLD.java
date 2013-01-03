@@ -9,6 +9,7 @@ import org.sdu.network.Packet;
 /**
  * Test the classes of building a new packet and print out the packet.
  * 
+ * @deprecated
  * @version 0.1 rev 8001 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

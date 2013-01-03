@@ -1,5 +1,8 @@
 package org.sdu.network;
 
+/**
+ * @deprecated
+ * */
 public class PacketDataBuilder {
 	byte[] DataArr;
 	public PacketDataBuilder(){

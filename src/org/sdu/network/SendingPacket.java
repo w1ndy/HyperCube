@@ -2,6 +2,9 @@ package org.sdu.network;
 
 import java.net.Socket;
 
+/**
+ * @deprecated
+ */
 public class SendingPacket implements Packet{
 	private final byte[] arr;
 	private final Socket socket;

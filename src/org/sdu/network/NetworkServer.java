@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * NetworkServer class provides an simple interface for servers.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 18, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

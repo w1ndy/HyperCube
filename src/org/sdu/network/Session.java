@@ -12,6 +12,7 @@ import java.util.Observable;
  * Session class allows servers or clients to post and receive the data
  * in a non-blocking way.
  * 
+ * @deprecated
  * @version 0.1 rev 8005 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

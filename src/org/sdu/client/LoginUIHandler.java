@@ -2,8 +2,6 @@ package org.sdu.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,6 +9,9 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
+import org.sdu.net.NetworkClient;
+import org.sdu.net.Packet;
+import org.sdu.net.Session;
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.HyperLink;
 import org.sdu.ui.PasswordBox;
@@ -22,17 +23,21 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8003 Jan. 3, 2013.
+ * @version 0.1 rev 8004 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler implements UIHandler
 {
+	private EventDispatcher dispatcher;
 	private ClientFrame frame;
 	private AvatarBox avatarBox;
 	private TextBox	userBox;
 	private PasswordBox passBox;
 	private HyperLink registerLink;
 	private StatusNotifier notifier;
+	
+	private NetworkClient client;
+	private Session session;
 	
 	private InputVerifier userBoxVerifier = new InputVerifier() {
 		private boolean check(String str)
@@ -86,6 +91,7 @@ public class LoginUIHandler implements UIHandler
 				avatarBox.setEnabled(false);
 				userBox.setEditable(false);
 				passBox.setEditable(false);
+				startLogin();
 			}
 		}
 
@@ -99,12 +105,21 @@ public class LoginUIHandler implements UIHandler
 	/**
 	 * Initialize a LoginUIHandler object.
 	 */
-	public LoginUIHandler()
+	public LoginUIHandler(EventDispatcher dispatcher)
 	{
+		this.dispatcher = dispatcher;
 		createAvatarBox();
 		createUserBox();
 		createPasswordBox();
 		createRegisterLink();
+	}
+	
+	/**
+	 * Start login procedure.
+	 */
+	private void startLogin()
+	{
+		client.connect("127.0.0.1", 21071, dispatcher);
 	}
 	
 	/**
@@ -157,7 +172,9 @@ public class LoginUIHandler implements UIHandler
 	 * Notified when attaching to a UI.
 	 */
 	@Override
-	public void onAttach(final ClientUI ui) {
+	public void onAttach(final NetworkClient client, final ClientUI ui) {
+		this.client = client;
+		
 		frame = ui.getFrame();
 		frame.setTitle((String)UIHelper.getResource("ui.string.login.title"));
 		frame.setSubtitle((String)UIHelper.getResource("ui.string.login.subtitle"));
@@ -181,7 +198,7 @@ public class LoginUIHandler implements UIHandler
 	 * Notified when detaching from a UI.
 	 */
 	@Override
-	public void onDetach(final ClientUI ui) {
+	public void onDetach(final NetworkClient client, final ClientUI ui) {
 		frame.remove(notifier);
 		ui.getFader().reset(1.0f);
 		ui.getFader().fadeOut(true);
@@ -198,5 +215,32 @@ public class LoginUIHandler implements UIHandler
 		
 		timerCleanup.setRepeats(false);
 		timerCleanup.start();
+	}
+
+	@Override
+	public void onClosing(ClientUI ui) {
+		ui.getFrame().dispose();
+	}
+
+	@Override
+	public void onConnected(Session s) {
+		session = s;
+		// TODO successive login operations.
+	}
+
+	@Override
+	public void onConnectFailure() {
+		frame.stopProgressBar();
+		avatarBox.setEnabled(true);
+		userBox.setEditable(true);
+		passBox.setEditable(true);
+		notifier.setNotifyType(NotifyType.Error);
+		notifier.setStatus(new String[] { "连接服务器失败", "请检查网络连接"});
+		notifier.start();
+	}
+
+	@Override
+	public void onNetworkData(Session s, Packet p) {
+		// TODO Auto-generated method stub
 	}
 }
