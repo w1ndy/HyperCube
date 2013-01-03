@@ -2,13 +2,16 @@ package org.sdu.test;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
 
+import org.sdu.command.PacketResolver;
+import org.sdu.command.PacketResolver.par;
 import org.sdu.net.Packet;
 
 public class PacketResovlerTest {
 
 	public static void main(String[] args){
-		
+		par pp;
 		String s = "李毅大帝 isn't a みんな 的神。";
 		int len = s.getBytes().length;
 		
@@ -23,17 +26,25 @@ public class PacketResovlerTest {
 
 		buf.put(s.getBytes());
 		System.out.println(s.getBytes());
-		
 		Packet p = new Packet(buf);
-		ByteBuffer bu = p.getData();
-		System.out.println(bu.get());
-		System.out.println(bu.get());
-		System.out.println(bu.get());
-		System.out.println(bu.get());
+		PacketResolver re = new PacketResolver(p);
 		
-		byte[] b = bu.array();
+		LinkedList<par> list = re.getList();
+		len = list.size();
+
 		
-		String ss = new String(b);
-		System.out.println(ss);
+		for (int i=0; i <= len-1; i++){
+			pp = list.get(i);
+			System.out.println(pp.pos);
+			System.out.println(pp.length);
+			byte[] bb = new byte[pp.length + 1];
+			ByteBuffer buffer = p.getData();
+			buffer.position(pp.pos);
+			buffer.get(bb, 0, pp.length);
+			String ss = new String(bb);
+			System.out.println(ss);
+			
+		}
+		
 	}
 }
