@@ -15,7 +15,7 @@ import javax.swing.Timer;
 /**
  * AvatarBox class implements an avatar box with switchable status icon.
  * 
- * @version 0.1 rev 8002 Dec. 27, 2012.
+ * @version 0.1 rev 8003 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class AvatarBox extends JLabel implements TranslucentComponent
@@ -24,7 +24,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 	
 	private Image imageAvatar, imageNoAvatar, imageAvatarFrame, imageOnline, imageInvisible;
 	private Timer timerInvisibleToOnline, timerOnlineToInvisible;
-	private boolean isInvisible;
+	private boolean bInvisible;
 	private int statusOpacity;
 	private float globalOpacity = 1.0f;
 	
@@ -41,7 +41,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 		imageOnline = (Image)UIHelper.getResource("ui.avatarbox.online");
 		imageInvisible = (Image)UIHelper.getResource("ui.avatarbox.invisible");
 		
-		isInvisible = false;
+		bInvisible = false;
 		statusOpacity = 220;
 		
 		// Fade animations.
@@ -54,7 +54,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 					statusOpacity -= UIHelper.normalFadeRate;
 					if(statusOpacity < 0) {
 						statusOpacity = 0;
-						isInvisible = false;
+						bInvisible = false;
 						isFadingOut = false;
 					}
 				} else {
@@ -78,7 +78,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 					statusOpacity -= UIHelper.normalFadeRate;
 					if(statusOpacity < 0) {
 						statusOpacity = 0;
-						isInvisible = true;
+						bInvisible = true;
 						isFadingOut = false;
 					}
 				} else {
@@ -102,7 +102,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(!AvatarBox.this.isEnabled()) return ;
-				if(isInvisible) {
+				if(bInvisible) {
 					if(timerOnlineToInvisible.isRunning())
 						timerOnlineToInvisible.stop();
 					timerInvisibleToOnline.start();
@@ -138,7 +138,7 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 			g.drawImage(imageNoAvatar, UIHelper.avatarOffsetX, UIHelper.avatarOffsetY, this);
 		
 		((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, globalOpacity * (float)statusOpacity / 255));
-		if(isInvisible)
+		if(bInvisible)
 			g.drawImage(imageInvisible, UIHelper.avatarStatusIconOffsetX, UIHelper.avatarStatusIconOffsetY, this);
 		else
 			g.drawImage(imageOnline, UIHelper.avatarStatusIconOffsetX, UIHelper.avatarStatusIconOffsetY, this);
@@ -158,6 +158,14 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 		this.imageAvatar = imageAvatar;
 	}
 
+	/**
+	 * Is login status invisible.
+	 */
+	public boolean isInvisible()
+	{
+		return bInvisible;
+	}
+	
 	@Override
 	public void setOpacity(float alpha) {
 		globalOpacity = alpha;

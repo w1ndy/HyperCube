@@ -38,6 +38,11 @@ public interface UIHandler
 	public void onConnectFailure();
 	
 	/**
+	 * Notified when session is closed.
+	 */
+	public void onSessionClosed();
+	
+	/**
 	 * Notified when data is available.
 	 */
 	public void onNetworkData(Session s, Packet p);

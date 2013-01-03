@@ -45,4 +45,6 @@
 	<entry name="ui.string.login.register.url" type="string">http://bksms.sdu.edu.cn</entry>
 	<entry name="ui.string.login.notify.incorrectname" type="string">账号格式错误</entry>
 	<entry name="ui.string.login.notify.usageprompt" type="string">请使用您的学号登录</entry>
+	<entry name="ui.string.login.networkdown" type="string">连接服务器失败</entry>
+	<entry name="ui.string.login.checknetwork" type="string">请检查网络连接</entry>
 </resource>
