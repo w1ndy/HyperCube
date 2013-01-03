@@ -1,27 +1,24 @@
 package org.sdu.server.ProcessTools.SecPro;
 
-import org.sdu.network.PacketDataBuilder;
-import org.sdu.network.PacketDataPro;
-import org.sdu.network.Val;
+import org.sdu.database.Database;
+import org.sdu.net.Packet;
+import org.sdu.server.Val;
+import org.sdu.server.PacketDataBuilder;
+import org.sdu.server.PacketDataPro;
 
 public class login {
-	public static byte[] Push(byte c1, byte c2, String[] ProD) {
-		switch (c2) {
-		case 0x01: {
-			if (ProD[0] == Val.Version) {
-				PacketDataBuilder BuPacket = new PacketDataBuilder();
-				BuPacket.SetHead((byte) 0X01,(byte) 0X01, c1, c2);
-				BuPacket.SetParamN((byte)0x00);
-				return BuPacket.GetData();
-			} else {
-				PacketDataBuilder BuPacket = new PacketDataBuilder();
-				BuPacket.SetHead((byte) 0X01, (byte) 0X01, c1, c2);
-				BuPacket.SetParamN((byte) 0x01);
-				BuPacket.SetParamN((byte) 0x01);
-				return BuPacket.GetData();
+	public static Packet Push(PacketDataPro ProD,Database db) {
+			if (ProD.GetParam() == Val.F_version&ProD.GetParam() == Val.S_version) {
+			if (db.check(ProD.GetParam(),ProD.GetParam())) {
+				ProD.GetParam();
+				PacketDataBuilder Pack = new PacketDataBuilder();
+				Pack.SetData(Val.Check_T,Val.Login,Val.LoginCheck);
+				Pack.SetParamS("Welcome!");
 			}
-
-		}
+			else{
+				PacketDataBuilder Pack = new PacketDataBuilder();
+				Pack.SetData(Val.Check_F,Val.Unknow,Val.Login,Val.LoginCheck);
+			}
 		}
 		// TODO return push data here.
 		return null;
