@@ -6,6 +6,7 @@ import org.sdu.net.Session;
 import org.sdu.net.SessionHandler;
 import org.sdu.util.DebugFramework;
 
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -77,7 +78,12 @@ public class EchoServerTest extends SessionHandler
 	{
 		try {
 			debugger.print("Received " + p.getLength() + " bytes from client " + s.getChannel().getRemoteAddress() + ".");
-			s.post(p);
+			ByteBuffer buf = p.getData();
+
+			while(buf.hasRemaining()) {
+				System.out.printf("0x%02X ", buf.get());
+			}
+			//s.post(p);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

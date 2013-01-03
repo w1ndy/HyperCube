@@ -1,5 +1,7 @@
 package org.sdu.test;
 
+import java.nio.ByteBuffer;
+
 import org.sdu.command.*;
 import org.sdu.net.Packet;
 
@@ -13,12 +15,13 @@ import org.sdu.net.Packet;
 public class PacketTest {
 	
 	public static void main(String[] args){
-		Packet p = new PacketLoginSystem((byte)1, (byte)2, "姓名","密码", (byte)1);
-		byte[] b = p.getDataArray();
-		
-		for (int i = 0; i < b.length; i++)
-			System.out.printf("0x%02X ", b[i]);
+		Packet p = new PacketLoginSystem((byte)1, (byte)1, "username","password", (byte)1);
+		ByteBuffer buf = p.getData();
 
+		while(buf.hasRemaining()) {
+			System.out.printf("%02X", buf.get());
+		}
+		
 	}
 	
 }
