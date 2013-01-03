@@ -8,7 +8,8 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8004 Jan. 3, 2012 Copyright (c) HyperCube Dev Team
+ * @version 0.1 rev 8005 Jan. 4, 2012
+ * Copyright (c) HyperCube Dev Team
  */
 public class Database {
 	private Statement statement;
@@ -83,15 +84,25 @@ public class Database {
 		statement.execute("delete from " + table + " where id='" + id + "'");
 	}
 
-	public boolean check(String id, String password) {
+	public boolean checkExist(String id) {
 		boolean flag = false;
 		try {
 			ResultSet rs = statement.executeQuery("select * from " + table
 					+ " where id='" + id + "'");
-			if (rs.next()) {
-				rs.getString("password");
+			if (rs.next())
 				flag = true;
-			}
+		} catch (Exception e) {
+		}
+		return flag;
+	}
+
+	public boolean checkPassword(String id, String password) {
+		boolean flag = false;
+		try {
+			ResultSet rs = statement.executeQuery("select * from " + table
+					+ " where id='" + id + "'");
+			if (rs.next() && (rs.getString("password") == password))
+				flag = true;
 		} catch (Exception e) {
 		}
 		return flag;
@@ -130,6 +141,50 @@ public class Database {
 					+ " where id='" + id + "'");
 		} catch (Exception e) {
 		}
+	}
+
+	public void setNickname(String id, String nickname) {
+		try {
+			statement.executeUpdate("update " + table + " nickname='"
+					+ nickname + "' where id='" + id + "'");
+		} catch (Exception e) {
+		}
+	}
+
+	public boolean getOnline(String id) {
+		boolean flag = false;
+		try {
+			ResultSet rs = statement.executeQuery("select * from " + table
+					+ " where id='" + id + "'");
+			if (rs.next() && (rs.getInt("online") == 1))
+				flag = true;
+		} catch (Exception e) {
+		}
+		return flag;
+	}
+
+	public boolean getVisible(String id) {
+		boolean flag = false;
+		try {
+			ResultSet rs = statement.executeQuery("select * from " + table
+					+ " where id='" + id + "'");
+			if (rs.next() && (rs.getInt("visible") == 1))
+				flag = true;
+		} catch (Exception e) {
+		}
+		return flag;
+	}
+
+	public String getNickname(String id) {
+		String nickname = "";
+		try {
+			ResultSet rs = statement.executeQuery("select * from " + table
+					+ " where id='" + id + "'");
+			rs.next();
+			nickname = rs.getString("nickname");
+		} catch (Exception e) {
+		}
+		return nickname;
 	}
 
 	void setPic() throws Exception {

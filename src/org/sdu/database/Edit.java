@@ -2,6 +2,7 @@ package org.sdu.database;
 
 import java.awt.*;
 import javax.swing.*;
+
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.text.DateFormat;
@@ -35,13 +36,14 @@ public class Edit extends JFrame {
 		setBounds(150, 150, 500, 400);
 		setResizable(false);
 
-		JPanel bottomPane = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) bottomPane.getLayout();
+		JPanel buttonPane = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) buttonPane.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
-		getContentPane().add(bottomPane, BorderLayout.SOUTH);
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
 		JButton button = new JButton("保存");
-		bottomPane.add(button);
+		buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		buttonPane.add(button);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
