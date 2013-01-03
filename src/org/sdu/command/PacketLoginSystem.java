@@ -11,10 +11,10 @@ import org.sdu.util.DebugFramework;
  */
 public class PacketLoginSystem extends Packet{
 
-	public PacketLoginSystem(String version, String username, String password, String status){
+	public PacketLoginSystem(byte versionMain, byte versionSub, String username, String password, String status){
 		try {
 			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainLogin, Command.cmdLoginSystem,
-					version.getBytes("UTF-8"),
+					new byte[]{versionMain, versionSub},
 					username.getBytes("UTF-8"),
 					password.getBytes("UTF-8"),
 					status.getBytes("UTF-8"));

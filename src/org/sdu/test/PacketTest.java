@@ -13,7 +13,7 @@ import org.sdu.net.Packet;
 public class PacketTest {
 	
 	public static void main(String[] args){
-		Packet p = new PacketLoginSystem("0.1","姓名","密码","隐身");
+		Packet p = new PacketLoginSystem((byte)1, (byte)2, "姓名","密码","隐身");
 		byte[] b = p.getDataArray();
 		
 		for (int i = 0; i < b.length; i++)
