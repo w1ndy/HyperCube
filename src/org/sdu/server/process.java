@@ -20,7 +20,8 @@ public class process {
 		switch(ProD.GetFInst())
 		{
 		case 0x01: 
-			 if(ProD.GetSInst() == 0x01) {return login.Push(ProD,db1);}
+			 if(ProD.GetSInst() == 0x01) 
+			 {return login.Push(ProD,db1);}
 		//case 0x02: return logout.Push(cmd2,ProD);....
 		//case 0x03: return trans.Push(cmd2,ProD);....
 		//case 0x04: return detect.Push(cmd2,ProD);....

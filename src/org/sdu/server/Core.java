@@ -81,7 +81,7 @@ public class Core extends SessionHandler {
 	@Override
 	public void onPacketReceived(Session s, Packet p) {
 		process.Push(p.getData(),db);// Process
-		s.post(p);// Send back the Packet
+		s.post(process.GetData());// Send back the Packet
 
 	}
 
