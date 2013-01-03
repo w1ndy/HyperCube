@@ -103,7 +103,11 @@ public class EventDispatcher extends SessionHandler
 	public void onUnregisteredSession(SocketChannel c) {}
 
 	@Override
-	public void onPacketReceived(Session s, Packet p) {}
+	public void onPacketReceived(Session s, Packet p)
+	{
+		if(handler != null)
+			handler.onNetworkData(s, p);
+	}
 
 	@Override
 	public void onConnected(Session s)
