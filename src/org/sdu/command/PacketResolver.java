@@ -63,7 +63,7 @@ public class PacketResolver {
 		return instSub;
 	}
 
-	public void setInstSub(byte instSub) {
+	private void setInstSub(byte instSub) {
 		this.instSub = instSub;
 	}
 
@@ -71,7 +71,7 @@ public class PacketResolver {
 		return instMain;
 	}
 
-	public void setInstMain(byte instMain) {
+	private void setInstMain(byte instMain) {
 		this.instMain = instMain;
 	}
 
@@ -79,7 +79,7 @@ public class PacketResolver {
 		return statusSub;
 	}
 
-	public void setStatusSub(byte statusSub) {
+	private void setStatusSub(byte statusSub) {
 		this.statusSub = statusSub;
 	}
 
@@ -87,7 +87,7 @@ public class PacketResolver {
 		return statusMain;
 	}
 ;
-	public void setStatusMain(byte statusMain) {
+	private void setStatusMain(byte statusMain) {
 		this.statusMain = statusMain;
 	}	
 	
