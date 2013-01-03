@@ -10,13 +10,14 @@ import javax.swing.Timer;
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.HyperLink;
 import org.sdu.ui.PasswordBox;
+import org.sdu.ui.StatusNotifier;
 import org.sdu.ui.TextBox;
 import org.sdu.ui.UIHelper;
 
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8000 Jan. 1, 2013.
+ * @version 0.1 rev 8001 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler implements UIHandler
@@ -26,6 +27,7 @@ public class LoginUIHandler implements UIHandler
 	private TextBox	userBox;
 	private PasswordBox passBox;
 	private HyperLink registerLink;
+	private StatusNotifier notifier;
 	
 	KeyListener userBoxKeyListener = new KeyListener() {
 		@Override
@@ -132,6 +134,12 @@ public class LoginUIHandler implements UIHandler
 		ui.getFader().add(registerLink);
 		ui.getFader().reset(0.0f);
 		ui.getFader().fadeIn(true);
+		
+		notifier = new StatusNotifier();
+		notifier.setBounds(4, 35, 280, 50);
+		notifier.setStatus(new String[] { "服务器无响应", "请检查网络连接"});
+		notifier.start();
+		frame.add(notifier);
 	}
 
 	/**
@@ -139,6 +147,7 @@ public class LoginUIHandler implements UIHandler
 	 */
 	@Override
 	public void onDetach(final ClientUI ui) {
+		frame.remove(notifier);
 		ui.getFader().reset(1.0f);
 		ui.getFader().fadeOut(true);
 		

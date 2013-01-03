@@ -16,7 +16,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientFrame class handles basic stuffs in frame.
  * 
- * @version 0.1 rev 8000 Jan. 1, 2013.
+ * @version 0.1 rev 8001 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientFrame extends BasicFrame
@@ -54,6 +54,9 @@ public class ClientFrame extends BasicFrame
 		public void setEnabled(boolean arg0) {}
 	};
 	
+	/**
+	 * Initialize a ClientFrame object.
+	 */
 	public ClientFrame()
 	{
 		super();
@@ -66,6 +69,9 @@ public class ClientFrame extends BasicFrame
 				UIHelper.progressBarWidth, UIHelper.progressBarHeight);
 	}
 	
+	/**
+	 * Initialize a ClientFrame object with title and subtitle.
+	 */
 	public ClientFrame(String title, String subtitle)
 	{
 		super(title, subtitle);
@@ -74,16 +80,25 @@ public class ClientFrame extends BasicFrame
 				KeyStroke.getKeyStroke("ESCAPE"), "on_escape");
 	}
 	
+	/**
+	 * Start progress indicator.
+	 */
 	public void startProgressBar()
 	{
 		progressor.start();
 	}
 	
+	/**
+	 * Stop progress indicator.
+	 */
 	public void stopProgressBar()
 	{
 		progressor.stop();
 	}
 	
+	/**
+	 * Get progress indicator instance.
+	 */
 	public ProgressBar getProgressBar()
 	{
 		return progressor;

@@ -6,6 +6,7 @@
 	<entry name="ui.avatarbox.online" type="image">ui/avatarbox/online.png</entry>
 	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
 	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
+	<entry name="ui.status.notify" type="image">ui/status/notify.png</entry>
 	<entry name="ui.common.net" type="image">ui/common/Net.png</entry>
 	
 	<entry name="ui.font.title" type="font">
@@ -26,6 +27,13 @@
 		<fontface>微软雅黑</fontface>
 		<size>12</size>
 		<bold>false</bold>
+		<italic>false</italic>
+	</entry>
+	
+	<entry name="ui.font.notify" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>11</size>
+		<bold>true</bold>
 		<italic>false</italic>
 	</entry>
 	
