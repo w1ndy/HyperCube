@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.Timer;
 
 import org.sdu.command.PacketLoginSystem;
+import org.sdu.command.PacketResolver;
 import org.sdu.net.NetworkClient;
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -247,7 +248,45 @@ public class LoginUIHandler implements UIHandler
 
 	@Override
 	public void onNetworkData(Session s, Packet p) {
-		// TODO add successive login steps.
+		PacketResolver resolver = new PacketResolver(p);
+		if(resolver.getStatusMain() == 0) {
+			System.out.println("LoginSuccess");
+			// TODO Login success.
+		} else {
+			client.shutdown();
+			frame.stopProgressBar();
+			avatarBox.setEnabled(true);
+			userBox.setEditable(true);
+			passBox.setEditable(true);
+			notifier.setNotifyType(NotifyType.Error);
+			switch(resolver.getStatusSub())
+			{
+			case 0x00:
+				System.out.println("UnknownError");
+				// TODO unknown error.
+				break;
+			case 0x01:
+				System.out.println("UnsupportedVersion");
+				// TODO unsupported version.
+				break;
+			case 0x02:
+				System.out.println("WrongPass");
+				// TODO wrong password.
+				break;
+			case 0x03:
+				System.out.println("UnregisterUser");
+				// TODO unregister user.
+				break;
+			case 0x04:
+				System.out.println("FrozenUser");
+				// TODO frozen user.
+				break;
+			case 0x05:
+				System.out.println("AlreadyOnline");
+				// TODO already online.
+				break;
+			}
+		}
 	}
 
 	@Override
