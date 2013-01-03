@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8003 Dec. 27, 2012 Copyright (c) HyperCube Dev Team
+ * @version 0.1 rev 8004 Jan. 3, 2012 Copyright (c) HyperCube Dev Team
  */
 public class Database {
 	private Statement statement;
@@ -95,6 +95,41 @@ public class Database {
 		} catch (Exception e) {
 		}
 		return flag;
+	}
+
+	public void setOnline(String id, boolean visible) {
+		int flag;
+		if (visible)
+			flag = 1;
+		else
+			flag = 0;
+		try {
+			statement.executeUpdate("update " + table
+					+ " set online=1, visible=" + flag + " where id='" + id
+					+ "'");
+		} catch (Exception e) {
+		}
+	}
+
+	public void setOffline(String id) {
+		try {
+			statement.executeUpdate("update " + table
+					+ " set online=0 where id='" + id + "'");
+		} catch (Exception e) {
+		}
+	}
+
+	public void setVisible(String id, boolean visible) {
+		int flag;
+		if (visible)
+			flag = 1;
+		else
+			flag = 0;
+		try {
+			statement.executeUpdate("update " + table + " visible=" + flag
+					+ " where id='" + id + "'");
+		} catch (Exception e) {
+		}
 	}
 
 	void setPic() throws Exception {

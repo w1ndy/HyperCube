@@ -33,6 +33,7 @@ public class TextBox extends JTextField implements TranslucentComponent
 
 		@Override
 		public void inputMethodTextChanged(InputMethodEvent arg0) {
+			// Java is incompatible with IME in windows 8.
 			TextBox.this.getParent().repaint();
 		}
 	};

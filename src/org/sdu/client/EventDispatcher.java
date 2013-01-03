@@ -28,6 +28,7 @@ public class EventDispatcher extends SessionHandler
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 			client.shutdown();
+			System.exit(0);
 		}
 
 		@Override
@@ -92,7 +93,11 @@ public class EventDispatcher extends SessionHandler
 	public void onSessionAccepted(Session s) {}
 
 	@Override
-	public void onSessionClosed(Session s) {}
+	public void onSessionClosed(Session s)
+	{
+		if(handler != null)
+			handler.onSessionClosed();
+	}
 
 	@Override
 	public void onUnregisteredSession(SocketChannel c) {}

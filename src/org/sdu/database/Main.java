@@ -12,14 +12,14 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8103 Dec. 28, 2012
+ * @version 0.1 rev 8104 Jan. 3, 2012
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Main extends JFrame {
 	private final Dimension modeButton = new Dimension(30, 30);
 	private final Dimension dataButton = new Dimension(25, 25);
-	private final Color chosen = new Color(0x3A70D6);
+	private final Color chosen = new Color(0x2C5DCD);
 	private String[] name = new String[1000], idList = new String[1000],
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
@@ -284,7 +284,11 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Edit.create(frame, 0);
+				try {
+					Edit editWindow = new Edit(frame, 0);
+					editWindow.setVisible(true);
+				} catch (Exception e1) {
+				}
 			}
 		});
 
