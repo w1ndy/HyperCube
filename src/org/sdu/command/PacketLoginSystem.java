@@ -11,13 +11,13 @@ import org.sdu.util.DebugFramework;
  */
 public class PacketLoginSystem extends Packet{
 
-	public PacketLoginSystem(byte versionMain, byte versionSub, String username, String password, String status){
+	public PacketLoginSystem(byte versionMain, byte versionSub, String username, String password, byte status){
 		try {
 			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainLogin, Command.cmdLoginSystem,
 					new byte[]{versionMain, versionSub},
 					username.getBytes("UTF-8"),
 					password.getBytes("UTF-8"),
-					status.getBytes("UTF-8"));
+					new byte[]{status});
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Encoding not found: " + e);
 		}
