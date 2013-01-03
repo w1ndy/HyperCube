@@ -284,11 +284,7 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Edit editWindow = new Edit(frame, 0);
-					editWindow.setVisible(true);
-				} catch (Exception e1) {
-				}
+				new Edit(frame, 0);
 			}
 		});
 

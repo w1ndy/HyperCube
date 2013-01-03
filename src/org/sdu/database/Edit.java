@@ -19,8 +19,25 @@ import javax.imageio.ImageIO;
 public class Edit extends JFrame {
 	private Main main;
 	private int mode;
+	JTextField idField;
 	private static final String[] name = { "添加", "编辑" };
 
+	class NumberInputVerifier extends InputVerifier {
+		@Override
+		public boolean verify(JComponent field) {
+			boolean flag=false;
+			if (field instanceof JTextField) {
+				String text=((JTextField)field).getText();
+				try {
+				Integer.parseInt(text);
+				flag=true;
+				} catch (Exception e) {
+				}
+			}
+			return flag;
+		}
+	}
+	
 	/**
 	 * mode 0 = add mode 1 = edit
 	 */
@@ -29,6 +46,7 @@ public class Edit extends JFrame {
 		main=frame;
 		this.mode=mode;
 		addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent winEvt) {
 				main.refresh();
 			}
@@ -44,11 +62,15 @@ public class Edit extends JFrame {
 		JButton button = new JButton("保存");
 		buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 		buttonPane.add(button);
+		getRootPane().setDefaultButton(button);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.addTab("基本信息", basicInfo());
 		tabbedPane.addTab("更多信息", moreInfo());
+		
+		setVisible(true);
+		idField.requestFocus();
 	}
 
 	private JPanel basicInfo() {
@@ -62,19 +84,30 @@ public class Edit extends JFrame {
 			JLabel pic = new JLabel(new ImageIcon(
 					(ImageIO.read(picURL)).getScaledInstance(150, 200,
 							java.awt.Image.SCALE_SMOOTH)));
-			pic.setBounds(35, 25, 150, 200);
+			pic.setBounds(40, 10, 150, 200);
 			basicInfo.add(pic);
 		} catch (Exception e) {
 		}
 		JLabel picback = new JLabel(new ImageIcon("art/database/addpic.png"));
-		picback.setBounds(35, 25, 158, 208);
+		picback.setBounds(40, 10, 158, 208);
 		basicInfo.add(picback);
+		
+		// id
+				idField = new JTextField();
+				idField.setInputVerifier(new NumberInputVerifier());
+				JLabel idLabel = new JLabel("学号*：");
+				idField.setBounds(90, 230, 134, 28);
+				idLabel.setBounds(20, 230, 134, 28);
+				idLabel.setLabelFor(idField);
+				basicInfo.add(idField);
+				basicInfo.add(idLabel);
+				
 
 		// name
 		JTextField nameField = new JTextField();
 		JLabel nameLabel = new JLabel("姓名：");
-		nameField.setBounds(320, 10, 134, 28);
-		nameLabel.setBounds(250, 10, 134, 28);
+		nameField.setBounds(320, 20, 134, 28);
+		nameLabel.setBounds(250, 20, 134, 28);
 		nameLabel.setLabelFor(nameField);
 		basicInfo.add(nameField);
 		basicInfo.add(nameLabel);
@@ -82,27 +115,18 @@ public class Edit extends JFrame {
 		// engname
 		JTextField engnameField = new JTextField();
 		JLabel engnameLabel = new JLabel("英文姓名：");
-		engnameField.setBounds(320, 45, 134, 28);
-		engnameLabel.setBounds(250, 45, 134, 28);
+		engnameField.setBounds(320, 55, 134, 28);
+		engnameLabel.setBounds(250, 55, 134, 28);
 		engnameLabel.setLabelFor(engnameField);
 		basicInfo.add(engnameField);
 		basicInfo.add(engnameLabel);
-
-		// id
-		JTextField idField = new JTextField();
-		JLabel idLabel = new JLabel("学号：");
-		idField.setBounds(320, 80, 134, 28);
-		idLabel.setBounds(250, 80, 134, 28);
-		idLabel.setLabelFor(idField);
-		basicInfo.add(idField);
-		basicInfo.add(idLabel);
 
 		// sex
 		String[] sex = { "男", "女" };
 		JComboBox sexBox = new JComboBox(sex);
 		JLabel sexLabel = new JLabel("性别：");
-		sexBox.setBounds(320, 115, 134, 28);
-		sexLabel.setBounds(250, 115, 134, 28);
+		sexBox.setBounds(320, 125, 134, 28);
+		sexLabel.setBounds(250, 125, 134, 28);
 		sexLabel.setLabelFor(sexBox);
 		basicInfo.add(sexBox);
 		basicInfo.add(sexLabel);
@@ -110,8 +134,8 @@ public class Edit extends JFrame {
 		// hometown
 		JTextField hometownField = new JTextField();
 		JLabel hometownLabel = new JLabel("籍贯：");
-		hometownField.setBounds(320, 150, 134, 28);
-		hometownLabel.setBounds(250, 150, 134, 28);
+		hometownField.setBounds(320, 160, 134, 28);
+		hometownLabel.setBounds(250, 160, 134, 28);
 		hometownLabel.setLabelFor(hometownField);
 		basicInfo.add(hometownField);
 		basicInfo.add(hometownLabel);
@@ -119,8 +143,8 @@ public class Edit extends JFrame {
 		// country
 		JTextField countryField = new JTextField();
 		JLabel countryLabel = new JLabel("国别：");
-		countryField.setBounds(320, 185, 134, 28);
-		countryLabel.setBounds(250, 185, 134, 28);
+		countryField.setBounds(320, 195, 134, 28);
+		countryLabel.setBounds(250, 195, 134, 28);
 		countryLabel.setLabelFor(countryField);
 		basicInfo.add(countryField);
 		basicInfo.add(countryLabel);
@@ -133,8 +157,8 @@ public class Edit extends JFrame {
 				"鄂伦春族", "鄂温克族", "锡伯族", "门巴族", "黎族", "其他" };
 		JComboBox nationBox = new JComboBox(nation);
 		JLabel nationLabel = new JLabel("民族：");
-		nationBox.setBounds(320, 220, 134, 28);
-		nationLabel.setBounds(250, 220, 134, 28);
+		nationBox.setBounds(320, 230, 134, 28);
+		nationLabel.setBounds(250, 230, 134, 28);
 		nationLabel.setLabelFor(nationBox);
 		basicInfo.add(nationBox);
 		basicInfo.add(nationLabel);
