@@ -24,6 +24,8 @@ public class PacketResolver {
 		int pos;
 		int length;
 	}
+
+	private par part;
 	
 	/**
 	 * Initialize a PacketResovler object.
@@ -42,11 +44,12 @@ public class PacketResolver {
 		setStatusSub(buf.get());
 		setInstMain(buf.get());
 		setInstSub(buf.get());
-		buf.get();
-		
-		par part = null;
+
+		list = new LinkedList();
 		
 		while (buf.position() <= buf.capacity()){
+		buf.get();
+		part = new par();
 		part.pos = buf.position();
 		part.length = (buf.get() << 8) + buf.get();
 		list.add(part);
@@ -82,7 +85,7 @@ public class PacketResolver {
 	public byte getStatusMain() {
 		return statusMain;
 	}
-
+;
 	public void setStatusMain(byte statusMain) {
 		this.statusMain = statusMain;
 	}	
