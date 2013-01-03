@@ -1,22 +1,21 @@
 package org.sdu.database;
 
 import java.awt.*;
+import javax.swing.*;
 import java.io.File;
+import javax.imageio.ImageIO;
 import java.lang.reflect.Method;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
 /**
- * Launch the database management application on OS X. Optimized for menu bar
- * and dock.
+ * Launch the database management application. Optimized for menu bar and dock
+ * on OS X.
  * 
- * @version 0.1 rev 8003 Dec. 30, 2012
+ * @version 0.1 rev 8004 Jan. 2, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
 	public static void main(String[] args) {
-		if (System.getProperty("os.name").startsWith("Mac OS X")) {
+		if (System.getProperty("os.name").startsWith("Mac OS")) {
 			// Title
 			System.setProperty(
 					"com.apple.mrj.application.apple.menu.about.name", "数据库");
@@ -25,24 +24,22 @@ public class Driver {
 			// Dock Icon
 			try {
 				Class<?> app = Class.forName("com.apple.eawt.Application");
-				Method getapp = app.getMethod("getApplication", new Class<?>[0]);
+				Method getapp = app
+						.getMethod("getApplication", new Class<?>[0]);
 				Object app_obj = getapp.invoke(null, new Object[0]);
-				Method seticon = app.getMethod("setDockIcon", new Class[] { Image.class });
-				seticon.invoke(app.cast(app_obj), new Object[] { ImageIO.read(new File("art/database/icon.png")) });
-				
-				//com.apple.eawt.Application.getApplication().setDockIconImage(
-				//		new ImageIcon("art/database/icon.png").getImage());
-			} catch(Exception e) {
-				e.printStackTrace();
-				return ;
+				Method seticon = app.getMethod("setDockIconImage",
+						new Class[] { Image.class });
+				seticon.invoke(app.cast(app_obj), new Object[] { ImageIO
+						.read(new File("art/database/icon.png")) });
+			} catch (Exception e) {
 			}
 		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Main frame = new Main();
-					frame.setIconImage(new ImageIcon("art/database/icon.png")
-							.getImage());
+					frame.setIconImage(ImageIO.read(new File(
+							"art/database/icon.png")));
 					frame.nopic = ImageIO.read(new File(
 							"art/database/nopic.png"));
 					frame.setVisible(true);

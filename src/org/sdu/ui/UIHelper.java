@@ -21,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8006 Dec. 28, 2012.
+ * @version 0.1 rev 8008 Jan. 3, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -153,6 +153,18 @@ public class UIHelper
 	 */
 	public static final Color lightColor = new Color(0, 148, 255);
 	public static final Color darkColor = new Color(128, 128, 128);
+	
+	/**
+	 * Notify icon properties
+	 */
+	public static final int NotifyOffsetX = 150;
+	public static final int NotifyOffsetY = 37;
+	public static final int NotifyWidth = 135;
+	public static final int NotifyHeight = 24;
+	public static final int NotifyIconSize = 16;
+	public static final int NotifyTextSpacing = 5;
+	public static final int NotifyAdjustorInterval = 25;
+	public static final int NotifyActivatorInterval = 2000;
 	
 	/**
 	 * Load image resources.

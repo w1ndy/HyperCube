@@ -7,13 +7,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 
 import javax.swing.JTextField;
 
 /**
  * TextBox class implements a TextField with description.
  * 
- * @version 0.1 rev 8003 Dec. 27, 2012.
+ * @version 0.1 rev 8004 Jan. 1, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class TextBox extends JTextField implements TranslucentComponent
@@ -24,6 +26,16 @@ public class TextBox extends JTextField implements TranslucentComponent
 	private RectBorder border;
 	private BorderFlashAnimation aniFlash;
 	private float globalOpacity = 1.0f;
+	
+	private InputMethodListener imeListener = new InputMethodListener() {
+		@Override
+		public void caretPositionChanged(InputMethodEvent arg0) {}
+
+		@Override
+		public void inputMethodTextChanged(InputMethodEvent arg0) {
+			TextBox.this.getParent().repaint();
+		}
+	};
 	
 	/**
 	 * Initialize a TextBox object.
@@ -72,6 +84,7 @@ public class TextBox extends JTextField implements TranslucentComponent
 		aniFlash = new BorderFlashAnimation(this, border);
 		aniFlash.setColor(UIHelper.darkColor);
 		
+		addInputMethodListener(imeListener);
 		addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
