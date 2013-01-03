@@ -2,6 +2,8 @@ package org.sdu.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -20,7 +22,7 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8002 Jan. 3, 2013.
+ * @version 0.1 rev 8003 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler implements UIHandler
@@ -125,6 +127,7 @@ public class LoginUIHandler implements UIHandler
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		userBox.addKeyListener(userBoxKeyListener);
 		userBox.setInputVerifier(userBoxVerifier);
+		//userBox.addInputMethodListener(userBoxIME);
 	}
 	
 	/**

@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8002 Dec. 23, 2012.
+ * @version 0.1 rev 8003 Jan. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -205,6 +205,9 @@ public class BasicFrame extends JFrame
 		int uy = UIHelper.frameBlockSize;
 		int by = height - UIHelper.frameBlockSize;
 		int x, y;
+		
+		g.setColor(new Color(0, 0, 0, 0));
+		g.clearRect(0, 0, width, height);
 		
 		// Draw background.
 		g.setColor(background);
