@@ -18,13 +18,14 @@ public class PacketResolver {
 	private byte instMain;
 	private byte instSub;
 	
-	private LinkedList list;
-	
-	class par{
-		int pos;
-		int length;
+	public class par{
+		public int pos;
+		public int length;
 	}
 
+	private LinkedList<par> list;
+	
+	
 	private par part;
 	
 	/**
@@ -45,13 +46,13 @@ public class PacketResolver {
 		setInstMain(buf.get());
 		setInstSub(buf.get());
 
-		list = new LinkedList();
+		list = new LinkedList<par>();
 		
-		while (buf.position() <= buf.capacity()){
+		while (buf.position() < buf.capacity()){
 		buf.get();
 		part = new par();
-		part.pos = buf.position();
 		part.length = (buf.get() << 8) + buf.get();
+		part.pos = buf.position();
 		list.add(part);
 		buf.position(buf.position() + part.length);
 		}
@@ -93,7 +94,7 @@ public class PacketResolver {
 	/**
 	 * A LinkedList of the params' positions and lengths.
 	 */
-	public LinkedList getList(){
+	public LinkedList<par> getList(){
 		return list;
 	}
 }
