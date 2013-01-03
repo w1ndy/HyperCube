@@ -1,12 +1,13 @@
 package org.sdu.net;
 
+import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 /**
  * Session class warps a SocketChannel object into a operational transmitter
  * with asynchronized method.
  * 
- * @version 0.1 rev 8001 Dec. 31, 2012.
+ * @version 0.1 rev 8002 Jan. 4, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Session
@@ -27,6 +28,16 @@ public class Session
 		channel = c;
 		readQueue = new ReadQueue();
 		writeQueue = new WriteQueue();
+	}
+	
+	/**
+	 * Close a connection
+	 */
+	public void close()
+	{
+		try {
+			channel.close();
+		} catch (IOException e) {}
 	}
 	
 	/**

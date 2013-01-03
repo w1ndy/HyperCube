@@ -25,7 +25,7 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8004 Jan. 3, 2013.
+ * @version 0.1 rev 8005 Jan. 4, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler implements UIHandler
@@ -39,7 +39,6 @@ public class LoginUIHandler implements UIHandler
 	private StatusNotifier notifier;
 	
 	private NetworkClient client;
-	private Session session;
 	
 	private InputVerifier userBoxVerifier = new InputVerifier() {
 		private boolean check(String str)
@@ -226,9 +225,7 @@ public class LoginUIHandler implements UIHandler
 
 	@Override
 	public void onConnected(Session s) {
-		session = s;
-		
-		session.post(new PacketLoginSystem((byte) 0x00, (byte) 0x01,
+		s.post(new PacketLoginSystem((byte) 0x00, (byte) 0x01,
 				userBox.getText(), new String(passBox.getPassword()),
 				avatarBox.isInvisible() ? (byte) 0x00 : (byte) 0x01));
 	}
@@ -251,9 +248,9 @@ public class LoginUIHandler implements UIHandler
 		PacketResolver resolver = new PacketResolver(p);
 		if(resolver.getStatusMain() == 0) {
 			System.out.println("LoginSuccess");
-			// TODO Login success.
+			frame.stopProgressBar();
+			frame.startExpanding(650);
 		} else {
-			client.shutdown();
 			frame.stopProgressBar();
 			avatarBox.setEnabled(true);
 			userBox.setEditable(true);
@@ -263,29 +260,53 @@ public class LoginUIHandler implements UIHandler
 			{
 			case 0x00:
 				System.out.println("UnknownError");
-				// TODO unknown error.
+				notifier.setStatus(
+						new String[] {
+							(String)UIHelper.getResource("ui.string.login.notify.unknown"),
+							(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+						});
 				break;
 			case 0x01:
 				System.out.println("UnsupportedVersion");
-				// TODO unsupported version.
+				notifier.setStatus(
+						new String[] {
+								(String)UIHelper.getResource("ui.string.login.notify.unsupportver"),
+								(String)UIHelper.getResource("ui.string.login.notify.redirect"),
+								(String)UIHelper.getResource("ui.string.login.notify.download")
+						});
 				break;
 			case 0x02:
 				System.out.println("WrongPass");
-				// TODO wrong password.
+				notifier.setStatus(
+						(String)UIHelper.getResource("ui.string.login.notify.wrongpass"));
+				passBox.onWrongPassword();
 				break;
 			case 0x03:
 				System.out.println("UnregisterUser");
-				// TODO unregister user.
+				notifier.setStatus(
+						(String)UIHelper.getResource("ui.string.login.notify.unregister"));
+				userBox.onFailed();
 				break;
 			case 0x04:
 				System.out.println("FrozenUser");
-				// TODO frozen user.
+				notifier.setStatus(
+						new String[] {
+								(String)UIHelper.getResource("ui.string.login.notify.frozen"),
+								(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+						});
+				userBox.onFailed();
 				break;
 			case 0x05:
 				System.out.println("AlreadyOnline");
-				// TODO already online.
+				notifier.setStatus(
+						new String[] {
+								(String)UIHelper.getResource("ui.string.login.notify.online"),
+								(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+						});
 				break;
 			}
+			notifier.start();
+			s.close();
 		}
 	}
 
