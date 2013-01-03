@@ -11,36 +11,25 @@ import javax.imageio.ImageIO;
 /**
  * Create and edit information.
  * 
- * @version 0.1 rev 8001 Dec. 28, 2012
+ * @version 0.1 rev 8002 Jan. 3, 2012
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
 public class Edit extends JFrame {
-	private Main mainWindow;
+	private Main main;
+	private int mode;
 	private static final String[] name = { "添加", "编辑" };
 
 	/**
 	 * mode 0 = add mode 1 = edit
-	 * 
-	 * @param mode
 	 */
-	public static void create(Main mainWindow, int mode) {
-		try {
-			Edit frame = new Edit(mode);
-			frame.mainWindow = mainWindow;
-			frame.setVisible(true);
-		} catch (Exception e) {
-		}
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Edit(int mode) {
+	public Edit(Main frame, int mode) {
 		super(name[mode] + "资料");
+		main=frame;
+		this.mode=mode;
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
-				mainWindow.refresh();
+				main.refresh();
 			}
 		});
 		setBounds(150, 150, 500, 400);
@@ -75,7 +64,7 @@ public class Edit extends JFrame {
 			basicInfo.add(pic);
 		} catch (Exception e) {
 		}
-		JLabel picback = new JLabel(new ImageIcon("art/database/picback.png"));
+		JLabel picback = new JLabel(new ImageIcon("art/database/addpic.png"));
 		picback.setBounds(35, 25, 158, 208);
 		basicInfo.add(picback);
 
