@@ -101,7 +101,7 @@ public class Database {
 		try {
 			ResultSet rs = statement.executeQuery("select * from " + table
 					+ " where id='" + id + "'");
-			if (rs.next() && (rs.getString("password") == password))
+			if (rs.next() && (rs.getString("password").equals(password)))
 				flag = true;
 		} catch (Exception e) {
 		}
