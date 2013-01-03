@@ -9,6 +9,7 @@ import org.sdu.util.DebugFramework;
  * Encrypt the password by using MD5 twice. After the first round, attach the ID
  * after the string.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 26, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

@@ -13,8 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sdu.network.Session;
-
 /**
  * Test performance on an echo socket server.
  * 
@@ -28,7 +26,7 @@ public class NativeClientTest implements Runnable
 	
 	private static final int max_thread = 100;
 	private static final int post_times = 1;
-	private static final byte delimiter = Session.delimiter;
+	private static final byte delimiter = 0x02;
 	private static final byte[] data = {delimiter, 0x00, 0x05,
 		'H', 'e', 'l', 'l', 'o'};
 	private static final int packet_len = data.length;

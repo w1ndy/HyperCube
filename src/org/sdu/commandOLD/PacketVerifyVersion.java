@@ -7,6 +7,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Build the verify-version packet on the client to send to the server.
  * 
+ * @deprecated
  * @version 0.1 rev 8002 Dec. 27, 2012.
  * Copyright (c) HyperCube Dev Team.
  */

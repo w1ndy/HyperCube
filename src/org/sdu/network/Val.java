@@ -1,6 +1,7 @@
 package org.sdu.network;
 /**
  * The Value	
+ * @deprecated
  * @author Celr
  *		loc --> location 
  */
