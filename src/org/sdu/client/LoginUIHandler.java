@@ -9,6 +9,7 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
+import org.sdu.command.PacketLoginSystem;
 import org.sdu.net.NetworkClient;
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -225,7 +226,10 @@ public class LoginUIHandler implements UIHandler
 	@Override
 	public void onConnected(Session s) {
 		session = s;
-		// TODO successive login operations.
+		
+		session.post(new PacketLoginSystem((byte) 0x00, (byte) 0x01,
+				userBox.getText(), new String(passBox.getPassword()),
+				avatarBox.isInvisible() ? (byte) 0x00 : (byte) 0x01));
 	}
 
 	@Override
@@ -235,12 +239,29 @@ public class LoginUIHandler implements UIHandler
 		userBox.setEditable(true);
 		passBox.setEditable(true);
 		notifier.setNotifyType(NotifyType.Error);
-		notifier.setStatus(new String[] { "连接服务器失败", "请检查网络连接"});
+		notifier.setStatus(new String[] {
+				(String)UIHelper.getResource("ui.string.login.networkdown"),
+				(String)UIHelper.getResource("ui.string.login.checknetwork") });
 		notifier.start();
 	}
 
 	@Override
 	public void onNetworkData(Session s, Packet p) {
-		// TODO Auto-generated method stub
+		// TODO add successive login steps.
+	}
+
+	@Override
+	public void onSessionClosed() {
+		if(!passBox.isEditable()) {
+			frame.stopProgressBar();
+			avatarBox.setEnabled(true);
+			userBox.setEditable(true);
+			passBox.setEditable(true);
+			notifier.setNotifyType(NotifyType.Error);
+			notifier.setStatus(new String[] {
+					(String)UIHelper.getResource("ui.string.login.networkdown"),
+					(String)UIHelper.getResource("ui.string.login.checknetwork") });
+			notifier.start();
+		}
 	}
 }
