@@ -1,39 +1,26 @@
 package org.sdu.command;
 
-import java.net.Socket;
-import org.sdu.network.ModifiablePacket;
+import org.sdu.net.Packet;
 import org.sdu.util.DebugFramework;
 
 /**
  * Build the login-system packet on the client to send to the server.
  * 
- * @version 0.1 rev 8000 Dec. 27, 2012.
+ * @version 0.1 rev 8001 Jam. 3, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
-public class PacketLoginSystem extends ModifiablePacket{
+public class PacketLoginSystem extends Packet{
 
-	public PacketLoginSystem(String username, String password, String status, Socket socket){
+	public PacketLoginSystem(String version, String username, String password, String status){
 		try {
-			PacketDataFactory.makePacket(this, socket,
-					Command.cmdMainLogin, Command.cmdLoginSystem,
+			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainLogin, Command.cmdLoginSystem,
+					version.getBytes("UTF-8"),
 					username.getBytes("UTF-8"),
 					password.getBytes("UTF-8"),
 					status.getBytes("UTF-8"));
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Encoding not found: " + e);
 		}
-	}
-
-	@Override
-	public byte[] getData() {
-		// TODO Auto-generated method stub
-		return arr;
-	}
-
-	@Override
-	public Socket getSocket() {
-		// TODO Auto-generated method stub
-		return s;
 	}
 	
 }

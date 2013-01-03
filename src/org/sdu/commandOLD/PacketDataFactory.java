@@ -1,4 +1,4 @@
-package org.sdu.command;
+package org.sdu.commandOLD;
 
 import java.net.Socket;
 
