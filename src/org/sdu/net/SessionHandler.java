@@ -128,6 +128,10 @@ public abstract class SessionHandler implements ReadQueueHandler
 			} while(k > 0);
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Failed to read: " + e);
+			d.unregister(s);
+			workerExecutor.shutdown();
+			s.getReadQueue().releaseExecutor();
+			onSessionClosed(s);
 		}
 	}
 	
