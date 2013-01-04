@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8003 Jan. 5, 2013
+ * @version 0.1 rev 8004 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Connect {
@@ -67,17 +67,27 @@ public class Connect {
 		}
 	}
 
-	ResultSet getAll() throws Exception {
+	ResultSet get(String query) throws Exception {
+		ResultSet rs;
 		statement.setFetchSize(1001);
-		return statement.executeQuery("select * from " + table);
+		if ((query == null) || query.equals(""))
+			rs = statement.executeQuery("select * from " + table);
+		else
+			rs = statement.executeQuery("select * from " + table + " where "
+					+ query);
+		return rs;
 	}
 
-	int getAllCount() throws Exception {
-		ResultSet count = statement.executeQuery("select count(*) from "
-				+ table);
-		count.next();
-		int countNum = count.getInt(1);
-		count.close();
+	int getCount(String query) throws Exception {
+		ResultSet rs;
+		if ((query == null) || query.equals(""))
+			rs = statement.executeQuery("select count(*) from " + table);
+		else
+			rs = statement.executeQuery("select count(*) from " + table
+					+ " where " + query);
+		rs.next();
+		int countNum = rs.getInt(1);
+		rs.close();
 		return countNum;
 	}
 
@@ -128,8 +138,8 @@ public class Connect {
 				count++;
 			}
 			position = 0;
-			list = new String[count+1];
-			list[0]="";
+			list = new String[count + 1];
+			list[0] = "";
 			for (int i = 1; i <= count; i++) {
 				position = enums.indexOf("'", position);
 				int secondPosition = enums.indexOf("'", position + 1);

@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8106 Jan. 5, 2013
+ * @version 0.1 rev 8107 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
@@ -187,14 +187,11 @@ public class Main extends JFrame {
 	 * 
 	 * @param query
 	 */
-	private void getData(String query) {
+	private void getData() {
 		String[] id = new String[1000];
 		try {
 			ResultSet rs;
-			if (query == null)
-				rs = database.getAll();
-			else
-				rs = database.getAll();
+			rs = database.get(query);
 			int i = 0;
 			while ((i < 1000) && rs.next()) {
 				name[i] = rs.getString("name");
@@ -206,10 +203,7 @@ public class Main extends JFrame {
 			}
 			String listLabel;
 			if ((i == 1000) && rs.next()) {
-				if (query == null)
-					listLabel = database.getAllCount() + "个中的前1000个";
-				else
-					listLabel = database.getAllCount() + "个中的前1000个";
+				listLabel = database.getCount(query) + "个中的前1000个";
 				idList = id;
 			} else {
 				listLabel = "共" + i + "个";
@@ -230,11 +224,10 @@ public class Main extends JFrame {
 	 * Refresh list or table
 	 */
 	public void refresh() {
-		getData(query);
+		getData();
 		buffered = new boolean[1000];
 		listPane.removeAll();
 		listPane.add(mainList(currentMode));
-		listPane.validate();
 	}
 
 	/**
@@ -273,7 +266,14 @@ public class Main extends JFrame {
 		// TODO statButton.addActionListener(this);
 
 		final JButton filterButton = new JButton("筛选");
-		// TODO filterButton.addActionListener(this);
+		filterButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				query = (String) JOptionPane.showInputDialog(frame, "请输入条件：",
+						"筛选", JOptionPane.PLAIN_MESSAGE, null, null, query);
+				refresh();
+			}
+		});
 		getRootPane().setDefaultButton(filterButton);
 
 		JButton addButton = new JButton(new ImageIcon(
@@ -368,7 +368,7 @@ public class Main extends JFrame {
 		picmode.addActionListener(new modeListener());
 
 		// Get all students' data
-		getData(null);
+		getData();
 
 		// Lay out
 		listPane = new JPanel();
