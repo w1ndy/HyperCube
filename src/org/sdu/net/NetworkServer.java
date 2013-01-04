@@ -102,6 +102,7 @@ public class NetworkServer implements Runnable
 				if(channelServer != null) channelServer.close();
 			} catch (Throwable t) {}
 		}
+		handler.onShutdown();
 	}
 	
 	/**

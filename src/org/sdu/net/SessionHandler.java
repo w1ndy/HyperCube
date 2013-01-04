@@ -94,6 +94,7 @@ public abstract class SessionHandler implements ReadQueueHandler
 		try {
 			int k;
 			
+			if(d == null || s == null) return ;
 			// register self with ReadQueue
 			s.getReadQueue().associateHandler(s, this);
 			
@@ -121,7 +122,6 @@ public abstract class SessionHandler implements ReadQueueHandler
 					readBufferQueue.offer(buf);
 				} else {
 					d.unregister(s);
-					workerExecutor.shutdown();
 					s.getReadQueue().releaseExecutor();
 					onSessionClosed(s);
 				}
@@ -129,7 +129,6 @@ public abstract class SessionHandler implements ReadQueueHandler
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Failed to read: " + e);
 			d.unregister(s);
-			workerExecutor.shutdown();
 			s.getReadQueue().releaseExecutor();
 			onSessionClosed(s);
 		}
@@ -151,5 +150,21 @@ public abstract class SessionHandler implements ReadQueueHandler
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Failed to write: " + e);
 		}
+	}
+	
+	/**
+	 * Notified when shutting down.
+	 */
+	public void onShutdown()
+	{
+		if(workerExecutor != null && !workerExecutor.isShutdown())
+			workerExecutor.shutdown();
+	}
+	
+	@Override
+	public void finalize()
+	{
+		if(workerExecutor != null && !workerExecutor.isShutdown())
+			workerExecutor.shutdown();
 	}
 }

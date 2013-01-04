@@ -5,7 +5,7 @@ package org.sdu.server;
  *
  */
 public final class Val {
-	public final static byte F_version = 01;
+	public final static byte F_version = 00;
 	public final static byte S_version = 01;
 	public final static byte Check_T = 0x00;
 	public final static byte Check_F = 0x01;

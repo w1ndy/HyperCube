@@ -34,6 +34,7 @@ public class NetworkClient implements Runnable
 		try {
 			dispatcher.stop();
 		} catch (IOException e) {}
+		handler.onShutdown();
 	}
 	
 	/**
