@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8107 Jan. 5, 2013
+ * @version 0.1 rev 8108 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
@@ -228,6 +228,7 @@ public class Main extends JFrame {
 		buffered = new boolean[1000];
 		listPane.removeAll();
 		listPane.add(mainList(currentMode));
+		listPane.validate();
 	}
 
 	/**

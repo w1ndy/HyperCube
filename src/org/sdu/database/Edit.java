@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 /**
  * Create and edit information.
  * 
- * @version 0.1 rev 8100 Jan. 5, 2013
+ * @version 0.1 rev 8101 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
@@ -21,6 +21,7 @@ public class Edit extends JFrame {
 	private Main main;
 	private int mode;
 	private JComponent[][] field = new JComponent[7][7];
+	private JLabel pic;
 	private String id;
 	private ResultSet rs;
 	private String[][] content;
@@ -78,7 +79,17 @@ public class Edit extends JFrame {
 				for (int i=0;i<7;i++)
 					for (int j=0;j<7;j++)
 						content[i][j]=rs.getString(List.columnName[i][j]);
+				String picAddress=rs.getString("pic");
 				rs.close();
+				URL picURL = new URL("http://" + main.database.webserverAddress
+						+ "/pic/"
+						+ picAddress.substring(0, picAddress.length() - 5)
+						+ "/" + picAddress.substring(picAddress.length() - 5)
+						+ ".jpg");
+				pic = new JLabel(new ImageIcon(
+						(ImageIO.read(picURL)).getScaledInstance(150, 200,
+								java.awt.Image.SCALE_SMOOTH)));
+				pic.setBounds(40, 10, 150, 200);
 			} catch (Exception e) {
 			}
 		}
@@ -111,11 +122,6 @@ public class Edit extends JFrame {
 
 		// picture
 		try {
-			URL picURL = new URL("http://127.0.0.1/pic/1.jpg");
-			JLabel pic = new JLabel(new ImageIcon(
-					(ImageIO.read(picURL)).getScaledInstance(150, 200,
-							java.awt.Image.SCALE_SMOOTH)));
-			pic.setBounds(40, 10, 150, 200);
 			basicInfo.add(pic);
 		} catch (Exception e) {
 		}
