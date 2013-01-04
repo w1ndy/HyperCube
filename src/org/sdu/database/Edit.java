@@ -4,13 +4,14 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.text.DateFormat;
 import javax.imageio.ImageIO;
 
 /**
  * Create and edit information.
  * 
- * @version 0.1 rev 8004 Jan. 3, 2013
+ * @version 0.1 rev 8100 Jan. 3, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
@@ -20,6 +21,9 @@ public class Edit extends JFrame {
 	private Main main;
 	private int mode;
 	private JComponent[][] field = new JComponent[7][7];
+	private String id;
+	private ResultSet rs;
+	private String[][] content;
 
 	class NumberInputVerifier extends InputVerifier {
 		@Override
@@ -27,7 +31,7 @@ public class Edit extends JFrame {
 			boolean flag = false;
 			if (field instanceof JTextField) {
 				try {
-					Integer.parseInt(((JTextField) field).getText());
+					Long.parseLong(((JTextField) field).getText());
 					flag = true;
 				} catch (Exception e) {
 				}
@@ -51,10 +55,11 @@ public class Edit extends JFrame {
 	/**
 	 * mode 0 = add, mode 1 = edit
 	 */
-	public Edit(Main frame, int mode) {
+	public Edit(Main frame, int mode, String id) {
 		super(name[mode] + "资料");
 		main = frame;
 		this.mode = mode;
+		this.id=id;
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent winEvt) {
@@ -64,6 +69,20 @@ public class Edit extends JFrame {
 		setBounds(150, 150, 500, 400);
 		setResizable(false);
 
+		// Get all info
+		if (mode == 1) {
+			try {
+				rs = frame.database.getOne(id);
+				rs.next();
+				content=new String[7][7];
+				for (int i=0;i<7;i++)
+					for (int j=0;j<7;j++)
+						content[i][j]=rs.getString(List.columnName[i][j]);
+				rs.close();
+			} catch (Exception e) {
+			}
+		}
+		
 		JPanel buttonPane = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) buttonPane.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
@@ -113,6 +132,8 @@ public class Edit extends JFrame {
 		idLabel.setLabelFor(idField);
 		basicInfo.add(idField);
 		basicInfo.add(idLabel);
+		if (mode == 1)
+			(idField).setText(id);
 
 		for (int i = 0; i < 7; i++)
 			field[0][i] = field(basicInfo, 0, i);
@@ -160,21 +181,34 @@ public class Edit extends JFrame {
 	// ComboBox
 	JComponent field(JPanel pane, int x, int y) {
 		JComponent field = null;
-		switch (Detail.columnType[x][y]) {
+		switch (List.columnType[x][y]) {
 		case 1:
 			field = new JTextField();
+			if (mode == 1)
+				((JTextField) field).setText(content[x][y]);
 			break;
 		case 2:
 			field = new JTextField();
 			field.setInputVerifier(new NumberInputVerifier());
+			if (mode == 1)
+				((JTextField) field).setText(content[x][y]);
 			break;
 		case 3:
 			field = new JFormattedTextField(DateFormat.getDateInstance());
+			if (mode == 1)
+				((JFormattedTextField) field).setText(content[x][y]);
 			break;
 		case 4:
-			field = new JComboBox(main.database.getEnumList(x, y));
+			String[] list=main.database.getEnumList(x, y);
+			field = new JComboBox(list);
+			if (mode == 1)
+				for (int i=1;i<list.length;i++)
+					if (content[x][y].equals(list[i])) {
+						((JComboBox) field).setSelectedIndex(i);
+						break;
+					}
 		}
-		JLabel label = new JLabel(Detail.column[x][y] + "：");
+		JLabel label = new JLabel(List.column[x][y] + "：");
 		if (x % 2 == 0) {
 			field.setBounds(320, y * 35 + 20, 134, 28);
 			label.setBounds(250, y * 35 + 20, 134, 28);

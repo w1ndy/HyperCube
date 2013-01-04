@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8002 Jan. 4, 2013
+ * @version 0.1 rev 8003 Jan. 4, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Connect {
@@ -118,8 +118,8 @@ public class Connect {
 	String[] getEnumList(int x, int y) {
 		String[] list;
 		try {
-			ResultSet rs = statement.executeQuery("SHOW COLUMNS FROM " + table
-					+ " LIKE '" + Detail.columnName[x][y] + "'");
+			ResultSet rs = statement.executeQuery("show columns from " + table
+					+ " like '" + List.columnName[x][y] + "'");
 			rs.next();
 			String enums = rs.getString("Type");
 			int position = 0, count = 0;
@@ -128,8 +128,9 @@ public class Connect {
 				count++;
 			}
 			position = 0;
-			list = new String[count];
-			for (int i = 0; i < count; i++) {
+			list = new String[count+1];
+			list[0]="";
+			for (int i = 1; i <= count; i++) {
 				position = enums.indexOf("'", position);
 				int secondPosition = enums.indexOf("'", position + 1);
 				list[i] = enums.substring(position + 1, secondPosition);
@@ -139,5 +140,10 @@ public class Connect {
 			list = new String[0];
 		}
 		return list;
+	}
+
+	ResultSet getOne(String id) throws Exception {
+		return statement.executeQuery("select * from " + table + " where id='"
+				+ id + "'");
 	}
 }

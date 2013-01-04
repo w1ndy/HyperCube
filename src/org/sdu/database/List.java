@@ -3,7 +3,7 @@ package org.sdu.database;
 /**
  * Store database column list.
  * 
- * @version 0.1 rev 8000 Jan. 4, 2013
+ * @version 0.1 rev 8001 Jan. 4, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class List {
@@ -30,7 +30,7 @@ public class List {
 			{ "language", "languageskill", "roll", "field", "studyplace",
 					"exam", "cardnum" } };
 	final static int[][] columnType = { { 1, 1, 4, 3, 1, 4, 4 },
-			{ 4, 1, 1, 1, 2, 1, 1 }, { 1, 1, 2, 1, 2, 1, 1 },
+			{ 4, 1, 1, 1, 2, 1, 1 }, { 1, 1, 2, 2, 2, 1, 1 },
 			{ 4, 4, 4, 1, 1, 1, 1 }, { 3, 4, 4, 4, 2, 1, 4 },
 			{ 4, 1, 4, 4, 4, 4, 4 }, { 1, 1, 4, 4, 4, 2, 2 } };
 }

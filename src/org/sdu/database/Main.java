@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8105 Jan. 3, 2013
+ * @version 0.1 rev 8106 Jan. 3, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
@@ -157,9 +157,8 @@ public class Main extends JFrame {
 			table = new JTable(model);
 			table.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-
-					}
+					if (e.getClickCount() == 2)
+						new Edit(frame, 1, idList[table.getSelectedRow()]);
 				}
 			});
 			listScroller = new JScrollPane(table);
@@ -174,11 +173,9 @@ public class Main extends JFrame {
 			list.setVisibleRowCount(-1);
 			list.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						// TODO
-					}
+					if (e.getClickCount() == 2)
+						new Edit(frame, 1, (String) list.getSelectedValue());
 				}
-
 			});
 			listScroller = new JScrollPane(list);
 		}
@@ -284,7 +281,7 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Edit(frame, 0);
+				new Edit(frame, 0, null);
 			}
 		});
 
