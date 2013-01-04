@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8104 Jan. 3, 2012
+ * @version 0.1 rev 8105 Jan. 3, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
@@ -23,7 +23,7 @@ public class Main extends JFrame {
 	private String[] name = new String[1000], idList = new String[1000],
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
-	private Database stuData = new Database("stu1");
+	private Connect stuData = new Connect();
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	BufferedImage nopic;

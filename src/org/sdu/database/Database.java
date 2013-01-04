@@ -6,21 +6,21 @@ import java.util.*;
 import javax.swing.*;
 
 /**
- * Build database connection.
+ * Access database.
  * 
- * @version 0.1 rev 8005 Jan. 4, 2012
+ * @version 0.1 rev 8006 Jan. 4, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Database {
+	private final String mainDatabase = "hypercube";
+	private final String infoTable = "info";
 	private Statement statement;
 	private Connection conn;
-	private String table;
 	public String webserverAddress;
 
-	public Database(String table) {
-		this.table = table;
+	public Database() {
 		// Read configuration file
-		String line, databaseAddress = "", database = "", user = "", password = "";
+		String line, databaseAddress = "", user = "", password = "";
 		try {
 			FileReader in = new FileReader("database.conf");
 			Scanner conf = new Scanner(in);
@@ -30,8 +30,6 @@ public class Database {
 					databaseAddress = conf.next();
 				if (line.equals("[webserver_address]"))
 					webserverAddress = conf.next();
-				if (line.equals("[database]"))
-					database = conf.next();
 				if (line.equals("[user]"))
 					user = conf.next();
 				if (line.equals("[password]"))
@@ -47,7 +45,7 @@ public class Database {
 
 		// Connect to database
 		try {
-			String url = "jdbc:mysql://" + databaseAddress + "/" + database;
+			String url = "jdbc:mysql://" + databaseAddress + "/" + mainDatabase;
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password);
 			statement = conn.createStatement();
@@ -66,154 +64,91 @@ public class Database {
 		}
 	}
 
-	ResultSet getAll() throws Exception {
-		statement.setFetchSize(1001);
-		return statement.executeQuery("select * from " + table);
-	}
-
-	int getAllCount() throws Exception {
+	public int getCount() throws Exception {
+		int num = 0;
 		ResultSet count = statement.executeQuery("select count(*) from "
-				+ table);
+				+ infoTable);
 		count.next();
-		int countNum = count.getInt(1);
+		num = count.getInt(1);
 		count.close();
-		return countNum;
+		return num;
 	}
 
-	void delete(String id) throws Exception {
-		statement.execute("delete from " + table + " where id='" + id + "'");
+	public void deleteUser(String id) throws Exception {
+		statement
+				.execute("delete from " + infoTable + " where id='" + id + "'");
 	}
 
-	public boolean checkExist(String id) {
+	public boolean checkExist(String id) throws Exception {
 		boolean flag = false;
-		try {
-			ResultSet rs = statement.executeQuery("select * from " + table
-					+ " where id='" + id + "'");
-			if (rs.next())
-				flag = true;
-		} catch (Exception e) {
-		}
+		ResultSet rs = statement.executeQuery("select * from " + infoTable
+				+ " where id='" + id + "'");
+		if (rs.next())
+			flag = true;
 		return flag;
 	}
 
-	public boolean checkPassword(String id, String password) {
+	public boolean checkPassword(String id, String password) throws Exception {
 		boolean flag = false;
-		try {
-			ResultSet rs = statement.executeQuery("select * from " + table
-					+ " where id='" + id + "'");
-			if (rs.next() && (rs.getString("password").equals(password)))
-				flag = true;
-		} catch (Exception e) {
-		}
+		ResultSet rs = statement.executeQuery("select * from " + infoTable
+				+ " where id='" + id + "'");
+		if (rs.next() && (rs.getString("password").equals(password)))
+			flag = true;
 		return flag;
 	}
 
-	public void setOnline(String id, boolean visible) {
+	public void setOnline(String id, boolean visible) throws Exception {
 		int flag;
 		if (visible)
 			flag = 1;
 		else
 			flag = 0;
-		try {
-			statement.executeUpdate("update " + table
-					+ " set online=1, visible=" + flag + " where id='" + id
-					+ "'");
-		} catch (Exception e) {
-		}
+		statement.executeUpdate("update " + infoTable
+				+ " set online=1, visible=" + flag + " where id='" + id + "'");
 	}
 
-	public void setOffline(String id) {
-		try {
-			statement.executeUpdate("update " + table
-					+ " set online=0 where id='" + id + "'");
-		} catch (Exception e) {
-		}
+	public void setOffline(String id) throws Exception {
+		statement.executeUpdate("update " + infoTable
+				+ " set online=0 where id='" + id + "'");
 	}
 
-	public void setVisible(String id, boolean visible) {
+	public void setVisible(String id, boolean visible) throws Exception {
 		int flag;
 		if (visible)
 			flag = 1;
 		else
 			flag = 0;
-		try {
-			statement.executeUpdate("update " + table + " visible=" + flag
-					+ " where id='" + id + "'");
-		} catch (Exception e) {
-		}
+		statement.executeUpdate("update " + infoTable + " visible=" + flag
+				+ " where id='" + id + "'");
 	}
 
-	public void setNickname(String id, String nickname) {
-		try {
-			statement.executeUpdate("update " + table + " nickname='"
-					+ nickname + "' where id='" + id + "'");
-		} catch (Exception e) {
-		}
+	public void setNickname(String id, String nickname) throws Exception {
+		statement.executeUpdate("update " + infoTable + " nickname='"
+				+ nickname + "' where id='" + id + "'");
 	}
 
-	public boolean getOnline(String id) {
+	public boolean getOnline(String id) throws Exception {
 		boolean flag = false;
-		try {
-			ResultSet rs = statement.executeQuery("select * from " + table
-					+ " where id='" + id + "'");
-			if (rs.next() && (rs.getInt("online") == 1))
-				flag = true;
-		} catch (Exception e) {
-		}
+		ResultSet rs = statement.executeQuery("select * from " + infoTable
+				+ " where id='" + id + "'");
+		if (rs.next() && (rs.getInt("online") == 1))
+			flag = true;
 		return flag;
 	}
 
-	public boolean getVisible(String id) {
+	public boolean getVisible(String id) throws Exception {
 		boolean flag = false;
-		try {
-			ResultSet rs = statement.executeQuery("select * from " + table
-					+ " where id='" + id + "'");
-			if (rs.next() && (rs.getInt("visible") == 1))
-				flag = true;
-		} catch (Exception e) {
-		}
+		ResultSet rs = statement.executeQuery("select * from " + infoTable
+				+ " where id='" + id + "'");
+		if (rs.next() && (rs.getInt("visible") == 1))
+			flag = true;
 		return flag;
 	}
 
-	public String getNickname(String id) {
-		String nickname = "";
-		try {
-			ResultSet rs = statement.executeQuery("select * from " + table
-					+ " where id='" + id + "'");
-			rs.next();
-			nickname = rs.getString("nickname");
-		} catch (Exception e) {
-		}
-		return nickname;
-	}
-
-	void setPic() throws Exception {
-		FileReader fi = new FileReader("1.txt");
-		Scanner scan = new Scanner(fi);
-		String s, s1, s2;
-		int i;
-		Random rand = new Random();
-		File pic, pic1;
-		while (scan.hasNext()) {
-			s = scan.next();
-			pic = new File("/Users/cc941201/Desktop/Database/wget/pic/" + s);
-			do {
-				s1 = "";
-				for (i = 0; i < 27; i++)
-					s1 += (char) (rand.nextInt(26) + 97);
-				s2 = "";
-				for (i = 0; i < 5; i++)
-					s2 += (char) (rand.nextInt(26) + 97);
-				pic1 = new File("/Library/Server/Web/Data/Sites/Default/pic/"
-						+ s1 + "/" + s2 + ".jpg");
-			} while (pic1.exists());
-			File path = new File("/Library/Server/Web/Data/Sites/Default/pic/"
-					+ s1 + "/");
-			if (!path.exists())
-				path.mkdirs();
-			pic.renameTo(pic1);
-			statement.execute("update stu set pic='" + s1 + s2 + "' where id='"
-					+ s.substring(0, s.length() - 4) + "'");
-		}
+	public String getNickname(String id) throws Exception {
+		ResultSet rs = statement.executeQuery("select * from " + infoTable
+				+ " where id='" + id + "'");
+		rs.next();
+		return rs.getString("nickname");
 	}
 }
