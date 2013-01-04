@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8001 Jan. 4, 2013
+ * @version 0.1 rev 8002 Jan. 4, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Connect {
@@ -84,7 +84,7 @@ public class Connect {
 	void delete(String id) throws Exception {
 		statement.execute("delete from " + table + " where id='" + id + "'");
 	}
-	
+
 	void setPic() throws Exception {
 		FileReader fi = new FileReader("1.txt");
 		Scanner scan = new Scanner(fi);
@@ -113,5 +113,31 @@ public class Connect {
 			statement.execute("update stu set pic='" + s1 + s2 + "' where id='"
 					+ s.substring(0, s.length() - 4) + "'");
 		}
+	}
+
+	String[] getEnumList(int x, int y) {
+		String[] list;
+		try {
+			ResultSet rs = statement.executeQuery("SHOW COLUMNS FROM " + table
+					+ " LIKE '" + Detail.columnName[x][y] + "'");
+			rs.next();
+			String enums = rs.getString("Type");
+			int position = 0, count = 0;
+			while ((position = enums.indexOf("'", position)) > 0) {
+				position = enums.indexOf("'", position + 1) + 1;
+				count++;
+			}
+			position = 0;
+			list = new String[count];
+			for (int i = 0; i < count; i++) {
+				position = enums.indexOf("'", position);
+				int secondPosition = enums.indexOf("'", position + 1);
+				list[i] = enums.substring(position + 1, secondPosition);
+				position = secondPosition + 1;
+			}
+		} catch (Exception e) {
+			list = new String[0];
+		}
+		return list;
 	}
 }

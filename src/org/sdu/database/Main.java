@@ -23,7 +23,7 @@ public class Main extends JFrame {
 	private String[] name = new String[1000], idList = new String[1000],
 			idNum = new String[1000], faculty = new String[1000],
 			pic = new String[1000];
-	private Connect stuData = new Connect();
+	Connect database = new Connect();
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	BufferedImage nopic;
@@ -46,7 +46,7 @@ public class Main extends JFrame {
 	private BufferedImage paintPic(int index) {
 		if (!buffered[index])
 			try {
-				URL picURL = new URL("http://" + stuData.webserverAddress
+				URL picURL = new URL("http://" + database.webserverAddress
 						+ "/pic/"
 						+ pic[index].substring(0, pic[index].length() - 5)
 						+ "/" + pic[index].substring(pic[index].length() - 5)
@@ -195,9 +195,9 @@ public class Main extends JFrame {
 		try {
 			ResultSet rs;
 			if (query == null)
-				rs = stuData.getAll();
+				rs = database.getAll();
 			else
-				rs = stuData.getAll();
+				rs = database.getAll();
 			int i = 0;
 			while ((i < 1000) && rs.next()) {
 				name[i] = rs.getString("name");
@@ -210,9 +210,9 @@ public class Main extends JFrame {
 			String listLabel;
 			if ((i == 1000) && rs.next()) {
 				if (query == null)
-					listLabel = stuData.getAllCount() + "个中的前1000个";
+					listLabel = database.getAllCount() + "个中的前1000个";
 				else
-					listLabel = stuData.getAllCount() + "个中的前1000个";
+					listLabel = database.getAllCount() + "个中的前1000个";
 				idList = id;
 			} else {
 				listLabel = "共" + i + "个";
@@ -248,7 +248,7 @@ public class Main extends JFrame {
 		super("数据库管理");
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
-				stuData.close();
+				database.close();
 				System.exit(0);
 			}
 		});
@@ -305,9 +305,10 @@ public class Main extends JFrame {
 							if (currentMode == 1) {
 								int[] selected = table.getSelectedRows();
 								for (int i = 0; i < selected.length; i++)
-									stuData.delete(idList[selected[i]]);
+									database.delete(idList[selected[i]]);
 							} else
-								stuData.delete((String) list.getSelectedValue());
+								database.delete((String) list
+										.getSelectedValue());
 							refresh();
 						} catch (Exception e1) {
 							JOptionPane.showMessageDialog(frame, "删除失败", "错误",
