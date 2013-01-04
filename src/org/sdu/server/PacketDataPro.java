@@ -27,13 +27,11 @@ public class PacketDataPro {
 			if (opt.get(opt.position())== 0x05) {
 				param_length = (opt.get(opt.position()+1) << 8)+opt.get(opt.position()+2);
 				opt.position(opt.position()+3);
-				opt.limit(opt.position()+param_length);
-				for (int i=opt.position();i<opt.limit();i++){
+				for (int i=opt.position();i<=opt.position()+param_length-1;i++){
 					tmp1[i-opt.position()] = opt.get(i);
 				}
-				tmp = new String(tmp1);
-				opt.position(opt.limit());
-				opt.limit(opt.capacity());
+				tmp = new String(tmp1,0,param_length);
+				if (opt.position()+param_length < opt.capacity()-1) opt.position(opt.position()+param_length);
 		}
 			else{
 				tmp = "";
@@ -50,12 +48,10 @@ public class PacketDataPro {
 				tmp = new byte[param_length];	
 				a = opt.position()+3;
 				opt.position(a);
-				opt.limit(opt.position()+param_length);
-				for (int i=opt.position();i<opt.limit();i++){
+				for (int i=opt.position();i<=opt.position()+param_length-1;i++){
 					tmp[i-opt.position()] = opt.get(i);
 				}
-				opt.position(opt.limit());
-				opt.limit(opt.capacity());
+				if (opt.position()+param_length < opt.capacity()-1) opt.position(opt.position()+param_length);
 				}
 			else{
 				tmp = null;

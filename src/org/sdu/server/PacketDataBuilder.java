@@ -19,15 +19,17 @@ public class PacketDataBuilder {
 		DataArr.put(list,0,list.length);
 	}
 	public void SetParamB(byte...list){
-		DataArr.limit(DataArr.limit()+list.length);
+		DataArr.limit(DataArr.limit()+list.length+3);
 		DataArr.put((byte) 0x05);
-		DataArr.put((byte) list.length);
+		DataArr.put((byte) ((list.length >> 8)&0xff));
+		DataArr.put((byte) ((list.length)&0xff));
 		DataArr.put(list);
 	}
 	public void SetParamS(String tmp){
-		DataArr.limit(DataArr.limit()+tmp.getBytes().length);
+		DataArr.limit(DataArr.limit()+tmp.getBytes().length+3);
 		DataArr.put((byte) 0x05);
-		DataArr.put((byte) tmp.getBytes().length);
+		DataArr.put((byte) ((tmp.getBytes().length >> 8)&0xff));
+		DataArr.put((byte) ((tmp.getBytes().length)&0xff));
 		DataArr.put(tmp.getBytes());
 	}
 	public Packet GetData(){
