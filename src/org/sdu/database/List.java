@@ -1,12 +1,12 @@
 package org.sdu.database;
 
 /**
- * Store database column data.
+ * Store database column list.
  * 
  * @version 0.1 rev 8000 Jan. 4, 2013
  * Copyright (c) HyperCube Dev Team
  */
-public class Detail {
+public class List {
 	final static String[][] column = {
 			{ "姓名", "英文姓名", "性别", "出生日期", "国别", "民族", "政治面貌" },
 			{ "证件类别", "证件号码", "所在地", "家庭地址", "家庭邮编", "家庭电话", "固定电话" },
