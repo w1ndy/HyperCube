@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 /**
  * Create and edit information.
  * 
- * @version 0.1 rev 8002 Jan. 3, 2012
+ * @version 0.1 rev 8003 Jan. 3, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
@@ -27,9 +27,8 @@ public class Edit extends JFrame {
 		public boolean verify(JComponent field) {
 			boolean flag=false;
 			if (field instanceof JTextField) {
-				String text=((JTextField)field).getText();
 				try {
-				Integer.parseInt(text);
+				Integer.parseInt(((JTextField)field).getText());
 				flag=true;
 				} catch (Exception e) {
 				}
@@ -38,8 +37,20 @@ public class Edit extends JFrame {
 		}
 	}
 	
+	class NullInputVerifier extends InputVerifier {
+		@Override
+		public boolean verify(JComponent field) {
+			boolean flag=false;
+			if (field instanceof JTextField) {
+				if (((JTextField)field).getText().length()>0)
+					flag=true;
+			}
+			return flag;
+		}
+	}
+	
 	/**
-	 * mode 0 = add mode 1 = edit
+	 * mode 0 = add, mode 1 = edit
 	 */
 	public Edit(Main frame, int mode) {
 		super(name[mode] + "资料");
@@ -93,15 +104,14 @@ public class Edit extends JFrame {
 		basicInfo.add(picback);
 		
 		// id
-				idField = new JTextField();
-				idField.setInputVerifier(new NumberInputVerifier());
-				JLabel idLabel = new JLabel("学号*：");
-				idField.setBounds(90, 230, 134, 28);
-				idLabel.setBounds(20, 230, 134, 28);
-				idLabel.setLabelFor(idField);
-				basicInfo.add(idField);
-				basicInfo.add(idLabel);
-				
+		idField = new JTextField();
+		idField.setInputVerifier(new NullInputVerifier());
+		JLabel idLabel = new JLabel("学号*：");
+		idField.setBounds(90, 230, 134, 28);
+		idLabel.setBounds(20, 230, 134, 28);
+		idLabel.setLabelFor(idField);
+		basicInfo.add(idField);
+		basicInfo.add(idLabel);
 
 		// name
 		JTextField nameField = new JTextField();
@@ -251,5 +261,34 @@ public class Edit extends JFrame {
 		 * basicInfo.add(nationBox); basicInfo.add(nationLabel);
 		 */
 		return moreInfo;
+	}
+	
+	// type 1 = TextField, type 2 = NumberField, type 3 = DateField, type 4 = ComboBox
+	JComponent field(JPanel pane, boolean left, int num, String name, String colName, int type) {
+		JComponent field=null;
+		switch (type) {
+		case 1:
+			field=new JTextField();
+			break;
+		case 2:
+			field=new JTextField();
+			field.setInputVerifier(new NumberInputVerifier());
+			break;
+		case 3:
+			field=new JFormattedTextField(DateFormat.getDateInstance());
+			break;
+		case 4:
+			String[] list={};
+			field=new JComboBox(list);
+		}
+		JLabel label=new JLabel(name);
+		if (left)
+			label.setBounds(20,num*35+20,134,28);
+		else
+			label.setBounds(250,num*35+20,134,28);
+		label.setLabelFor(field);
+		pane.add(field);
+		pane.add(label);
+		return field;
 	}
 }
