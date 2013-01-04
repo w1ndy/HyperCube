@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8106 Jan. 3, 2013
+ * @version 0.1 rev 8106 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })

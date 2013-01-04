@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 /**
  * Create and edit information.
  * 
- * @version 0.1 rev 8100 Jan. 3, 2013
+ * @version 0.1 rev 8100 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
@@ -96,9 +96,9 @@ public class Edit extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.addTab("基本", basicInfo());
-		tabbedPane.addTab("联系", contactInfo());
-		tabbedPane.addTab("教学", teachInfo());
-		tabbedPane.addTab("学习", studyInfo());
+		tabbedPane.addTab("更多", contactInfo());
+		tabbedPane.addTab("培养", teachInfo());
+		tabbedPane.addTab("其他", studyInfo());
 
 		setVisible(true);
 		idField.requestFocus();
