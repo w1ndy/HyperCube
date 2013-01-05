@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8006 Jan. 6, 2013
+ * @version 0.1 rev 8007 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class Connect {
@@ -67,6 +67,22 @@ class Connect {
 	}
 
 	void delete(int index) throws Exception {
+		File origin = new File(Configure.siteDirectory + "pic/"
+				+ pic[index].substring(0, pic[index].length() - 5) + "/"
+				+ pic[index].substring(pic[index].length() - 5) + ".jpg");
+		File move = new File(Configure.siteDirectory + "picdeleted/"
+				+ pic[index].substring(0, pic[index].length() - 5) + "/"
+				+ pic[index].substring(pic[index].length() - 5) + ".jpg");
+		File oldPath = new File(Configure.siteDirectory + "pic/"
+				+ pic[index].substring(0, pic[index].length() - 5) + "/");
+		File newPath = new File(Configure.siteDirectory + "picdeleted/"
+				+ pic[index].substring(0, pic[index].length() - 5) + "/");
+		if (!newPath.exists())
+			newPath.mkdirs();
+		origin.renameTo(move);
+		File[] oldPathFiles = oldPath.listFiles();
+		if (oldPathFiles.length == 0)
+			oldPath.delete();
 		statement.execute("delete from " + Configure.table + " where id='"
 				+ id[index] + "'");
 	}

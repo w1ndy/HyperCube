@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * Launch the database management application. Optimized for menu bar and dock
  * on OS X.
  * 
- * @version 0.1 rev 8005 Jan. 6, 2013
+ * @version 0.1 rev 8006 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
@@ -39,7 +39,7 @@ public class Driver {
 			Configure.read();
 			if (!new File(Configure.siteDirectory + "pic/").isDirectory())
 				JOptionPane.showMessageDialog(null,
-						"如果需要更换、导入、删除图片，请在网页服务器上运行此程序。", "提示",
+						"如果需要添加、删除照片，\n请在网页服务器上运行此程序。", "提示",
 						JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "配置文件错误", "启动失败",
