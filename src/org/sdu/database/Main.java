@@ -12,11 +12,11 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8108 Jan. 5, 2013
+ * @version 0.1 rev 8109 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
-public class Main extends JFrame {
+class Main extends JFrame {
 	private final Dimension modeButton = new Dimension(30, 30);
 	private final Dimension dataButton = new Dimension(25, 25);
 	private final Color chosen = new Color(0x2C5DCD);
@@ -190,8 +190,7 @@ public class Main extends JFrame {
 	private void getData() {
 		String[] id = new String[1000];
 		try {
-			ResultSet rs;
-			rs = database.get(query);
+			ResultSet rs = database.get(query);
 			int i = 0;
 			while ((i < 1000) && rs.next()) {
 				name[i] = rs.getString("name");
@@ -255,12 +254,59 @@ public class Main extends JFrame {
 
 		JMenuItem importData = new JMenuItem("导入数据库...");
 		dataMenu.add(importData);
+		importData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new Port(frame, 0, null);
+			}
+		});
 
-		JMenuItem exportData = new JMenuItem("导出数据库...");
-		dataMenu.add(exportData);
-
-		JMenuItem exportCurrentData = new JMenuItem("导出当前条目...");
+		JMenuItem exportCurrentData = new JMenuItem("导出当前所有条目...");
 		dataMenu.add(exportCurrentData);
+		exportCurrentData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					int num = database.getCount(query);
+					String[] id = new String[num];
+					ResultSet rs = database.get(query);
+					for (int i = 0; i < num; i++) {
+						rs.next();
+						id[i] = rs.getString("id");
+					}
+					rs.close();
+					new Port(frame, 1, id);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		JMenuItem exportSelectedData = new JMenuItem("导出选中条目...");
+		dataMenu.add(exportSelectedData);
+		exportSelectedData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
+						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
+					JOptionPane.showMessageDialog(frame, "请选择条目", "提示",
+							JOptionPane.INFORMATION_MESSAGE);
+				else {
+					String[] id;
+					if (currentMode == 1) {
+						int[] selected = table.getSelectedRows();
+						id = new String[selected.length];
+						for (int i = 0; i < selected.length; i++)
+							id[i] = idList[selected[i]];
+					} else {
+						id = new String[1];
+						id[0] = (String) list.getSelectedValue();
+					}
+					new Port(frame, 1, id);
+				}
+			}
+		});
 
 		// Buttons
 		JButton statButton = new JButton("统计");
@@ -269,7 +315,7 @@ public class Main extends JFrame {
 		final JButton filterButton = new JButton("筛选");
 		filterButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				query = (String) JOptionPane.showInputDialog(frame, "请输入条件：",
 						"筛选", JOptionPane.PLAIN_MESSAGE, null, null, query);
 				refresh();
@@ -293,7 +339,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
 						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
-					JOptionPane.showMessageDialog(frame, "请选择条目", "错误",
+					JOptionPane.showMessageDialog(frame, "请选择条目", "提示",
 							JOptionPane.INFORMATION_MESSAGE);
 				else {
 					int confirm = JOptionPane.showConfirmDialog(frame,
