@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8004 Jan. 5, 2013
+ * @version 0.1 rev 8005 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class Connect {
@@ -16,6 +16,8 @@ class Connect {
 	private Connection conn;
 	private String table;
 	public String webserverAddress;
+	int totalNum;
+	String[] name, id, idNum, faculty, pic;
 
 	public Connect() {
 		// Read configuration file
@@ -155,5 +157,43 @@ class Connect {
 	ResultSet getOne(String id) throws Exception {
 		return statement.executeQuery("select * from " + table + " where id='"
 				+ id + "'");
+	}
+
+	void getData(Main frame, String query) {
+		try {
+			ResultSet rs = get(query);
+			totalNum = getCount(query);
+			int num = (totalNum > 1000) ? 1000 : totalNum;
+			name = new String[num];
+			id = new String[num];
+			idNum = new String[num];
+			faculty = new String[num];
+			pic = new String[num];
+			for (int i = 0; i < num; i++) {
+				rs.next();
+				name[i] = rs.getString("name");
+				id[i] = rs.getString("id");
+				idNum[i] = rs.getString("idnum");
+				faculty[i] = rs.getString("faculty");
+				pic[i] = rs.getString("pic");
+				i++;
+			}
+			rs.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
+	}
+
+	String[] getID(String query) throws Exception {
+		String[] id = new String[totalNum];
+		ResultSet rs = get(query);
+		for (int i = 0; i < totalNum; i++) {
+			rs.next();
+			id[i] = rs.getString("id");
+		}
+		rs.close();
+		return id;
 	}
 }
