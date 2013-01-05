@@ -1,6 +1,7 @@
 package org.sdu.database;
 
 import javax.swing.*;
+
 import java.awt.event.*;
 
 import javax.swing.filechooser.FileFilter;
@@ -72,9 +73,9 @@ class Port extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int result;
 				if (mode==0)
-					result=csvChooser.showOpenDialog(getParent());
+					result=csvChooser.showOpenDialog(Port.this);
 				else
-					result=csvChooser.showSaveDialog(getParent());
+					result=csvChooser.showSaveDialog(Port.this);
 				if (result==JFileChooser.APPROVE_OPTION)
 					csvField.setText(csvChooser.getSelectedFile().toString());
 			}
@@ -90,9 +91,9 @@ class Port extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				int result;
 				if (mode==0)
-					result=picChooser.showOpenDialog(getParent());
+					result=picChooser.showOpenDialog(Port.this);
 				else
-					result=picChooser.showSaveDialog(getParent());
+					result=picChooser.showSaveDialog(Port.this);
 				if (result == JFileChooser.APPROVE_OPTION)
 					picField.setText(picChooser.getSelectedFile().toString());
 			}
@@ -114,6 +115,10 @@ class Port extends JFrame {
 				picButton.setEnabled(false);
 				csvField.setEnabled(false);
 				picField.setEnabled(false);
+				progressBar.setValue(50);
+				JOptionPane.showMessageDialog(Port.this, NAME[mode]+"完成！", "成功",
+						JOptionPane.INFORMATION_MESSAGE);
+				dispose();
 				// TODO
 			}
 		});

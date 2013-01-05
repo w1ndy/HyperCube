@@ -341,24 +341,20 @@ class Main extends JFrame {
 						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
 					JOptionPane.showMessageDialog(frame, "请选择条目", "提示",
 							JOptionPane.INFORMATION_MESSAGE);
-				else {
-					int confirm = JOptionPane.showConfirmDialog(frame,
-							"是否确认删除？", "确认", JOptionPane.YES_NO_OPTION);
-					if (confirm == 0)
-						try {
-							if (currentMode == 1) {
-								int[] selected = table.getSelectedRows();
-								for (int i = 0; i < selected.length; i++)
-									database.delete(idList[selected[i]]);
-							} else
-								database.delete((String) list
-										.getSelectedValue());
-							refresh();
-						} catch (Exception e1) {
-							JOptionPane.showMessageDialog(frame, "删除失败", "错误",
-									JOptionPane.ERROR_MESSAGE);
-						}
-				}
+				else if (JOptionPane.showConfirmDialog(frame, "是否确认删除？", "确认",
+						JOptionPane.YES_NO_OPTION) == 0)
+					try {
+						if (currentMode == 1) {
+							int[] selected = table.getSelectedRows();
+							for (int i = 0; i < selected.length; i++)
+								database.delete(idList[selected[i]]);
+						} else
+							database.delete((String) list.getSelectedValue());
+						refresh();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame, "删除失败", "错误",
+								JOptionPane.ERROR_MESSAGE);
+					}
 			}
 		});
 
