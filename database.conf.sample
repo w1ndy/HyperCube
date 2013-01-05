@@ -5,6 +5,10 @@
 211.87.219.40
 
 #this is for database management application only
+[site_directory]
+/Library/Server/Web/Data/Sites/Default/
+
+#this is for database management application only
 [database]
 hypercube
 

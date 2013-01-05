@@ -8,45 +8,14 @@ import javax.swing.*;
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8005 Jan. 5, 2013
+ * @version 0.1 rev 8006 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class Connect {
 	private Statement statement;
 	private Connection conn;
-	private String table;
-	public String webserverAddress;
 	int totalNum;
 	String[] name, id, idNum, faculty, pic;
-
-	public Connect() {
-		// Read configuration file
-		String line, databaseAddress = "", database = "", user = "", password = "";
-		try {
-			FileReader in = new FileReader("database.conf");
-			Scanner conf = new Scanner(in);
-			while (conf.hasNextLine()) {
-				line = conf.nextLine();
-				if (line.equals("[database_address]"))
-					databaseAddress = conf.next();
-				if (line.equals("[webserver_address]"))
-					webserverAddress = conf.next();
-				if (line.equals("[database]"))
-					database = conf.next();
-				if (line.equals("[table]"))
-					table = conf.next();
-				if (line.equals("[user]"))
-					user = conf.next();
-				if (line.equals("[password]"))
-					password = conf.next();
-			}
-			conf.close();
-			in.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "配置文件错误", "启动失败",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
 
 	Connect() {
 		// Connect to database
