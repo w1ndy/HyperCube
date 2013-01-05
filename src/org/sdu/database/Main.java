@@ -215,7 +215,8 @@ class Main extends JFrame {
 				System.exit(0);
 			}
 		});
-		setBounds(100, 100, 600, 400);
+		setSize(600, 400);
+		setLocationRelativeTo(null);
 		setMinimumSize(new Dimension(450, 300));
 
 		// Menu
