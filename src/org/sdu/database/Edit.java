@@ -60,7 +60,7 @@ class Edit extends JFrame {
 		super(NAME[mode] + "资料");
 		main = frame;
 		this.mode = mode;
-		this.id=id;
+		this.id = id;
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent winEvt) {
@@ -75,13 +75,13 @@ class Edit extends JFrame {
 			try {
 				rs = frame.database.getOne(id);
 				rs.next();
-				content=new String[7][7];
-				for (int i=0;i<7;i++)
-					for (int j=0;j<7;j++)
-						content[i][j]=rs.getString(List.COLUMN_NAME[i][j]);
-				String picAddress=rs.getString("pic");
+				content = new String[7][7];
+				for (int i = 0; i < 7; i++)
+					for (int j = 0; j < 7; j++)
+						content[i][j] = rs.getString(List.COLUMN_NAME[i][j]);
+				String picAddress = rs.getString("pic");
 				rs.close();
-				URL picURL = new URL("http://" + main.database.webserverAddress
+				URL picURL = new URL("http://" + Configure.webserverAddress
 						+ "/pic/"
 						+ picAddress.substring(0, picAddress.length() - 5)
 						+ "/" + picAddress.substring(picAddress.length() - 5)
@@ -93,7 +93,7 @@ class Edit extends JFrame {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		JPanel buttonPane = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) buttonPane.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
@@ -205,10 +205,10 @@ class Edit extends JFrame {
 				((JFormattedTextField) field).setText(content[x][y]);
 			break;
 		case 4:
-			String[] list=main.database.getEnumList(x, y);
+			String[] list = main.database.getEnumList(x, y);
 			field = new JComboBox(list);
 			if (mode == 1)
-				for (int i=1;i<list.length;i++)
+				for (int i = 1; i < list.length; i++)
 					if (content[x][y].equals(list[i])) {
 						((JComboBox) field).setSelectedIndex(i);
 						break;

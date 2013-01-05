@@ -42,7 +42,7 @@ class Main extends JFrame {
 		if (!buffered[index])
 			try {
 				URL picURL = new URL("http://"
-						+ database.webserverAddress
+						+ Configure.webserverAddress
 						+ "/pic/"
 						+ database.pic[index].substring(0,
 								database.pic[index].length() - 5)
@@ -194,8 +194,8 @@ class Main extends JFrame {
 	/**
 	 * Refresh list or table
 	 */
-	public void refresh() {
-		database.getData(this, query);
+	void refresh() {
+		database.getData(query);
 		updateLabel();
 		buffered = new boolean[1000];
 		listPane.removeAll();
@@ -206,7 +206,7 @@ class Main extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main() {
+	Main() {
 		// Window
 		super("数据库管理");
 		addWindowListener(new java.awt.event.WindowAdapter() {
@@ -313,9 +313,9 @@ class Main extends JFrame {
 						if (currentMode == 1) {
 							int[] selected = table.getSelectedRows();
 							for (int i = 0; i < selected.length; i++)
-								database.delete(database.id[selected[i]]);
+								database.delete(selected[i]);
 						} else
-							database.delete((String) list.getSelectedValue());
+							database.delete(list.getSelectedIndex());
 						refresh();
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(Main.this, "删除失败", "错误",
@@ -377,7 +377,7 @@ class Main extends JFrame {
 		picmode.addActionListener(new modeListener());
 
 		// Get all students' data
-		database.getData(this, query);
+		database.getData(query);
 		updateLabel();
 
 		// Lay out

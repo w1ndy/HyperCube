@@ -48,11 +48,14 @@ class Connect {
 			System.exit(-1);
 		}
 
+	Connect() {
 		// Connect to database
 		try {
-			String url = "jdbc:mysql://" + databaseAddress + "/" + database;
+			String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
+					+ Configure.database;
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(url, user, password);
+			conn = DriverManager.getConnection(url, Configure.user,
+					Configure.password);
 			statement = conn.createStatement();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "数据库连接错误", "启动失败",
@@ -61,7 +64,7 @@ class Connect {
 		}
 	}
 
-	public void close() {
+	void close() {
 		try {
 			statement.close();
 			conn.close();
@@ -73,28 +76,30 @@ class Connect {
 		ResultSet rs;
 		statement.setFetchSize(1001);
 		if ((query == null) || query.equals(""))
-			rs = statement.executeQuery("select * from " + table);
+			rs = statement.executeQuery("select * from " + Configure.table);
 		else
-			rs = statement.executeQuery("select * from " + table + " where "
-					+ query);
+			rs = statement.executeQuery("select * from " + Configure.table
+					+ " where " + query);
 		return rs;
 	}
 
 	int getCount(String query) throws Exception {
 		ResultSet rs;
 		if ((query == null) || query.equals(""))
-			rs = statement.executeQuery("select count(*) from " + table);
+			rs = statement.executeQuery("select count(*) from "
+					+ Configure.table);
 		else
-			rs = statement.executeQuery("select count(*) from " + table
-					+ " where " + query);
+			rs = statement.executeQuery("select count(*) from "
+					+ Configure.table + " where " + query);
 		rs.next();
 		int countNum = rs.getInt(1);
 		rs.close();
 		return countNum;
 	}
 
-	void delete(String id) throws Exception {
-		statement.execute("delete from " + table + " where id='" + id + "'");
+	void delete(int index) throws Exception {
+		statement.execute("delete from " + Configure.table + " where id='"
+				+ id[index] + "'");
 	}
 
 	void setPic() throws Exception {
@@ -130,8 +135,9 @@ class Connect {
 	String[] getEnumList(int x, int y) {
 		String[] list;
 		try {
-			ResultSet rs = statement.executeQuery("show columns from " + table
-					+ " like '" + List.COLUMN_NAME[x][y] + "'");
+			ResultSet rs = statement.executeQuery("show columns from "
+					+ Configure.table + " like '" + List.COLUMN_NAME[x][y]
+					+ "'");
 			rs.next();
 			String enums = rs.getString("Type");
 			int position = 0, count = 0;
@@ -155,14 +161,14 @@ class Connect {
 	}
 
 	ResultSet getOne(String id) throws Exception {
-		return statement.executeQuery("select * from " + table + " where id='"
-				+ id + "'");
+		return statement.executeQuery("select * from " + Configure.table
+				+ " where id='" + id + "'");
 	}
 
-	void getData(Main frame, String query) {
+	void getData(String query) {
 		try {
-			ResultSet rs = get(query);
 			totalNum = getCount(query);
+			ResultSet rs = get(query);
 			int num = (totalNum > 1000) ? 1000 : totalNum;
 			name = new String[num];
 			id = new String[num];
@@ -176,13 +182,11 @@ class Connect {
 				idNum[i] = rs.getString("idnum");
 				faculty[i] = rs.getString("faculty");
 				pic[i] = rs.getString("pic");
-				i++;
 			}
 			rs.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
+			JOptionPane.showMessageDialog(null, "数据库读取错误", "运行时错误",
 					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
 		}
 	}
 
