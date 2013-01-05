@@ -12,7 +12,7 @@ import org.sdu.net.SessionHandler;
 /**
  * EventDispatcher class coordinates events between network and UI.
  * 
- * @version 0.1 rev 8001 Jan. 3, 2013.
+ * @version 0.1 rev 8002 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EventDispatcher extends SessionHandler
@@ -20,6 +20,7 @@ public class EventDispatcher extends SessionHandler
 	private UIHandler handler;
 	private ClientUI ui;
 	private NetworkClient client;
+	private Session session;
 	
 	private WindowListener exitListener = new WindowListener() {
 		@Override
@@ -68,9 +69,10 @@ public class EventDispatcher extends SessionHandler
 	public void attach(UIHandler handler)
 	{
 		if(this.handler != null)
-			this.handler.onDetach(client, ui);
+			this.handler.onDetach(ui);
 		this.handler = handler;
-		handler.onAttach(client, ui);
+		handler.setDispatcher(this);
+		handler.onAttach(ui);
 	}
 	
 	/**
@@ -79,36 +81,76 @@ public class EventDispatcher extends SessionHandler
 	public void deattach()
 	{
 		if(handler != null) {
-			handler.onDetach(client, ui);
+			handler.onDetach(ui);
 			handler = null;
 		}
 	}
 
+	/**
+	 * Connect to a server.
+	 */
+	public boolean connect(String hostname, int port)
+	{
+		return client.connect(hostname, port, this);
+	}
+	
+	/**
+	 * Disconnect from a server.
+	 */
+	public void disconnect()
+	{
+		if(session != null) {
+			session.close();
+		}
+	}
+	
+	/**
+	 * Get current session.
+	 */
+	public Session getSession()
+	{
+		return session;
+	}
+	
+	/**
+	 * Get current UI.
+	 */
+	public ClientUI getUI()
+	{
+		return ui;
+	}
+	
+	// Skip server-specified call backs.
 	@Override
 	public boolean onAcceptingSession(SocketChannel c) {
 		return true;
 	}
 
+	// Skip server-specified call backs.
 	@Override
 	public void onSessionAccepted(Session s) {}
 
+	// Skip server-specified call backs.
+	@Override
+	public void onUnregisteredSession(SocketChannel c) {}
+	
+	// Redirect messages to handler.
 	@Override
 	public void onSessionClosed(Session s)
 	{
 		if(handler != null)
-			handler.onSessionClosed();
+			handler.onSessionClosed(s);
 	}
 
-	@Override
-	public void onUnregisteredSession(SocketChannel c) {}
-
+	// Redirect messages to handler.
 	@Override
 	public void onPacketReceived(Session s, Packet p)
 	{
 		if(handler != null)
-			handler.onNetworkData(s, p);
+			handler.onPacketReceived(s, p);
 	}
 
+	// Redirect messages to handler.
 	@Override
 	public void onConnected(Session s)
 	{
@@ -116,10 +158,11 @@ public class EventDispatcher extends SessionHandler
 			handler.onConnected(s);
 	}
 
+	// Redirect messages to handler.
 	@Override
 	public void onConnectFailure(SocketChannel c)
 	{
 		if(handler != null)
-			handler.onConnectFailure();
+			handler.onConnectFailure(c);
 	}
 }

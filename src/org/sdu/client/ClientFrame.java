@@ -18,7 +18,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientFrame class handles basic stuffs in frame.
  * 
- * @version 0.1 rev 8002 Jan. 3, 2013.
+ * @version 0.1 rev 8003 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientFrame extends BasicFrame
@@ -57,7 +57,7 @@ public class ClientFrame extends BasicFrame
 		public void setEnabled(boolean arg0) {}
 	};
 	
-	private Timer timerRollingExpand = new Timer(25, new ActionListener() {
+	private Timer timerRollingExpand = new Timer(10, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(getHeight() < targetHeight) {

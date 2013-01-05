@@ -6,7 +6,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Client class implements a student client.
  * 
- * @version 0.1 rev 8005 Jan. 3, 2013.
+ * @version 0.1 rev 8006 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class Client
@@ -19,7 +19,7 @@ public class Client
 	public Client()
 	{
 		dispatcher = new EventDispatcher();
-		dispatcher.attach(new LoginUIHandler(dispatcher));
+		dispatcher.attach(new LoginUIHandler());
 	}
 	
 	/**

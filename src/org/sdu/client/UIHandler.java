@@ -1,49 +1,62 @@
 package org.sdu.client;
 
-import org.sdu.net.NetworkClient;
-import org.sdu.net.Packet;
-import org.sdu.net.Session;
+import org.sdu.net.SessionHandler;
+import org.sdu.util.DebugFramework;
 
 /**
  * UIHandler interface handles UI events.
  * 
- * @version 0.1 rev 8001 Jan. 3, 2013.
+ * @version 0.1 rev 8002 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
-public interface UIHandler
+public abstract class UIHandler extends SessionHandler
 {
+	private EventDispatcher dispatcher = null;
+	
 	/**
 	 * Notified when attaching to a UI.
 	 */
-	public void onAttach(final NetworkClient client, final ClientUI ui);
+	public abstract void onAttach(final ClientUI ui);
 	
 	/**
 	 * Notified when detaching from a UI.
 	 */
-	public void onDetach(final NetworkClient client, final ClientUI ui);
+	public abstract void onDetach(final ClientUI ui);
 	
 	/**
 	 * Notified when ui is closing.
 	 */
-	public void onClosing(final ClientUI ui);
+	public abstract void onClosing(final ClientUI ui);
 	
 	/**
-	 * Notified when connected.
+	 * Call by dispatcher to set an instance of dispatcher.
 	 */
-	public void onConnected(Session s);
+	public void setDispatcher(EventDispatcher d)
+	{
+		dispatcher = d;
+	}
 	
 	/**
-	 * Notified when failed to connect.
+	 * Get parent dispatcher.
 	 */
-	public void onConnectFailure();
+	public EventDispatcher getDispatcher()
+	{
+		return dispatcher;
+	}
 	
 	/**
-	 * Notified when session is closed.
+	 * Get UI frame.
 	 */
-	public void onSessionClosed();
+	public ClientFrame getFrame()
+	{
+		return (dispatcher != null) ? dispatcher.getUI().getFrame() : null;
+	}
 	
 	/**
-	 * Notified when data is available.
+	 * Output log string.
 	 */
-	public void onNetworkData(Session s, Packet p);
+	public void log(String str)
+	{
+		DebugFramework.getFramework().print(str);
+	}
 }

@@ -1,17 +1,14 @@
 package org.sdu.client;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.nio.channels.SocketChannel;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.Timer;
 
 import org.sdu.command.PacketLoginSystem;
 import org.sdu.command.PacketResolver;
-import org.sdu.net.NetworkClient;
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
 import org.sdu.ui.AvatarBox;
@@ -25,20 +22,16 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8005 Jan. 4, 2013.
+ * @version 0.1 rev 8006 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
-public class LoginUIHandler implements UIHandler
+public class LoginUIHandler extends UIHandler
 {
-	private EventDispatcher dispatcher;
-	private ClientFrame frame;
 	private AvatarBox avatarBox;
 	private TextBox	userBox;
 	private PasswordBox passBox;
 	private HyperLink registerLink;
 	private StatusNotifier notifier;
-	
-	private NetworkClient client;
 	
 	private InputVerifier userBoxVerifier = new InputVerifier() {
 		private boolean check(String str)
@@ -88,11 +81,10 @@ public class LoginUIHandler implements UIHandler
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				frame.startProgressBar();
-				avatarBox.setEnabled(false);
-				userBox.setEditable(false);
-				passBox.setEditable(false);
-				startLogin();
+				if(passBox.getPassword().length == 0)
+					passBox.onWrongPassword();
+				else
+					startLogin();
 			}
 		}
 
@@ -103,16 +95,27 @@ public class LoginUIHandler implements UIHandler
 		public void keyTyped(KeyEvent e) {}
 	};
 	
+	private enum CancelReason
+	{
+		UnknownError,
+		NetworkUnreachable,
+		UnsupportedVersion,
+		IncorrectPassword,
+		UnregisteredUser,
+		FrozenUser,
+		AlreadyOnline
+	}
+	
 	/**
 	 * Initialize a LoginUIHandler object.
 	 */
-	public LoginUIHandler(EventDispatcher dispatcher)
+	public LoginUIHandler()
 	{
-		this.dispatcher = dispatcher;
 		createAvatarBox();
 		createUserBox();
 		createPasswordBox();
 		createRegisterLink();
+		createNotifier();
 	}
 	
 	/**
@@ -120,7 +123,83 @@ public class LoginUIHandler implements UIHandler
 	 */
 	private void startLogin()
 	{
-		client.connect("127.0.0.1", 21071, dispatcher);
+		getFrame().startProgressBar();
+		avatarBox.setEnabled(false);
+		userBox.setEditable(false);
+		passBox.setEditable(false);
+		getDispatcher().connect("127.0.0.1", 21071);
+	}
+	
+	/**
+	 * Cancel login procedure.
+	 */
+	private void cancelLogin(CancelReason reason)
+	{
+		getFrame().stopProgressBar();
+		avatarBox.setEnabled(true);
+		userBox.setEditable(true);
+		passBox.setEditable(true);
+		
+		String[] str;
+		switch(reason)
+		{
+		case AlreadyOnline:
+			log("Failed login attempt: User already online.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.online"),
+					(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+			};
+			break;
+		case FrozenUser:
+			log("Failed login attempt: User is frozen.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.frozen"),
+					(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+			};
+			break;
+		case IncorrectPassword:
+			log("Failed login attempt: Password is incorrect.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.wrongpass")
+			};
+			break;
+		case NetworkUnreachable:
+			log("Failed login attempt: Server is unreachable.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.networkdown"),
+					(String)UIHelper.getResource("ui.string.login.checknetwork")
+			};
+			break;
+		case UnknownError:
+			log("Failed login attempt: Server returned unknown error.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.unknown"),
+					(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
+			};
+			break;
+		case UnregisteredUser:
+			log("Failed login attempt: User unregistered.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.unregister")
+			};
+			break;
+		case UnsupportedVersion:
+			log("Failed login attempt: Client version is not supported.");
+			str = new String[] {
+					(String)UIHelper.getResource("ui.string.login.notify.unsupportver"),
+					(String)UIHelper.getResource("ui.string.login.notify.redirect"),
+					(String)UIHelper.getResource("ui.string.login.notify.download")
+			};
+			break;
+		default:
+			log("Failed login attempt: No reason.");
+			str = null;
+			break;
+		}
+		notifier.stop();
+		notifier.setNotifyType(NotifyType.Error);
+		notifier.setStatus(str);
+		notifier.start();
 	}
 	
 	/**
@@ -143,7 +222,6 @@ public class LoginUIHandler implements UIHandler
 				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
 		userBox.addKeyListener(userBoxKeyListener);
 		userBox.setInputVerifier(userBoxVerifier);
-		//userBox.addInputMethodListener(userBoxIME);
 	}
 	
 	/**
@@ -168,160 +246,123 @@ public class LoginUIHandler implements UIHandler
 		registerLink.setBounds(UIHelper.registerLinkOffsetX, UIHelper.registerLinkOffsetY,
 				UIHelper.registerLinkWidth, UIHelper.registerLinkHeight);
 	}
-	
+
 	/**
-	 * Notified when attaching to a UI.
+	 * Add rolling notifier
 	 */
-	@Override
-	public void onAttach(final NetworkClient client, final ClientUI ui) {
-		this.client = client;
-		
-		frame = ui.getFrame();
-		frame.setTitle((String)UIHelper.getResource("ui.string.login.title"));
-		frame.setSubtitle((String)UIHelper.getResource("ui.string.login.subtitle"));
-		frame.setSize(UIHelper.loginFrameWidth, UIHelper.loginFrameHeight);
-		frame.setVisible(true);
-		
-		ui.getFader().add(avatarBox);
-		ui.getFader().add(userBox);
-		ui.getFader().add(passBox);
-		ui.getFader().add(registerLink);
-		ui.getFader().reset(0.0f);
-		ui.getFader().fadeIn(true);
-		
+	private void createNotifier()
+	{
 		notifier = new StatusNotifier();
 		notifier.setBounds(UIHelper.NotifyOffsetX, UIHelper.NotifyOffsetY,
 				UIHelper.NotifyWidth, UIHelper.NotifyHeight);
-		frame.add(notifier);
 	}
-
-	/**
-	 * Notified when detaching from a UI.
-	 */
 	@Override
-	public void onDetach(final NetworkClient client, final ClientUI ui) {
-		frame.remove(notifier);
-		ui.getFader().reset(1.0f);
-		ui.getFader().fadeOut(true);
-		
-		Timer timerCleanup = new Timer(1000, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ui.getFader().remove(avatarBox);
-				ui.getFader().remove(userBox);
-				ui.getFader().remove(passBox);
-				ui.getFader().remove(registerLink);
-			}
-		});
-		
-		timerCleanup.setRepeats(false);
-		timerCleanup.start();
-	}
-
-	@Override
-	public void onClosing(ClientUI ui) {
+	public void onClosing(ClientUI ui)
+	{
 		ui.getFrame().dispose();
 	}
 
 	@Override
-	public void onConnected(Session s) {
+	public void onConnected(Session s)
+	{
 		s.post(new PacketLoginSystem((byte) 0x00, (byte) 0x01,
 				userBox.getText(), new String(passBox.getPassword()),
 				avatarBox.isInvisible() ? (byte) 0x00 : (byte) 0x01));
 	}
 
 	@Override
-	public void onConnectFailure() {
-		frame.stopProgressBar();
-		avatarBox.setEnabled(true);
-		userBox.setEditable(true);
-		passBox.setEditable(true);
-		notifier.setNotifyType(NotifyType.Error);
-		notifier.setStatus(new String[] {
-				(String)UIHelper.getResource("ui.string.login.networkdown"),
-				(String)UIHelper.getResource("ui.string.login.checknetwork") });
-		notifier.start();
+	public boolean onAcceptingSession(SocketChannel c)
+	{
+		return true;
 	}
 
 	@Override
-	public void onNetworkData(Session s, Packet p) {
-		PacketResolver resolver = new PacketResolver(p);
-		if(resolver.getStatusMain() == 0) {
-			System.out.println("LoginSuccess");
-			frame.stopProgressBar();
-			frame.startExpanding(650);
-		} else {
-			frame.stopProgressBar();
-			avatarBox.setEnabled(true);
-			userBox.setEditable(true);
-			passBox.setEditable(true);
-			notifier.setNotifyType(NotifyType.Error);
-			switch(resolver.getStatusSub())
-			{
-			case 0x00:
-				System.out.println("UnknownError");
-				notifier.setStatus(
-						new String[] {
-							(String)UIHelper.getResource("ui.string.login.notify.unknown"),
-							(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
-						});
-				break;
-			case 0x01:
-				System.out.println("UnsupportedVersion");
-				notifier.setStatus(
-						new String[] {
-								(String)UIHelper.getResource("ui.string.login.notify.unsupportver"),
-								(String)UIHelper.getResource("ui.string.login.notify.redirect"),
-								(String)UIHelper.getResource("ui.string.login.notify.download")
-						});
-				break;
-			case 0x02:
-				System.out.println("WrongPass");
-				notifier.setStatus(
-						(String)UIHelper.getResource("ui.string.login.notify.wrongpass"));
-				passBox.onWrongPassword();
-				break;
-			case 0x03:
-				System.out.println("UnregisterUser");
-				notifier.setStatus(
-						(String)UIHelper.getResource("ui.string.login.notify.unregister"));
-				userBox.onFailed();
-				break;
-			case 0x04:
-				System.out.println("FrozenUser");
-				notifier.setStatus(
-						new String[] {
-								(String)UIHelper.getResource("ui.string.login.notify.frozen"),
-								(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
-						});
-				userBox.onFailed();
-				break;
-			case 0x05:
-				System.out.println("AlreadyOnline");
-				notifier.setStatus(
-						new String[] {
-								(String)UIHelper.getResource("ui.string.login.notify.online"),
-								(String)UIHelper.getResource("ui.string.login.notify.contactadmin")
-						});
-				break;
-			}
-			notifier.start();
-			s.close();
-		}
-	}
+	public void onSessionAccepted(Session s) {}
 
 	@Override
-	public void onSessionClosed() {
+	public void onSessionClosed(Session s)
+	{
 		if(!passBox.isEditable()) {
-			frame.stopProgressBar();
+			getFrame().stopProgressBar();
 			avatarBox.setEnabled(true);
 			userBox.setEditable(true);
 			passBox.setEditable(true);
+			
 			notifier.setNotifyType(NotifyType.Error);
 			notifier.setStatus(new String[] {
 					(String)UIHelper.getResource("ui.string.login.networkdown"),
 					(String)UIHelper.getResource("ui.string.login.checknetwork") });
 			notifier.start();
 		}
+	}
+
+	@Override
+	public void onUnregisteredSession(SocketChannel c) {}
+
+	@Override
+	public void onPacketReceived(Session s, Packet p)
+	{
+		PacketResolver resolver = new PacketResolver(p);
+		if(resolver.getStatusMain() == 0) {
+			log("Login succeeded.");
+			getFrame().stopProgressBar();
+			getFrame().startExpanding(650);
+			// TODO load MainUIHandler.
+		} else {
+			switch(resolver.getStatusSub())
+			{
+			case 0x01:
+				cancelLogin(CancelReason.UnsupportedVersion);
+				break;
+			case 0x02:
+				cancelLogin(CancelReason.IncorrectPassword);
+				break;
+			case 0x03:
+				cancelLogin(CancelReason.UnregisteredUser);
+				break;
+			case 0x04:
+				cancelLogin(CancelReason.FrozenUser);
+				break;
+			case 0x05:
+				cancelLogin(CancelReason.AlreadyOnline);
+				break;
+			case 0x00:
+			default:
+				cancelLogin(CancelReason.UnknownError);
+				break;
+			}
+			s.close();
+		}
+	}
+
+	@Override
+	public void onConnectFailure(SocketChannel c)
+	{
+		cancelLogin(CancelReason.NetworkUnreachable);
+	}
+
+	@Override
+	public void onAttach(final ClientUI ui)
+	{
+		ui.getFrame().setTitle((String)UIHelper.getResource("ui.string.login.title"));
+		ui.getFrame().setSubtitle((String)UIHelper.getResource("ui.string.login.subtitle"));
+		ui.getFrame().setSize(UIHelper.loginFrameWidth, UIHelper.loginFrameHeight);
+		ui.getFrame().setVisible(true);
+		
+		ui.getFrame().add(avatarBox);
+		ui.getFrame().add(userBox);
+		ui.getFrame().add(passBox);
+		ui.getFrame().add(registerLink);
+		ui.getFrame().add(notifier);
+	}
+
+	@Override
+	public void onDetach(final ClientUI ui)
+	{
+		ui.getFrame().remove(notifier);
+		ui.getFrame().remove(avatarBox);
+		ui.getFrame().remove(userBox);
+		ui.getFrame().remove(passBox);
+		ui.getFrame().remove(registerLink);
 	}
 }
