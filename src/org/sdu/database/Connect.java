@@ -11,7 +11,7 @@ import javax.swing.*;
  * @version 0.1 rev 8004 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
-public class Connect {
+class Connect {
 	private Statement statement;
 	private Connection conn;
 	private String table;
@@ -129,7 +129,7 @@ public class Connect {
 		String[] list;
 		try {
 			ResultSet rs = statement.executeQuery("show columns from " + table
-					+ " like '" + List.columnName[x][y] + "'");
+					+ " like '" + List.COLUMN_NAME[x][y] + "'");
 			rs.next();
 			String enums = rs.getString("Type");
 			int position = 0, count = 0;

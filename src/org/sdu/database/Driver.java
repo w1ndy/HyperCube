@@ -44,7 +44,7 @@ public class Driver {
 							"art/database/nopic.png"));
 					frame.setVisible(true);
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "找不到图片", "缺少文件",
+					JOptionPane.showMessageDialog(null, "初始化错误", "无法启动",
 							JOptionPane.ERROR_MESSAGE);
 					System.exit(-1);
 				}

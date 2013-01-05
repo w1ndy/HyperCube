@@ -15,8 +15,8 @@ import javax.imageio.ImageIO;
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings("serial")
-public class Edit extends JFrame {
-	private static final String[] name = { "添加", "编辑" };
+class Edit extends JFrame {
+	private static final String[] NAME = { "添加", "编辑" };
 	JTextField idField;
 	private Main main;
 	private int mode;
@@ -57,7 +57,7 @@ public class Edit extends JFrame {
 	 * mode 0 = add, mode 1 = edit
 	 */
 	public Edit(Main frame, int mode, String id) {
-		super(name[mode] + "资料");
+		super(NAME[mode] + "资料");
 		main = frame;
 		this.mode = mode;
 		this.id=id;
@@ -78,7 +78,7 @@ public class Edit extends JFrame {
 				content=new String[7][7];
 				for (int i=0;i<7;i++)
 					for (int j=0;j<7;j++)
-						content[i][j]=rs.getString(List.columnName[i][j]);
+						content[i][j]=rs.getString(List.COLUMN_NAME[i][j]);
 				String picAddress=rs.getString("pic");
 				rs.close();
 				URL picURL = new URL("http://" + main.database.webserverAddress
@@ -187,7 +187,7 @@ public class Edit extends JFrame {
 	// ComboBox
 	JComponent field(JPanel pane, int x, int y) {
 		JComponent field = null;
-		switch (List.columnType[x][y]) {
+		switch (List.COLUMN_TYPE[x][y]) {
 		case 1:
 			field = new JTextField();
 			if (mode == 1)
@@ -214,7 +214,7 @@ public class Edit extends JFrame {
 						break;
 					}
 		}
-		JLabel label = new JLabel(List.column[x][y] + "：");
+		JLabel label = new JLabel(List.COLUMN[x][y] + "：");
 		if (x % 2 == 0) {
 			field.setBounds(320, y * 35 + 20, 134, 28);
 			label.setBounds(250, y * 35 + 20, 134, 28);
