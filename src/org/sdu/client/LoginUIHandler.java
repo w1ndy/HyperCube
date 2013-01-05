@@ -22,7 +22,7 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8006 Jan. 6, 2013.
+ * @version 0.1 rev 8007 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler extends UIHandler
@@ -306,8 +306,7 @@ public class LoginUIHandler extends UIHandler
 		if(resolver.getStatusMain() == 0) {
 			log("Login succeeded.");
 			getFrame().stopProgressBar();
-			getFrame().startExpanding(650);
-			// TODO load MainUIHandler.
+			getDispatcher().attach(new MainUIHandler());
 		} else {
 			switch(resolver.getStatusSub())
 			{
