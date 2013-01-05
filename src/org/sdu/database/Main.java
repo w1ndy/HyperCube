@@ -3,32 +3,27 @@ package org.sdu.database;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.net.URL;
-import java.sql.ResultSet;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8104 Jan. 3, 2012
+ * @version 0.1 rev 8111 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
-public class Main extends JFrame {
+class Main extends JFrame {
 	private final Dimension modeButton = new Dimension(30, 30);
 	private final Dimension dataButton = new Dimension(25, 25);
 	private final Color chosen = new Color(0x2C5DCD);
-	private String[] name = new String[1000], idList = new String[1000],
-			idNum = new String[1000], faculty = new String[1000],
-			pic = new String[1000];
-	private Database stuData = new Database("stu1");
+	Connect database = new Connect();
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	BufferedImage nopic;
-	private JLabel totalNum = new JLabel("");
-	private Main frame = this;
+	private JLabel totalNumLabel = new JLabel("");
 	private JPanel listPane;
 	private JList list;
 	private JTable table;
@@ -46,11 +41,14 @@ public class Main extends JFrame {
 	private BufferedImage paintPic(int index) {
 		if (!buffered[index])
 			try {
-				URL picURL = new URL("http://" + stuData.webserverAddress
+				URL picURL = new URL("http://"
+						+ Configure.webserverAddress
 						+ "/pic/"
-						+ pic[index].substring(0, pic[index].length() - 5)
-						+ "/" + pic[index].substring(pic[index].length() - 5)
-						+ ".jpg");
+						+ database.pic[index].substring(0,
+								database.pic[index].length() - 5)
+						+ "/"
+						+ database.pic[index].substring(database.pic[index]
+								.length() - 5) + ".jpg");
 				BufferedImage input = ImageIO.read(picURL);
 				Image scaledImage = input.getScaledInstance(75, 100,
 						Image.SCALE_DEFAULT);
@@ -86,11 +84,11 @@ public class Main extends JFrame {
 				g.setColor(Color.white);
 			}
 			g.drawImage(nopic, 0, 0, this);
-			if (pic[index].length() == 32)
+			if (database.pic[index].length() == 32)
 				g.drawImage(paintPic(index), 0, 0, this);
-			g.drawString(name[index], 80, 20);
-			g.drawString(idList[index], 80, 40);
-			g.drawString(faculty[index], 80, 60);
+			g.drawString(database.name[index], 80, 20);
+			g.drawString(database.id[index], 80, 40);
+			g.drawString(database.faculty[index], 80, 60);
 			g.drawString("山东大学", 80, 80);
 		}
 
@@ -121,9 +119,9 @@ public class Main extends JFrame {
 				g.setColor(Color.white);
 			}
 			g.drawImage(nopic, 0, 0, this);
-			if (pic[index].length() == 32)
+			if (database.pic[index].length() == 32)
 				g.drawImage(paintPic(index), 0, 0, this);
-			g.drawString(name[index], 0, 115);
+			g.drawString(database.name[index], 0, 115);
 		}
 
 		public Dimension getPreferredSize() {
@@ -141,12 +139,12 @@ public class Main extends JFrame {
 		JScrollPane listScroller;
 		if (mode == 1) {
 			String[] columnName = { "姓名", "学号", "院系", "身份证号" };
-			String[][] cellData = new String[idList.length][4];
-			for (int i = 0; i < idList.length; i++) {
-				cellData[i][0] = name[i];
-				cellData[i][1] = idList[i];
-				cellData[i][2] = faculty[i];
-				cellData[i][3] = idNum[i];
+			String[][] cellData = new String[database.id.length][4];
+			for (int i = 0; i < database.id.length; i++) {
+				cellData[i][0] = database.name[i];
+				cellData[i][1] = database.id[i];
+				cellData[i][2] = database.faculty[i];
+				cellData[i][3] = database.idNum[i];
 			}
 			DefaultTableModel model = new DefaultTableModel(cellData,
 					columnName) {
@@ -157,14 +155,14 @@ public class Main extends JFrame {
 			table = new JTable(model);
 			table.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-
-					}
+					if (e.getClickCount() == 2)
+						new Edit(Main.this, 1, database.id[table
+								.getSelectedRow()]);
 				}
 			});
 			listScroller = new JScrollPane(table);
 		} else {
-			list = new JList(idList);
+			list = new JList(database.id);
 			if (mode == 2)
 				list.setCellRenderer(new PictextList());
 			else
@@ -174,11 +172,9 @@ public class Main extends JFrame {
 			list.setVisibleRowCount(-1);
 			list.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						// TODO
-					}
+					if (e.getClickCount() == 2)
+						new Edit(Main.this, 1, (String) list.getSelectedValue());
 				}
-
 			});
 			listScroller = new JScrollPane(list);
 		}
@@ -186,54 +182,21 @@ public class Main extends JFrame {
 	}
 
 	/**
-	 * Get data from database and update JLabel.
-	 * 
-	 * @param query
+	 * Update the TotalNumLabel
 	 */
-	private void getData(String query) {
-		String[] id = new String[1000];
-		try {
-			ResultSet rs;
-			if (query == null)
-				rs = stuData.getAll();
-			else
-				rs = stuData.getAll();
-			int i = 0;
-			while ((i < 1000) && rs.next()) {
-				name[i] = rs.getString("name");
-				id[i] = rs.getString("id");
-				idNum[i] = rs.getString("idnum");
-				faculty[i] = rs.getString("faculty");
-				pic[i] = rs.getString("pic");
-				i++;
-			}
-			String listLabel;
-			if ((i == 1000) && rs.next()) {
-				if (query == null)
-					listLabel = stuData.getAllCount() + "个中的前1000个";
-				else
-					listLabel = stuData.getAllCount() + "个中的前1000个";
-				idList = id;
-			} else {
-				listLabel = "共" + i + "个";
-				idList = new String[i];
-				for (int j = 0; j < i; j++)
-					idList[j] = id[j];
-			}
-			totalNum.setText(listLabel);
-			rs.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(frame, "数据库读取错误", "运行时错误",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
+	private void updateLabel() {
+		if (database.totalNum > 1000)
+			totalNumLabel.setText(database.totalNum + "个中的前1000个");
+		else
+			totalNumLabel.setText("共" + database.totalNum + "个");
 	}
 
 	/**
 	 * Refresh list or table
 	 */
-	public void refresh() {
-		getData(query);
+	void refresh() {
+		database.getData(query);
+		updateLabel();
 		buffered = new boolean[1000];
 		listPane.removeAll();
 		listPane.add(mainList(currentMode));
@@ -243,12 +206,12 @@ public class Main extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main() {
+	Main() {
 		// Window
 		super("数据库管理");
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
-				stuData.close();
+				database.close();
 				System.exit(0);
 			}
 		});
@@ -264,19 +227,66 @@ public class Main extends JFrame {
 
 		JMenuItem importData = new JMenuItem("导入数据库...");
 		dataMenu.add(importData);
+		importData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new Port(Main.this, 0, null);
+			}
+		});
 
-		JMenuItem exportData = new JMenuItem("导出数据库...");
-		dataMenu.add(exportData);
-
-		JMenuItem exportCurrentData = new JMenuItem("导出当前条目...");
+		JMenuItem exportCurrentData = new JMenuItem("导出当前所有条目...");
 		dataMenu.add(exportCurrentData);
+		exportCurrentData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					new Port(Main.this, 1, database.getID(query));
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(Main.this, "数据库读取错误",
+							"运行时错误", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		JMenuItem exportSelectedData = new JMenuItem("导出选中条目...");
+		dataMenu.add(exportSelectedData);
+		exportSelectedData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
+						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
+					JOptionPane.showMessageDialog(Main.this, "请选择条目", "提示",
+							JOptionPane.INFORMATION_MESSAGE);
+				else {
+					String[] id;
+					if (currentMode == 1) {
+						int[] selected = table.getSelectedRows();
+						id = new String[selected.length];
+						for (int i = 0; i < selected.length; i++)
+							id[i] = database.id[selected[i]];
+					} else {
+						id = new String[1];
+						id[0] = (String) list.getSelectedValue();
+					}
+					new Port(Main.this, 1, id);
+				}
+			}
+		});
 
 		// Buttons
 		JButton statButton = new JButton("统计");
 		// TODO statButton.addActionListener(this);
 
 		final JButton filterButton = new JButton("筛选");
-		// TODO filterButton.addActionListener(this);
+		filterButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				query = (String) JOptionPane.showInputDialog(Main.this,
+						"请输入条件：", "筛选", JOptionPane.PLAIN_MESSAGE, null, null,
+						query);
+				refresh();
+			}
+		});
 		getRootPane().setDefaultButton(filterButton);
 
 		JButton addButton = new JButton(new ImageIcon(
@@ -284,7 +294,7 @@ public class Main extends JFrame {
 		addButton.setPreferredSize(dataButton);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Edit(frame, 0);
+				new Edit(Main.this, 0, null);
 			}
 		});
 
@@ -295,25 +305,22 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (((currentMode == 1) && (table.getSelectedRowCount() == 0))
 						|| ((currentMode != 1) && (list.getSelectedValue() == null)))
-					JOptionPane.showMessageDialog(frame, "请选择条目", "错误",
+					JOptionPane.showMessageDialog(Main.this, "请选择条目", "提示",
 							JOptionPane.INFORMATION_MESSAGE);
-				else {
-					int confirm = JOptionPane.showConfirmDialog(frame,
-							"是否确认删除？", "确认", JOptionPane.YES_NO_OPTION);
-					if (confirm == 0)
-						try {
-							if (currentMode == 1) {
-								int[] selected = table.getSelectedRows();
-								for (int i = 0; i < selected.length; i++)
-									stuData.delete(idList[selected[i]]);
-							} else
-								stuData.delete((String) list.getSelectedValue());
-							refresh();
-						} catch (Exception e1) {
-							JOptionPane.showMessageDialog(frame, "删除失败", "错误",
-									JOptionPane.ERROR_MESSAGE);
-						}
-				}
+				else if (JOptionPane.showConfirmDialog(Main.this, "是否确认删除？",
+						"确认", JOptionPane.YES_NO_OPTION) == 0)
+					try {
+						if (currentMode == 1) {
+							int[] selected = table.getSelectedRows();
+							for (int i = 0; i < selected.length; i++)
+								database.delete(selected[i]);
+						} else
+							database.delete(list.getSelectedIndex());
+						refresh();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(Main.this, "删除失败", "错误",
+								JOptionPane.ERROR_MESSAGE);
+					}
 			}
 		});
 
@@ -370,19 +377,20 @@ public class Main extends JFrame {
 		picmode.addActionListener(new modeListener());
 
 		// Get all students' data
-		getData(null);
+		database.getData(query);
+		updateLabel();
 
 		// Lay out
 		listPane = new JPanel();
 		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
 		listPane.add(mainList(1));
 		listPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		totalNum.setLabelFor(listPane);
+		totalNumLabel.setLabelFor(listPane);
 
 		JPanel topPane = new JPanel();
 		topPane.setLayout(new BoxLayout(topPane, BoxLayout.LINE_AXIS));
 		topPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		topPane.add(totalNum);
+		topPane.add(totalNumLabel);
 		topPane.add(Box.createHorizontalGlue());
 		topPane.add(textmode);
 		topPane.add(pictextmode);

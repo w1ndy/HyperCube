@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * Launch the database management application. Optimized for menu bar and dock
  * on OS X.
  * 
- * @version 0.1 rev 8004 Jan. 2, 2013
+ * @version 0.1 rev 8006 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
@@ -34,6 +34,19 @@ public class Driver {
 			} catch (Exception e) {
 			}
 		}
+
+		try {
+			Configure.read();
+			if (!new File(Configure.siteDirectory + "pic/").isDirectory())
+				JOptionPane.showMessageDialog(null,
+						"如果需要添加、删除照片，\n请在网页服务器上运行此程序。", "提示",
+						JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "配置文件错误", "启动失败",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -44,7 +57,7 @@ public class Driver {
 							"art/database/nopic.png"));
 					frame.setVisible(true);
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "找不到图片", "缺少文件",
+					JOptionPane.showMessageDialog(null, "初始化错误", "无法启动",
 							JOptionPane.ERROR_MESSAGE);
 					System.exit(-1);
 				}
