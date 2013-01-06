@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 /**
  * Database management application.
  * 
- * @version 0.1 rev 8111 Jan. 5, 2013
+ * @version 0.1 rev 8112 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
@@ -19,7 +19,7 @@ class Main extends JFrame {
 	private final Dimension modeButton = new Dimension(30, 30);
 	private final Dimension dataButton = new Dimension(25, 25);
 	private final Color chosen = new Color(0x2C5DCD);
-	Connect database = new Connect();
+	Connect database;
 	private boolean[] buffered = new boolean[1000];
 	private BufferedImage[] bufferedImage = new BufferedImage[1000];
 	BufferedImage nopic;
@@ -195,7 +195,12 @@ class Main extends JFrame {
 	 * Refresh list or table
 	 */
 	void refresh() {
-		database.getData(query);
+		try {
+			database.getData(query);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "数据库错误", "运行时错误",
+					JOptionPane.ERROR_MESSAGE);
+		}
 		updateLabel();
 		buffered = new boolean[1000];
 		listPane.removeAll();
@@ -378,7 +383,14 @@ class Main extends JFrame {
 		picmode.addActionListener(new modeListener());
 
 		// Get all students' data
-		database.getData(query);
+		try {
+			database = new Connect();
+			database.getData(query);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "数据库错误", "启动失败",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 		updateLabel();
 
 		// Lay out
