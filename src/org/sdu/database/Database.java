@@ -1,14 +1,11 @@
 package org.sdu.database;
 
-import java.io.*;
 import java.sql.*;
-import java.util.*;
-import javax.swing.*;
 
 /**
  * Access database.
  * 
- * @version 0.1 rev 8006 Jan. 4, 2013
+ * @version 0.1 rev 8007 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Database {
@@ -16,44 +13,18 @@ public class Database {
 	private final String infoTable = "info";
 	private Statement statement;
 	private Connection conn;
-	public String webserverAddress;
 
-	public Database() {
+	public Database() throws Exception {
 		// Read configuration file
-		String line, databaseAddress = "", user = "", password = "";
-		try {
-			FileReader in = new FileReader("database.conf");
-			Scanner conf = new Scanner(in);
-			while (conf.hasNextLine()) {
-				line = conf.nextLine();
-				if (line.equals("[database_address]"))
-					databaseAddress = conf.next();
-				if (line.equals("[webserver_address]"))
-					webserverAddress = conf.next();
-				if (line.equals("[user]"))
-					user = conf.next();
-				if (line.equals("[password]"))
-					password = conf.next();
-			}
-			conf.close();
-			in.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "配置文件错误", "启动失败",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
+		Configure.read();
 
 		// Connect to database
-		try {
-			String url = "jdbc:mysql://" + databaseAddress + "/" + mainDatabase;
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(url, user, password);
-			statement = conn.createStatement();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "数据库连接错误", "启动失败",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
+		String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
+				+ mainDatabase;
+		Class.forName("com.mysql.jdbc.Driver");
+		conn = DriverManager.getConnection(url, Configure.user,
+				Configure.password);
+		statement = conn.createStatement();
 	}
 
 	public void close() {
