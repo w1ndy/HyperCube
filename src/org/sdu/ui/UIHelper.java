@@ -84,7 +84,7 @@ public class UIHelper
 	 * Parameters of fading animation.
 	 */
 	public static final int normalFadeFrequency = 25;
-	public static final int normalFadeRate = 20;
+	public static final int normalAnimationRate = 20;
 	
 	/**
 	 * Default TextBox size.

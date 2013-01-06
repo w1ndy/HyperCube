@@ -20,7 +20,7 @@ public class ComponentFadeAnimation
 {
 	private Timer timerFadeIn, timerFadeOut;
 	private List<TranslucentComponent> componentList;
-	private float fadeRate = (float)UIHelper.normalFadeRate / 255.0f;
+	private float fadeRate = (float)UIHelper.normalAnimationRate / 255.0f;
 	private float globalOpacity = 1.0f;
 	private JFrame frame;
 	private boolean manage;

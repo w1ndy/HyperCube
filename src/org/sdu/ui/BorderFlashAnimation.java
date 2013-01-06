@@ -88,13 +88,13 @@ public class BorderFlashAnimation implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(uprise) {
-			stage += UIHelper.normalFadeRate;
+			stage += UIHelper.normalAnimationRate;
 			if(stage > 255) {
 				stage = 255;
 				uprise = false;
 			}
 		} else {
-			stage -= UIHelper.normalFadeRate;
+			stage -= UIHelper.normalAnimationRate;
 			if(stage < 128) {
 				stage = 128;
 				uprise = true;

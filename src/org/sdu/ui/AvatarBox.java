@@ -51,14 +51,14 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(isFadingOut) {
-					statusOpacity -= UIHelper.normalFadeRate;
+					statusOpacity -= UIHelper.normalAnimationRate;
 					if(statusOpacity < 0) {
 						statusOpacity = 0;
 						bInvisible = false;
 						isFadingOut = false;
 					}
 				} else {
-					statusOpacity += UIHelper.normalFadeRate;
+					statusOpacity += UIHelper.normalAnimationRate;
 					if(statusOpacity > 220) {
 						statusOpacity = 220;
 						isFadingOut = true;
@@ -75,14 +75,14 @@ public class AvatarBox extends JLabel implements TranslucentComponent
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(isFadingOut) {
-					statusOpacity -= UIHelper.normalFadeRate;
+					statusOpacity -= UIHelper.normalAnimationRate;
 					if(statusOpacity < 0) {
 						statusOpacity = 0;
 						bInvisible = true;
 						isFadingOut = false;
 					}
 				} else {
-					statusOpacity += UIHelper.normalFadeRate;
+					statusOpacity += UIHelper.normalAnimationRate;
 					if(statusOpacity > 220) {
 						statusOpacity = 220;
 						isFadingOut = true;
