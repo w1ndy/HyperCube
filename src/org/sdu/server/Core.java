@@ -20,7 +20,7 @@ import org.sdu.util.DebugFramework;
 public class Core extends SessionHandler {
 	public static final int port = 21071;
 	public static final DebugFramework debugger = DebugFramework.getFramework();
-	static Database db = new Database("info");
+	static Database db;
 	
 	private NetworkServer server;
 	
@@ -113,7 +113,13 @@ public class Core extends SessionHandler {
 	}
 	public Core()
 	{
+		try {
+			db = new Database();
+		} catch (Exception e) {
+			debugger.print("Failed to connect with database");
+		}
 		server = new NetworkServer(this, port);
 		server.start(true);
+		
 	}
 }

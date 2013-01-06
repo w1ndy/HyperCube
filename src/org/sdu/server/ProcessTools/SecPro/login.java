@@ -7,23 +7,40 @@ import org.sdu.server.PacketDataBuilder;
 import org.sdu.server.PacketDataPro;
 
 public class login {
-	public static Packet Push(PacketDataPro ProD,Database db) {
-			byte version[] = ProD.GetParamB();
-			if ((version[0] == Val.F_version)&&(version[1] == Val.S_version)) {
-			if (db.checkPassword(ProD.GetParam(),ProD.GetParam())) {
-				ProD.GetParam();
-				PacketDataBuilder Pack = new PacketDataBuilder();
-				Pack.SetData(Val.Check_T,Val.Login,Val.LoginCheck);
-				Pack.SetParamS("Welcome!");
-				return Pack.GetData();
+	public static Packet Push(PacketDataPro ProD, Database db) {
+		byte version[] = ProD.GetParamB();
+			 String username = ProD.GetParam();
+			 String password = ProD.GetParam();
+		PacketDataBuilder Pack = new PacketDataBuilder();
+		if ((version[0] == Val.F_version) && (version[1] == Val.S_version)) {
+			try {
+				if (db.checkPassword(username, password)) {
+					ProD.GetParam();
+					Pack.SetData(Val.Check_T, Val.Login, Val.LoginCheck);
+					Pack.SetParamS("Welcome!");
+				} else {
+					if (!db.checkExist(username)){
+						Pack.SetData(Val.Check_F, Val.NotExist, Val.Login,Val.LoginCheck);
+						return Pack.GetData();
+					}
+					if (db.getOnline(username)) {
+						Pack.SetData(Val.Check_F, Val.AlreadyOnline, Val.Login,Val.LoginCheck);
+						return Pack.GetData();
+					}
+//					if (db.Freeze()) {
+//						Pack.SetData(Val.Check_F, Val.Freeze, Val.Login,Val.LoginCheck);
+//						return Pack.GetData();
+//	 				}
+					Pack.SetData(Val.Check_F, Val.WrongPass, Val.Login,Val.LoginCheck);
+					return Pack.GetData();
+				}
+			} catch (Exception e) {
+				Pack.SetData(Val.Check_F, Val.Unknow, Val.Login, Val.LoginCheck);
+				e.printStackTrace();
 			}
-			else{
-				PacketDataBuilder Pack = new PacketDataBuilder();
-				Pack.SetData(Val.Check_F,Val.Unknow,Val.Login,Val.LoginCheck);
-				return Pack.GetData();
-			}
+		} else {
+			Pack.SetData(Val.Check_F, Val.UnSupportVer, Val.Login,Val.LoginCheck);
 		}
-		// TODO return push data here.
-		return null;
+		return Pack.GetData();
 	}
 }
