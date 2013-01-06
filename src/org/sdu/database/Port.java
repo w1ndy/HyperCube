@@ -25,7 +25,8 @@ class Port extends JFrame {
 					frame.refresh();
 			}
 		});
-		setBounds(150, 150, 370, 200);
+		setSize(370, 200);
+		setLocationRelativeTo(frame);
 		setResizable(false);
 		getContentPane().setLayout(null);
 

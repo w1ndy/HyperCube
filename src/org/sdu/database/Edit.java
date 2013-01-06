@@ -67,7 +67,8 @@ class Edit extends JFrame {
 				main.refresh();
 			}
 		});
-		setBounds(150, 150, 500, 400);
+		setSize(500, 400);
+		setLocationRelativeTo(frame);
 		setResizable(false);
 
 		// Get all info
