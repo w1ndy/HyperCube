@@ -6,7 +6,11 @@ import org.sdu.net.Packet;
 import org.sdu.server.ProcessTools.SecPro.*;
 
 import java.nio.ByteBuffer;
-
+/**
+ * process for Incoming Packet and return the request data
+ * @author Celr
+ *
+ */
 public class process {
 	private static ByteBuffer indata;
 	private static Database db1;

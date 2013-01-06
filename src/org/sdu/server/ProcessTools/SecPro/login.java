@@ -5,7 +5,11 @@ import org.sdu.net.Packet;
 import org.sdu.server.Val;
 import org.sdu.server.PacketDataBuilder;
 import org.sdu.server.PacketDataPro;
-
+/**
+ * This Model check the version,username and password and return a Packet
+ * @author Celr
+ *
+ */
 public class login {
 	public static Packet Push(PacketDataPro ProD, Database db) {
 		byte version[] = ProD.GetParamB();
