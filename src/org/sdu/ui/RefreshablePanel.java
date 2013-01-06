@@ -1,26 +1,33 @@
 package org.sdu.ui;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
  * RefreshablePanel class implements a pull-down-refresh panel.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013.
+ * @version 0.1 rev 8001 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class RefreshablePanel extends ScrollPanel
 {
 	private static final long serialVersionUID = 1L;
-	private static final int BannnerHeight = 40;
+	private static final int BannerHeight = 45;
 
 	private Point origin;
 	private boolean checked = false, isRefreshing = false;
@@ -33,6 +40,7 @@ public class RefreshablePanel extends ScrollPanel
 			if(offset > 0) {
 				offset = 0;
 				RestoreZero.stop();
+				isRefreshing = false;
 			}
 			setOffset(offset);
 		}
@@ -43,8 +51,8 @@ public class RefreshablePanel extends ScrollPanel
 		public void actionPerformed(ActionEvent arg0) {
 			int offset = getOffset();
 			offset += 30;
-			if(offset > -BannnerHeight) {
-				offset = -BannnerHeight;
+			if(offset > -BannerHeight) {
+				offset = -BannerHeight;
 				RestoreBanner.stop();
 			}
 			setOffset(offset);
@@ -94,10 +102,13 @@ public class RefreshablePanel extends ScrollPanel
 				origin = null;
 				if(checked) {
 					checked = false;
-					if(-getOffset() > BannnerHeight) {
+					if(-getOffset() > BannerHeight) {
 						System.out.println("Restore to banner location.");
 						RestoreBanner.start();
-						onRefresh();
+						if(!isRefreshing) {
+							isRefreshing = true;
+							onRefresh();
+						}
 					} else if(-getOffset() > 0) {
 						System.out.println("Restore to 0");
 						RestoreZero.start();
@@ -141,5 +152,24 @@ public class RefreshablePanel extends ScrollPanel
 	public void finishRefresh()
 	{
 		RestoreZero.start();
+	}
+	
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setFont((Font)UIHelper.getResource("ui.font.prompt"));
+		g.setColor(UIHelper.darkColor);
+		g.drawImage((Image)UIHelper.getResource("ui.main.refresh"), 0, -getOffset() - 40, null);
+		FontMetrics fm = g.getFontMetrics();
+		String str;
+		if(isRefreshing) {
+			str = (String)UIHelper.getResource("ui.string.main.refreshing");
+		} else {
+			str = (String)UIHelper.getResource("ui.string.main.refresh.release");
+		}
+		g.drawString(str, (getWidth() - fm.stringWidth(str)) / 2, -getOffset() - 20);
 	}
 }
