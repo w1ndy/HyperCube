@@ -19,5 +19,6 @@ public final class Val {
 	public final static	byte NoAuthority = 0x02;
 	public final static	byte NotExist = 0x01;
 	public final static	byte Login = 0x01;
+	public final static	byte Logout = 0x02;
 	public final static	byte LoginCheck =0x01;
 }
