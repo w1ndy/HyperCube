@@ -3,7 +3,7 @@ package org.sdu.database;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 /**
  * Build database connection.
