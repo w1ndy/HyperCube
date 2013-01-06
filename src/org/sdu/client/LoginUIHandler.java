@@ -22,7 +22,7 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8007 Jan. 6, 2013.
+ * @version 0.1 rev 8008 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler extends UIHandler
@@ -346,13 +346,17 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().setTitle((String)UIHelper.getResource("ui.string.login.title"));
 		ui.getFrame().setSubtitle((String)UIHelper.getResource("ui.string.login.subtitle"));
 		ui.getFrame().setSize(UIHelper.loginFrameWidth, UIHelper.loginFrameHeight);
-		ui.getFrame().setVisible(true);
 		
 		ui.getFrame().add(avatarBox);
 		ui.getFrame().add(userBox);
 		ui.getFrame().add(passBox);
 		ui.getFrame().add(registerLink);
 		ui.getFrame().add(notifier);
+
+		ui.getFrame().setVisible(true);
+		
+		// DEBUG redirect login to main.
+		getDispatcher().attach(new MainUIHandler());
 	}
 
 	@Override

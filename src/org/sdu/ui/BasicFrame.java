@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,7 +20,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8004 Jan. 6, 2013.
+ * @version 0.1 rev 8005 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -27,6 +28,7 @@ public class BasicFrame extends JFrame
 	private static final long serialVersionUID = 1L;
 	
 	private Point mouseCoord = null;
+	private Rectangle rectClient = null;
 	
 	private String title = null;
 	private String subtitle = null;
@@ -117,6 +119,8 @@ public class BasicFrame extends JFrame
 			
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if(rectClient != null && rectClient.contains(arg0.getPoint()))
+					return ;
 				mouseCoord = arg0.getPoint();
 			}
 			
@@ -137,6 +141,22 @@ public class BasicFrame extends JFrame
 			@Override
 			public void mouseMoved(MouseEvent arg0) {}
 		});
+	}
+	
+	/**
+	 * Set client area.
+	 */
+	public void setClientRect(Rectangle r)
+	{
+		rectClient = r;
+	}
+
+	/**
+	 * Set client area.
+	 */
+	public void setClientRect(int x, int y, int w, int h)
+	{
+		rectClient = new Rectangle(x, y, w, h);
 	}
 	
 	/**
