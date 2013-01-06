@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 /**
  * ScrollPanel class provides a scrollable container.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013.
+ * @version 0.1 rev 8001 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ScrollPanel extends JPanel
@@ -49,6 +49,32 @@ public class ScrollPanel extends JPanel
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Get panel's offset.
+	 */
+	public int getOffset()
+	{
+		return offset;
+	}
+	
+	/**
+	 * Set panel's offset.
+	 */
+	public void setOffset(int value)
+	{
+		offset = value;
+		panel.setLocation(0, -offset);
+		repaint();
+	}
+	
+	/**
+	 * Get panel page length.
+	 */
+	public int getPageLength()
+	{
+		return panel.getHeight();
 	}
 	
 	@Override

@@ -1,17 +1,21 @@
 package org.sdu.test;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import org.sdu.client.ClientFrame;
 import org.sdu.ui.AvatarBox;
 import org.sdu.ui.PanelSwitcher;
 import org.sdu.ui.PushMessage;
+import org.sdu.ui.RefreshablePanel;
 import org.sdu.ui.ScrollPanel;
 import org.sdu.ui.TextBox;
 import org.sdu.ui.UIHelper;
@@ -20,7 +24,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Create a test-purposed main window.
  *
- * @version 0.1 rev 8002 Jan. 6, 2013.
+ * @version 0.1 rev 8003 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class MainWindowTest extends ClientFrame
@@ -81,7 +85,19 @@ public class MainWindowTest extends ClientFrame
 		p3.setBackground(Color.GREEN);
 		p1.setBounds(0, 0, 300, 900);
 		p1.add(label);
-		switcher.addPanel(new ScrollPanel(p1));
+		switcher.addPanel(new RefreshablePanel(p1) {
+			protected void onRefresh()
+			{
+				Timer t = new Timer(2000, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						finishRefresh();
+					}
+				});
+				t.setRepeats(false);
+				t.start();
+			}
+		});
 		switcher.addPanel(p2);
 		switcher.addPanel(p3);
 		add(switcher);
