@@ -61,12 +61,6 @@ class Edit extends JFrame {
 		main = frame;
 		this.mode = mode;
 		this.id = id;
-		addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent winEvt) {
-				main.refresh();
-			}
-		});
 		setSize(500, 400);
 		setLocationRelativeTo(frame);
 		setResizable(false);

@@ -3,7 +3,7 @@ package org.sdu.database;
 /**
  * Store database column list.
  * 
- * @version 0.1 rev 8002 Jan. 5, 2013
+ * @version 0.1 rev 8003 Jan. 5, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class List {
@@ -16,7 +16,7 @@ class List {
 			{ "外语语种", "外语水平", "学籍", "专业领域", "学习地点", "准考证号", "校园卡号" },
 			{ "婚否", "华侨", "英烈子女", "健康状况", "特长", "经济状况", "经济来源" } };
 	final static String[][] COLUMN_NAME = {
-			{ "name", "engname", "sex", "birth", "country", "nation",
+			{ "name", "engname", "sex", "birthday", "country", "nation",
 					"identity" },
 			{ "idtype", "idnum", "home", "homeadd", "homepost", "homephone",
 					"telephone" },
