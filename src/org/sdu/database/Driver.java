@@ -10,19 +10,22 @@ import java.lang.reflect.Method;
  * Launch the database management application. Optimized for menu bar and dock
  * on OS X.
  * 
- * @version 0.1 rev 8006 Jan. 6, 2013
+ * @version 0.1 rev 8007 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Driver {
 	public static void main(String[] args) {
-		if (System.getProperty("os.name").startsWith("Mac OS")) {
-			// Title
-			System.setProperty(
-					"com.apple.mrj.application.apple.menu.about.name", "数据库");
-			// Menu bar
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-			// Dock Icon
-			try {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			if (System.getProperty("os.name").startsWith("Mac OS")) {
+				// Title
+				System.setProperty(
+						"com.apple.mrj.application.apple.menu.about.name",
+						"数据库");
+				// Menu bar
+				System.setProperty("apple.laf.useScreenMenuBar", "true");
+				// Dock Icon
+
 				Class<?> app = Class.forName("com.apple.eawt.Application");
 				Method getapp = app
 						.getMethod("getApplication", new Class<?>[0]);
@@ -31,8 +34,8 @@ public class Driver {
 						new Class[] { Image.class });
 				seticon.invoke(app.cast(app_obj), new Object[] { ImageIO
 						.read(new File("art/database/icon.png")) });
-			} catch (Exception e) {
 			}
+		} catch (Exception e) {
 		}
 
 		try {
