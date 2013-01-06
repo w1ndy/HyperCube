@@ -4,19 +4,6 @@
 [webserver_address]
 211.87.219.40
 
-# This is for database management application only
-# Use "/" instead of "\"
-[site_directory]
-/Library/Server/Web/Data/Sites/Default/
-
-# This is for database management application only
-[database]
-hypercube
-
-# This is for database management application only
-[table]
-stu
-
 [user]
 hypercube
 
