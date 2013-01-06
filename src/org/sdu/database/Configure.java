@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * Read the configuration file.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013
+ * @version 0.1 rev 8001 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class Configure {
@@ -22,8 +22,11 @@ class Configure {
 				databaseAddress = conf.next();
 			if (line.equals("[webserver_address]"))
 				webserverAddress = conf.next();
-			if (line.equals("[site_directory]"))
+			if (line.equals("[site_directory]")) {
 				siteDirectory = conf.next();
+				if (!siteDirectory.endsWith("/"))
+					siteDirectory += "/";
+			}
 			if (line.equals("[database]"))
 				database = conf.next();
 			if (line.equals("[table]"))

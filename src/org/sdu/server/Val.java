@@ -5,8 +5,14 @@ package org.sdu.server;
  *
  */
 public final class Val {
+	/**
+	 * Version
+	 */
 	public final static byte F_version = 00;
 	public final static byte S_version = 01;
+	/**
+	 *  Flag Code
+	 */
 	public final static byte Check_T = 0x00;
 	public final static byte Check_F = 0x01;
 	public final static	byte Unknow = 0x00;

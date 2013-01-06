@@ -3,7 +3,9 @@ package org.sdu.server;
 import java.nio.ByteBuffer;
 
 /**
- * 
+ * Process of Unpack the Incoming Packet
+ * @author Celr
+ *
  */
 public class PacketDataPro {
 	private ByteBuffer opt;
@@ -13,13 +15,25 @@ public class PacketDataPro {
 	public int GetLength(){
 		return opt.capacity();
 	}
+	/**
+	 * Get the First Instruction
+	 * @return
+	 */
 	public int GetFInst(){
 		return opt.get(0);
 	}
+	/**
+	 * Get the Second Instruction
+	 * @return
+	 */
 	public int GetSInst(){
 		opt.position(2);
 		return opt.get(1);
 	}
+	/**
+	 * Get the Parameter for String
+	 * @return
+	 */
 	public String GetParam(){
 		int param_length;
 		byte[] tmp1 = new byte[1000];
@@ -38,6 +52,10 @@ public class PacketDataPro {
 			}
 		return tmp;
 	}
+	/**
+	 * Get the Parameter for Byte
+	 * @return
+	 */
 	public byte[] GetParamB(){
 		int param_length;
 		int a;

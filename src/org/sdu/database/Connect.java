@@ -3,12 +3,11 @@ package org.sdu.database;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import javax.swing.*;
 
 /**
  * Build database connection.
  * 
- * @version 0.1 rev 8007 Jan. 6, 2013
+ * @version 0.1 rev 8008 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
 class Connect {
@@ -17,20 +16,13 @@ class Connect {
 	int totalNum;
 	String[] name, id, idNum, faculty, pic;
 
-	Connect() {
-		// Connect to database
-		try {
-			String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
-					+ Configure.database;
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(url, Configure.user,
-					Configure.password);
-			statement = conn.createStatement();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "数据库连接错误", "启动失败",
-					JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
+	Connect() throws Exception {
+		String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
+				+ Configure.database;
+		Class.forName("com.mysql.jdbc.Driver");
+		conn = DriverManager.getConnection(url, Configure.user,
+				Configure.password);
+		statement = conn.createStatement();
 	}
 
 	void close() {
@@ -150,29 +142,24 @@ class Connect {
 				+ " where id='" + id + "'");
 	}
 
-	void getData(String query) {
-		try {
-			totalNum = getCount(query);
-			ResultSet rs = get(query);
-			int num = (totalNum > 1000) ? 1000 : totalNum;
-			name = new String[num];
-			id = new String[num];
-			idNum = new String[num];
-			faculty = new String[num];
-			pic = new String[num];
-			for (int i = 0; i < num; i++) {
-				rs.next();
-				name[i] = rs.getString("name");
-				id[i] = rs.getString("id");
-				idNum[i] = rs.getString("idnum");
-				faculty[i] = rs.getString("faculty");
-				pic[i] = rs.getString("pic");
-			}
-			rs.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "数据库读取错误", "运行时错误",
-					JOptionPane.ERROR_MESSAGE);
+	void getData(String query) throws Exception {
+		totalNum = getCount(query);
+		ResultSet rs = get(query);
+		int num = (totalNum > 1000) ? 1000 : totalNum;
+		name = new String[num];
+		id = new String[num];
+		idNum = new String[num];
+		faculty = new String[num];
+		pic = new String[num];
+		for (int i = 0; i < num; i++) {
+			rs.next();
+			name[i] = rs.getString("name");
+			id[i] = rs.getString("id");
+			idNum[i] = rs.getString("idnum");
+			faculty[i] = rs.getString("faculty");
+			pic[i] = rs.getString("pic");
 		}
+		rs.close();
 	}
 
 	String[] getID(String query) throws Exception {
