@@ -77,7 +77,7 @@ public class MainWindowTest extends ClientFrame
 		DashboardPanel dash = new DashboardPanel();
 		PushMessage msg1 = new PushMessage();
 		msg1.setTitle("管理猿 (10086) 给您发来一条消息");
-		msg1.setContent("您好，欢迎使用HyperCube 2013。");
+		msg1.setContent("您好，欢迎使用HyperCube 2013。\n这是Dashboard界面。您可以在这里接收最新发布的公告及留言等信息。");
 		dash.add(msg1);
 		PushMessage msg2 = new PushMessage();
 		msg2.setTitle("图书馆还书通知");

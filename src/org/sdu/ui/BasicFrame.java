@@ -224,7 +224,6 @@ public class BasicFrame extends JFrame
 		int rx = width - UIHelper.frameBlockSize;
 		int uy = UIHelper.frameBlockSize;
 		int by = height - UIHelper.frameBlockSize;
-		int x, y;
 		
 		g.setColor(new Color(0, 0, 0, 0));
 		g.clearRect(0, 0, width, height);

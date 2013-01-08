@@ -2,6 +2,7 @@ package org.sdu.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -53,7 +54,7 @@ public class DashboardPanel extends JPanel
 	};
 	
 	public DashboardPanel() {
-		super(null);
+		super(new FlowLayout(FlowLayout.CENTER, 0, 5));
 		setBackground(Color.WHITE);
 		
 		messages = new ArrayList<PushMessage>();
@@ -64,7 +65,6 @@ public class DashboardPanel extends JPanel
 	{
 		if(c instanceof PushMessage) {
 			PushMessage m = (PushMessage)c;
-			m.setBounds(8, 10 + 100 * messages.size(), 280, 90);
 			messages.add(m);
 			if(getHeight() < 100 * messages.size())
 				setSize(getWidth(), 100 * messages.size());
@@ -83,15 +83,12 @@ public class DashboardPanel extends JPanel
 			m.removeMouseListener(mouseListener);
 			m.removeMouseMotionListener(mouseMotionListener);
 			
-			int i;
-			for(i = 0; i < messages.size(); i++) {
+			for(int i = 0; i < messages.size(); i++) {
 				if(messages.get(i) == m) {
-					for(int j = i + 1; j < messages.size(); j++) {
-						messages.get(i).setBounds(0, 90 * (j - 1), 280, 90);
-					}
+					messages.remove(i);
+					break;
 				}
 			}
-			if(i != messages.size()) messages.remove(i);
 		}
 		remove(c);
 	}
