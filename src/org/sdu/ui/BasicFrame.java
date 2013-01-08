@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8005 Jan. 6, 2013.
+ * @version 0.1 rev 8006 Jan. 9, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -259,62 +259,28 @@ public class BasicFrame extends JFrame
 				UIHelper.frameBlockSize * 3, UIHelper.frameBlockSize * 3, this);
 		
 		// Draw upper and lower strips.
-		for(x = lx + UIHelper.frameBlockSize; x <= rx; x += UIHelper.frameBlockSize) {
-			g.drawImage(imageFrame, 
-					x - UIHelper.frameBlockSize, 0, 
-					x, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize, 0, 
-					UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize, this);
-			g.drawImage(imageFrame,
-					x - UIHelper.frameBlockSize, by,
-					x, height,
-					UIHelper.frameBlockSize, UIHelper.frameBlockSize * 2,
-					UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize * 3, this);
-		}
-		
-		// Fill the gap.
-		x -= UIHelper.frameBlockSize;
-		if(x < rx) {
-			g.drawImage(imageFrame,
-					x, 0,
-					rx, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize, 0,
-					UIHelper.frameBlockSize + rx - x, UIHelper.frameBlockSize, null);
-			g.drawImage(imageFrame,
-					x, by,
-					rx, height,
-					UIHelper.frameBlockSize, UIHelper.frameBlockSize * 2,
-					UIHelper.frameBlockSize + rx - x, UIHelper.frameBlockSize * 3, null);
-		}
+		g.drawImage(imageFrame, 
+				lx, 0, 
+				rx, UIHelper.frameBlockSize,
+				UIHelper.frameBlockSize, 0, 
+				UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize, this);
+		g.drawImage(imageFrame,
+				lx, by,
+				rx, height,
+				UIHelper.frameBlockSize, UIHelper.frameBlockSize * 2,
+				UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize * 3, this);
 		
 		// Draw left and right strips.
-		for(y = uy + UIHelper.frameBlockSize; y <= by; y += UIHelper.frameBlockSize) {
-			g.drawImage(imageFrame,
-					0, y - UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize, y,
-					0, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize, UIHelper.frameBlockSize * 2, this);
-			g.drawImage(imageFrame,
-					rx, y - UIHelper.frameBlockSize,
-					width, y,
-					UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize * 3, UIHelper.frameBlockSize * 2, this);
-		}
-		
-		// Fill the gap.
-		y -= UIHelper.frameBlockSize;
-		if(y < by) {
-			g.drawImage(imageFrame,
-					0, y,
-					UIHelper.frameBlockSize, by,
-					0, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize, UIHelper.frameBlockSize + by - y, this);
-			g.drawImage(imageFrame,
-					rx, y,
-					width, by,
-					UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize,
-					UIHelper.frameBlockSize * 3, UIHelper.frameBlockSize + by - y, this);
-		}
+		g.drawImage(imageFrame,
+				0, uy,
+				UIHelper.frameBlockSize, by,
+				0, UIHelper.frameBlockSize,
+				UIHelper.frameBlockSize, UIHelper.frameBlockSize * 2, this);
+		g.drawImage(imageFrame,
+				rx, uy,
+				width, by,
+				UIHelper.frameBlockSize * 2, UIHelper.frameBlockSize,
+				UIHelper.frameBlockSize * 3, UIHelper.frameBlockSize * 2, this);
 	}
 	
 	/**
