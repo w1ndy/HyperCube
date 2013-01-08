@@ -1,10 +1,10 @@
 package org.sdu.ui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,26 +13,20 @@ import javax.swing.JComponent;
 /**
  * PushMessage is a push notification component.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013.
+ * @version 0.1 rev 8001 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PushMessage extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final int Width = 265;
-	public static final int Height = 70;
-	public static final int Spacing = 6;
-	
-	private Stroke stroke;
-	private Color msgColor;
+	private boolean isActive = false;
+	private String title = null;
+	private String content = null;
 	
 	public PushMessage()
 	{
 		super();
-		stroke = new BasicStroke(1.0f);
-		
-		msgColor = UIHelper.darkColor;
 		
 		addMouseListener(new MouseListener() {
 			@Override
@@ -40,13 +34,13 @@ public class PushMessage extends JComponent
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				msgColor = UIHelper.lightColor;
+				isActive = true;
 				repaint();
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				msgColor = UIHelper.darkColor;
+				isActive = false;
 				repaint();
 			}
 
@@ -60,12 +54,41 @@ public class PushMessage extends JComponent
 	}
 	
 	@Override
-	public void paintComponent(Graphics graph)
+	public void paintComponent(Graphics g)
 	{
-		Graphics2D g = (Graphics2D) graph;
-		g.setColor(msgColor);
-		g.setStroke(stroke);
-		g.drawRect(1, 1, Width - 1, Height - 1);
-		g.fillRect(1, 1, Spacing, Height - 1);
+		if(isActive)
+			g.drawImage((Image)UIHelper.getResource("ui.main.active"), 0, 0, null);
+		else
+			g.drawImage((Image)UIHelper.getResource("ui.main.inactive"), 0, 0, null);
+		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setFont((Font)UIHelper.getResource("ui.font.msgtitle"));
+		if(title == null)
+			g.drawString("无标题", 20, 26);
+		else
+			g.drawString(title, 20, 26);
+		g.setFont((Font)UIHelper.getResource("ui.font.text"));
+		if(content == null)
+			g.drawString("无内容", 21, 46);
+		else
+			g.drawString(content, 21, 46);
+		g.setColor(UIHelper.darkColor);
+		g.drawString("更多内容", 19, 75);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 }

@@ -19,7 +19,7 @@ import javax.swing.Timer;
 /**
  * PanelSwitcher class provides a gesture-based panel switcher.
  * 
- * @version 0.1 rev 8002 Jan. 6, 2013.
+ * @version 0.1 rev 8003 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class PanelSwitcher extends JComponent
@@ -73,6 +73,7 @@ public class PanelSwitcher extends JComponent
 					if(Math.abs(e.getLocationOnScreen().x - dragStart.x)
 							<= Math.abs(e.getLocationOnScreen().y - dragStart.y)) {
 						dragStart = null;
+						mouseListener.mouseClicked(e);
 					} else {
 						trackUnchecked = false;
 						onSwitchStart();
@@ -146,10 +147,10 @@ public class PanelSwitcher extends JComponent
 				int offsetX = (int) ((getWidth() - panels.size() * 22 + 7) * 0.5f);
 				int offsetY = getHeight() - (int) ((PanelSwitcher.this.switcherHeight + 15) * 0.5f);
 				int dx = arg0.getPoint().x - offsetX, dy = arg0.getPoint().y - offsetY;
-				if(dy >= 0 && dy <= 15 && dx >= 0) {
+				if(dy >= -3 && dy <= 18 && dx >= -1) {
 					int n = dx / 22;
 					dx %= 22;
-					if(dx <= 15) {
+					if(dx <= 16) {
 						panelOffset = (n - activatedPanel) * getWidth();
 						activatedPanel = n;
 						if(panelOffset < 0)

@@ -1,5 +1,7 @@
 package org.sdu.ui;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -8,7 +10,7 @@ import javax.swing.JPanel;
 /**
  * ScrollPanel class provides a scrollable container.
  * 
- * @version 0.1 rev 8001 Jan. 6, 2013.
+ * @version 0.1 rev 8002 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ScrollPanel extends JPanel
@@ -24,6 +26,7 @@ public class ScrollPanel extends JPanel
 	public ScrollPanel(JPanel p)
 	{
 		super(null);
+		this.setBackground(new Color(0, true));
 		panel = p;
 		offset = 0;
 		add(panel);
@@ -75,6 +78,12 @@ public class ScrollPanel extends JPanel
 	public int getPageLength()
 	{
 		return panel.getHeight();
+	}
+	
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		g.clearRect(0, 0, getWidth(), getHeight());
 	}
 	
 	@Override

@@ -7,7 +7,9 @@
 	<entry name="ui.avatarbox.invisible" type="image">ui/avatarbox/invisible.png</entry>
 	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
 	<entry name="ui.status.notify" type="image">ui/status/notify.png</entry>
-	<entry name="ui.common.net" type="image">ui/common/Net.png</entry>
+	<entry name="ui.main.refresh" type="image">ui/main/refresh.png</entry>
+	<entry name="ui.main.active" type="image">ui/main/active.png</entry>
+	<entry name="ui.main.inactive" type="image">ui/main/inactive.png</entry>
 	
 	<entry name="ui.font.title" type="font">
 		<fontface>微软雅黑</fontface>
@@ -23,6 +25,13 @@
 		<italic>false</italic>
 	</entry>
 	
+	<entry name="ui.font.msgtitle" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>14</size>
+		<bold>false</bold>
+		<italic>false</italic>
+	</entry>
+	
 	<entry name="ui.font.text" type="font">
 		<fontface>微软雅黑</fontface>
 		<size>12</size>
@@ -33,6 +42,13 @@
 	<entry name="ui.font.notify" type="font">
 		<fontface>微软雅黑</fontface>
 		<size>11</size>
+		<bold>true</bold>
+		<italic>false</italic>
+	</entry>
+	
+	<entry name="ui.font.prompt" type="font">
+		<fontface>微软雅黑</fontface>
+		<size>14</size>
 		<bold>true</bold>
 		<italic>false</italic>
 	</entry>
@@ -56,4 +72,6 @@
 	<entry name="ui.string.login.notify.unregister" type="string">账号不存在</entry>
 	<entry name="ui.string.login.notify.frozen" type="string">账号已冻结</entry>
 	<entry name="ui.string.login.notify.online" type="string">账号已登录</entry>
+	<entry name="ui.string.main.refresh.release" type="string">释放以刷新</entry>
+	<entry name="ui.string.main.refreshing" type="string">刷新中....</entry>
 </resource>
