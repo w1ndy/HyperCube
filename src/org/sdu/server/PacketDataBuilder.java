@@ -41,6 +41,10 @@ public class PacketDataBuilder {
 		DataArr.put((byte) ((tmp.getBytes().length)&0xff));
 		DataArr.put(tmp.getBytes());
 	}
+	public void SetParamS(String[] list){
+		for (int i=0;i<=list.length-1;i++)
+			SetParamS(list[i]);
+	}
 	/**
 	 * return the Data of Sending Packet
 	 * @return

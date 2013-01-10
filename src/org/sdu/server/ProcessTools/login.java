@@ -1,7 +1,11 @@
-package org.sdu.server.ProcessTools.SecPro;
+package org.sdu.server.ProcessTools;
 
-import org.sdu.database.Database;
+import java.util.HashMap;
+
 import org.sdu.net.Packet;
+import org.sdu.net.Session;
+import org.sdu.server.DatabaseInterface;
+import org.sdu.server.ID_Manager;
 import org.sdu.server.Val;
 import org.sdu.server.PacketDataBuilder;
 import org.sdu.server.PacketDataPro;
@@ -11,7 +15,7 @@ import org.sdu.server.PacketDataPro;
  *
  */
 public class login {
-	public static Packet Push(PacketDataPro ProD, Database db) {
+	public static Packet Push(PacketDataPro ProD, DatabaseInterface db,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap,Session s) {
 		byte version[] = ProD.GetParamB();
 			 String username = ProD.GetParam();
 			 String password = ProD.GetParam();
@@ -19,9 +23,12 @@ public class login {
 		if ((version[0] == Val.F_version) && (version[1] == Val.S_version)) {
 			try {
 				if (db.checkPassword(username, password)) {
-					ProD.GetParam();
+					if (ProD.GetParamB()[0] == 0){db.setInvisible(username);}
+					else{db.setVisible(username);}
 					Pack.SetData(Val.Check_T, Val.Login, Val.LoginCheck);
-					Pack.SetParamS("Welcome!");
+					Pack.SetParamS(ID_Manager.setID(username));
+					SessionMap.put(username, s);
+					UserMap.put(s, username);
 				} else {
 					if (!db.checkExist(username)){
 						Pack.SetData(Val.Check_F, Val.NotExist, Val.Login,Val.LoginCheck);
@@ -31,10 +38,10 @@ public class login {
 						Pack.SetData(Val.Check_F, Val.AlreadyOnline, Val.Login,Val.LoginCheck);
 						return Pack.GetData();
 					}
-//					if (db.Freeze()) {
-//						Pack.SetData(Val.Check_F, Val.Freeze, Val.Login,Val.LoginCheck);
-//						return Pack.GetData();
-//	 				}
+					if (db.Freeze(username)) {
+						Pack.SetData(Val.Check_F, Val.Freeze, Val.Login,Val.LoginCheck);
+						return Pack.GetData();
+	 				}
 					Pack.SetData(Val.Check_F, Val.WrongPass, Val.Login,Val.LoginCheck);
 					return Pack.GetData();
 				}

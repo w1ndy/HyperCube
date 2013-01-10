@@ -1,6 +1,9 @@
 package org.sdu.database;
 
+import java.net.InetAddress;
 import java.sql.*;
+
+import org.sdu.server.DatabaseInterface;
 
 /**
  * Access database.
@@ -8,7 +11,7 @@ import java.sql.*;
  * @version 0.1 rev 8007 Jan. 6, 2013
  * Copyright (c) HyperCube Dev Team
  */
-public class Database {
+public class Database implements DatabaseInterface {
 	private final String mainDatabase = "hypercube";
 	private final String infoTable = "info";
 	private Statement statement;
@@ -121,5 +124,67 @@ public class Database {
 				+ " where id='" + id + "'");
 		rs.next();
 		return rs.getString("nickname");
+	}
+
+	@Override
+	public void setOnline(String id, boolean visible, InetAddress IP)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setNotification(String Notification, String id)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String[] getUserGroup(String SQL_Query) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMessage(String Message, String id) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setVisible(String id) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setInvisible(String id) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void chatdatabackup(String id, String Data) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String[] getNotification(String id, long timestamp) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setFreeze(String id) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean Freeze(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

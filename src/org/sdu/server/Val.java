@@ -27,4 +27,10 @@ public final class Val {
 	public final static	byte Login = 0x01;
 	public final static	byte Logout = 0x02;
 	public final static	byte LoginCheck =0x01;
+	public final static	byte DataTrans = 0x03;
+	public final static	byte SendNotificationA = 0x01;
+	public final static	byte SendNotificationR = 0x02;
+	public final static	byte SendMessage = 0x01;
+	
+	
 }
