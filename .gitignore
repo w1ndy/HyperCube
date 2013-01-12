@@ -11,6 +11,3 @@
 # Log Files #
 *.log
 *.stackdump
-
-# Platform Differential Files #
-.classpath
