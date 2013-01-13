@@ -8,7 +8,7 @@ import org.sdu.server.DatabaseInterface;
 /**
  * Access database.
  * 
- * @version 0.1 rev 8007 Jan. 6, 2013
+ * @version 0.1 rev 8008 Jan. 13, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Database implements DatabaseInterface {
@@ -23,7 +23,7 @@ public class Database implements DatabaseInterface {
 
 		// Connect to database
 		String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
-				+ mainDatabase;
+				+ mainDatabase + "?characterEncoding=utf8";
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(url, Configure.user,
 				Configure.password);
@@ -130,14 +130,14 @@ public class Database implements DatabaseInterface {
 	public void setOnline(String id, boolean visible, InetAddress IP)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setNotification(String Notification, String id)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -149,25 +149,25 @@ public class Database implements DatabaseInterface {
 	@Override
 	public void setMessage(String Message, String id) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setVisible(String id) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInvisible(String id) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void chatdatabackup(String id, String Data) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class Database implements DatabaseInterface {
 	@Override
 	public void setFreeze(String id) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
