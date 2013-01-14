@@ -81,6 +81,13 @@ public interface DatabaseInterface {
 	public void setNotification(String Notification,String id) throws Exception;
 	/**
 	 * 
+	 * @param id
+	 * @return The User's friends list
+	 * @throws Exception
+	 */
+	public String[] getFriendList(String id) throws Exception;
+	/**
+	 * 
 	 * @param SQL_Query
 	 * @return The User who fit the condition
 	 * @throws Exception
@@ -116,7 +123,7 @@ public interface DatabaseInterface {
 	 * 
 	 * @param id
 	 * @param timestamp
-	 * @return The Notification whose time bigger than the given time
+	 * @return The Notifications whose time bigger than the given time
 	 * @throws Exception
 	 */
 	public String[] getNotification(String id,long timestamp) throws Exception;

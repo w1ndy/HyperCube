@@ -35,9 +35,12 @@ public class process {
 		case 0x02: 
 			 if(ProD.GetSInst() == 0x01) 
 			 {return logout.Push(ProD,db1,SessionMap,UserMap,ss);}
-		case 0x03: 
+		case 0x03: {
 			 if(ProD.GetSInst() == 0x01)
 			 {return trans.PushforNotification(ProD,db1,UserMap,ss);}
+			 if(ProD.GetSInst() == 0x04)
+			 {return trans.PushforFriendList(ProD, db1, UserMap, ss);}
+		}
 		//default : return Warming....;
 		}
 		return null;
