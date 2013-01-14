@@ -3,7 +3,8 @@ package org.sdu.ui;
 /**
  * LoginFrame class implements a login window.
  * 
- * @version 0.1 rev 8001 Dec. 26, 2012.
+ * @deprecated
+ * @version 0.1 rev 8002 Jan. 15, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginFrame extends BasicFrame
@@ -22,10 +23,10 @@ public class LoginFrame extends BasicFrame
 		setSize(UIHelper.loginFrameWidth, UIHelper.loginFrameHeight);
 		
 		// Add avatar box component.
-		avatarBox = new AvatarBox();
-		avatarBox.setBounds(UIHelper.avatarBoxLoginOffsetX, UIHelper.avatarBoxLoginOffsetY,
-				UIHelper.avatarBoxWidth, UIHelper.avatarBoxHeight);
-		add(avatarBox);
+		//avatarBox = new AvatarBox();
+		//avatarBox.setBounds(UIHelper.LoginAvatarBoxOffsetX, UIHelper.LoginAvatarBoxOffsetY,
+		//		UIHelper.DefaultAvatarBoxWidth, UIHelper.DefaultAvatarBoxHeight);
+		//add(avatarBox);
 	}
 
 	/**

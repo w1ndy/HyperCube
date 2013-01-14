@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,7 +22,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Create a test-purposed main window.
  *
- * @version 0.1 rev 8004 Jan. 6, 2013.
+ * @version 0.1 rev 8005 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class MainWindowTest extends ClientFrame
@@ -46,9 +45,9 @@ public class MainWindowTest extends ClientFrame
 		titleOffsetX += 95;
 		titleOffsetY += 5;
 		
-		AvatarBox avatar = new AvatarBox();
-		avatar.setBounds(UIHelper.avatarBoxLoginOffsetX, 10,
-				UIHelper.avatarBoxWidth, UIHelper.avatarBoxHeight);
+		AvatarBox avatar = new AvatarBox(true);
+		avatar.setBounds(UIHelper.LoginAvatarBoxOffsetX, 10,
+				UIHelper.DefaultAvatarBoxWidth, UIHelper.DefaultAvatarBoxHeight);
 		try {
 			avatar.setAvatar(ImageIO.read(new File("art/testavatar.jpg")));
 		} catch (IOException e) {

@@ -21,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8008 Jan. 3, 2012.
+ * @version 0.1 rev 8009 Jan. 15, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -59,26 +59,14 @@ public class UIHelper
 	/**
 	 * Default avatar box offset in login window.
 	 */
-	public static final int avatarBoxLoginOffsetX = 10;
-	public static final int avatarBoxLoginOffsetY = 68;
+	public static final int LoginAvatarBoxOffsetX = 15;
+	public static final int LoginAvatarBoxOffsetY = 75;
 	
 	/**
 	 * Default avatar box size.
 	 */
-	public static final int avatarBoxWidth = 100;
-	public static final int avatarBoxHeight = 100;
-	
-	/**
-	 * Default avatar offset.
-	 */
-	public static final int avatarOffsetX = 10;
-	public static final int avatarOffsetY = 10;
-	
-	/**
-	 * Default avatar status icon offset.
-	 */
-	public static final int avatarStatusIconOffsetX = avatarOffsetX;
-	public static final int avatarStatusIconOffsetY = avatarBoxHeight - avatarOffsetX - 20;
+	public static final int DefaultAvatarBoxWidth = 90;
+	public static final int DefaultAvatarBoxHeight = 90;
 	
 	/**
 	 * Parameters of fading animation.
@@ -95,20 +83,20 @@ public class UIHelper
 	/**
 	 * Default username TextBox position.
 	 */
-	public static final int usernameBoxOffsetX = 110;
-	public static final int usernameBoxOffsetY = 80;
+	public static final int usernameBoxOffsetX = 115;
+	public static final int usernameBoxOffsetY = 82;
 	
 	/**
 	 * Default password TextBox position.
 	 */
-	public static final int passwordBoxOffsetX = 110;
-	public static final int passwordBoxOffsetY = 110;
+	public static final int passwordBoxOffsetX = 115;
+	public static final int passwordBoxOffsetY = 113;
 	
 	/**
 	 * Default register link position.
 	 */
-	public static final int registerLinkOffsetX = 225;
-	public static final int registerLinkOffsetY = 142;
+	public static final int registerLinkOffsetX = 230;
+	public static final int registerLinkOffsetY = 145;
 	
 	/**
 	 * Default register link size
