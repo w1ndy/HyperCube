@@ -1,23 +1,15 @@
 package org.sdu.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 /**
  * ScrollPanel class provides a scrollable container.
  * 
- * @version 0.1 rev 8002 Jan. 6, 2013.
+ * @version 0.1 rev 8003 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 @SuppressWarnings("serial")

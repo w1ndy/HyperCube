@@ -2,21 +2,16 @@ package org.sdu.ui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.LayoutManager2;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 /**
  * DashboardPanel class implements a dashboard of messages.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013.
+ * @version 0.1 rev 8001 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class DashboardPanel extends JPanel

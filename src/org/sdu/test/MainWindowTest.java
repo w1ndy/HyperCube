@@ -22,7 +22,7 @@ import org.sdu.util.DebugFramework;
 /**
  * Create a test-purposed main window.
  *
- * @version 0.1 rev 8005 Jan. 15, 2013.
+ * @version 0.1 rev 8006 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class MainWindowTest extends ClientFrame
@@ -74,7 +74,7 @@ public class MainWindowTest extends ClientFrame
 		
 		PanelSwitcher switcher = new PanelSwitcher(35);
 		switcher.setBounds(5, 110, 300, 560);
-		JPanel p1, p2, p3;
+		JPanel p2, p3;
 		p2 = new JPanel();
 		p3 = new JPanel();
 		p2.setBackground(Color.BLUE);

@@ -9,7 +9,8 @@ import javax.swing.JFrame;
 /**
  * A unit test for LoginFrame class and some other components.
  * 
- * @version 0.1 rev 8002 Dec. 25, 2012.
+ * @deprecated
+ * @version 0.1 rev 8003 Jan. 15, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginFrameTest
