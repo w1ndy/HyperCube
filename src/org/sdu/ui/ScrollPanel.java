@@ -1,11 +1,18 @@
 package org.sdu.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  * ScrollPanel class provides a scrollable container.
@@ -13,20 +20,21 @@ import javax.swing.JPanel;
  * @version 0.1 rev 8002 Jan. 6, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
+@SuppressWarnings("serial")
 public class ScrollPanel extends JPanel
 {
-	private static final long serialVersionUID = 1L;
+	public static int ScrollingSpeed = 10;
 	
 	private JPanel panel;
 	private int offset;
-	
+
 	/**
 	 * Initialize a ScrollPanel object.
 	 */
 	public ScrollPanel(JPanel p)
 	{
 		super(null);
-		this.setBackground(new Color(0, true));
+		setBackground(Color.WHITE);
 		panel = p;
 		offset = 0;
 		add(panel);
@@ -34,21 +42,26 @@ public class ScrollPanel extends JPanel
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
+				if(offset == 0 && panel.getHeight() < getHeight()) {
+					return ;
+				}
 				if(e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-					int amount = e.getScrollAmount() * 5;
+					int amount = e.getScrollAmount() * ScrollingSpeed;
 					if(e.getWheelRotation() < 0) {
 						if(offset - amount < 0)
 							offset = 0;
 						else
 							offset -= amount;
 					} else {
-						if(offset + amount + getHeight() > panel.getHeight())
+						if(getRemainingPageHeight() - amount < 0) {
 							offset = panel.getHeight() - getHeight();
-						else
+							if(offset < 0) offset = 0;
+						}else
 							offset += amount;
 					}
 					panel.setLocation(0, -offset);
 					repaint();
+					System.out.println(getRemainingPageHeight());
 				}
 			}
 		});
@@ -79,18 +92,19 @@ public class ScrollPanel extends JPanel
 	{
 		return panel.getHeight();
 	}
-	
-	@Override
-	public void paintComponent(Graphics g)
+
+	/**
+	 * Get visible area height.
+	 */
+	public int getRemainingPageHeight()
 	{
-		g.clearRect(0, 0, getWidth(), getHeight());
+		return getPageLength() - getOffset() - getHeight();
 	}
 	
 	@Override
 	public void setBounds(int x, int y, int w, int h)
 	{
-		panel.setBounds(0, -offset, w,
-				(panel.getBounds().height > h) ? panel.getBounds().height : h);
+		panel.setBounds(0, -offset, w, panel.getHeight());
 		super.setBounds(x, y, w, h);
 	}
 }

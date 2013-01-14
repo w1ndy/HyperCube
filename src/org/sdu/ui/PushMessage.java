@@ -23,6 +23,7 @@ public class PushMessage extends JComponent
 	private static final long serialVersionUID = 1L;
 	
 	private boolean isActive = false;
+	private boolean isExpanded = false;
 	private String title = null;
 	private String content = null;
 	private String omitted = null;
@@ -36,7 +37,16 @@ public class PushMessage extends JComponent
 		
 		addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {}
+			public void mouseClicked(MouseEvent arg0) {
+				if(!isExpanded) {
+					setPreferredSize(new Dimension(280, 300));
+					isExpanded = true;
+				} else {
+					setPreferredSize(new Dimension(280, 90));
+					isExpanded = false;
+				}
+				getParent().invalidate();
+			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) {

@@ -62,6 +62,10 @@ public class RefreshablePanel extends ScrollPanel
 		public void actionPerformed(ActionEvent arg0) {
 			int offset = getOffset();
 			offset -= 30;
+			if(offset <= 0 && offset >= -30) {
+				offset = 0;
+				RestorePage.stop();
+			}
 			if(offset < getPageLength() - getHeight()) {
 				offset = getPageLength() - getHeight();
 				RestorePage.stop();
@@ -100,20 +104,7 @@ public class RefreshablePanel extends ScrollPanel
 				origin = null;
 				if(checked) {
 					checked = false;
-					if(-getOffset() > BannerHeight) {
-						System.out.println("Restore to banner location.");
-						RestoreBanner.start();
-						if(!isRefreshing) {
-							isRefreshing = true;
-							onRefresh();
-						}
-					} else if(-getOffset() > 0) {
-						System.out.println("Restore to 0");
-						RestoreZero.start();
-					} else if(getOffset() + getHeight() > getPageLength()) {
-						System.out.println("Restore to page length");
-						RestorePage.start();
-					}
+					restorePage();
 				}
 			}
 		});
@@ -143,6 +134,37 @@ public class RefreshablePanel extends ScrollPanel
 	
 	// Override this to get refresh indication.
 	protected void onRefresh() {}
+	
+	@Override
+	public void invalidate()
+	{
+		super.invalidate();
+		restorePage();
+	}
+	
+	/**
+	 * Restore page to its proper place after adjusting.
+	 */
+	public void restorePage()
+	{
+		int offset = -getOffset();
+		if(offset > BannerHeight) {
+			System.out.println("Restore to banner location.");
+			RestoreBanner.start();
+			if(!isRefreshing) {
+				isRefreshing = true;
+				onRefresh();
+			}
+		} else if(offset > 0) {
+			System.out.println("Restore to 0");
+			RestoreZero.start();
+		} else if(getRemainingPageHeight() < getHeight() ){
+			System.out.println("Restore to page length");
+			RestorePage.start();
+		}
+		
+	}
+	
 	
 	/**
 	 * Refreshing is complete.

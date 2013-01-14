@@ -2,7 +2,10 @@ package org.sdu.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.LayoutManager2;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -19,8 +22,6 @@ import javax.swing.JPanel;
 public class DashboardPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	
-	private ArrayList<PushMessage> messages;
 	
 	private MouseListener mouseListener = new MouseListener() {
 		@Override
@@ -54,42 +55,23 @@ public class DashboardPanel extends JPanel
 	};
 	
 	public DashboardPanel() {
-		super(new FlowLayout(FlowLayout.CENTER, 0, 5));
+		super(new DashboardLayout());
 		setBackground(Color.WHITE);
-		
-		messages = new ArrayList<PushMessage>();
 	}
 	
 	@Override
 	public Component add(Component c)
 	{
-		if(c instanceof PushMessage) {
-			PushMessage m = (PushMessage)c;
-			messages.add(m);
-			if(getHeight() < 100 * messages.size())
-				setSize(getWidth(), 100 * messages.size());
-			
-			m.addMouseListener(mouseListener);
-			m.addMouseMotionListener(mouseMotionListener);
-		}
+		c.addMouseListener(mouseListener);
+		c.addMouseMotionListener(mouseMotionListener);
 		return super.add(c);
 	}
 	
 	@Override
 	public void remove(Component c)
 	{
-		if(c instanceof PushMessage) {
-			PushMessage m = (PushMessage) c;
-			m.removeMouseListener(mouseListener);
-			m.removeMouseMotionListener(mouseMotionListener);
-			
-			for(int i = 0; i < messages.size(); i++) {
-				if(messages.get(i) == m) {
-					messages.remove(i);
-					break;
-				}
-			}
-		}
+		c.removeMouseListener(mouseListener);
+		c.removeMouseMotionListener(mouseMotionListener);
 		remove(c);
 	}
 }
