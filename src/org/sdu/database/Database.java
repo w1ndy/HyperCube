@@ -187,4 +187,10 @@ public class Database implements DatabaseInterface {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public String[] getFriendList(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
