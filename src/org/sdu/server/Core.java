@@ -6,6 +6,7 @@ package org.sdu.server;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
+import org.sdu.server.DatabaseInterface;
 import org.sdu.database.Database;
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -20,7 +21,7 @@ import org.sdu.util.DebugFramework;
 public class Core extends SessionHandler {
 	public static final int port = 21071;
 	public static final DebugFramework debugger = DebugFramework.getFramework();
-	static Database db;
+	static DatabaseInterface db;
 	
 	private NetworkServer server;
 	
@@ -80,7 +81,8 @@ public class Core extends SessionHandler {
 	 */
 	@Override
 	public void onPacketReceived(Session s, Packet p) {
-		process.Push(p.getData(),db);// Process
+		
+		process.Push(p.getData(),db,s);// Process
 		s.post(process.GetData());// Send back the Packet
 
 	}
