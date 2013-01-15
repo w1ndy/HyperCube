@@ -21,7 +21,7 @@ import org.sdu.util.DebugFramework;
  * UIHelper classes declares a series of constants and manages global
  * resources.
  * 
- * @version 0.1 rev 8009 Jan. 15, 2012.
+ * @version 0.1 rev 8010 Jan. 15, 2012.
  * Copyright (c) HyperCube Dev Team.
  */
 public class UIHelper
@@ -77,20 +77,20 @@ public class UIHelper
 	/**
 	 * Default TextBox size.
 	 */
-	public static final int textBoxWidth = 175;
-	public static final int textBoxHeight = 25;
+	public static final int DefaultTextBoxWidth = 175;
+	public static final int DefaultTextBoxHeight = 25;
 	
 	/**
 	 * Default username TextBox position.
 	 */
-	public static final int usernameBoxOffsetX = 115;
-	public static final int usernameBoxOffsetY = 82;
+	public static final int LoginUsernameBoxOffsetX = 115;
+	public static final int LoginUsernameBoxOffsetY = 82;
 	
 	/**
 	 * Default password TextBox position.
 	 */
-	public static final int passwordBoxOffsetX = 115;
-	public static final int passwordBoxOffsetY = 113;
+	public static final int LoginPasswordBoxOffsetX = 115;
+	public static final int LoginPasswordBoxOffsetY = 113;
 	
 	/**
 	 * Default register link position.
@@ -145,7 +145,7 @@ public class UIHelper
 	/**
 	 * Notify icon properties
 	 */
-	public static final int NotifyOffsetX = 150;
+	public static final int NotifyOffsetX = 157;
 	public static final int NotifyOffsetY = 37;
 	public static final int NotifyWidth = 135;
 	public static final int NotifyHeight = 24;

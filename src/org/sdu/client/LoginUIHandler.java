@@ -217,8 +217,7 @@ public class LoginUIHandler extends UIHandler
 	private void createUserBox()
 	{
 		userBox = new TextBox((String)UIHelper.getResource("ui.string.login.username"));
-		userBox.setBounds(UIHelper.usernameBoxOffsetX, UIHelper.usernameBoxOffsetY,
-				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
+		userBox.setLocation(UIHelper.LoginUsernameBoxOffsetX, UIHelper.LoginUsernameBoxOffsetY);
 		userBox.addKeyListener(userBoxKeyListener);
 		userBox.setInputVerifier(userBoxVerifier);
 	}
@@ -229,8 +228,7 @@ public class LoginUIHandler extends UIHandler
 	private void createPasswordBox()
 	{
 		passBox = new PasswordBox((String)UIHelper.getResource("ui.string.login.password"));
-		passBox.setBounds(UIHelper.passwordBoxOffsetX, UIHelper.passwordBoxOffsetY,
-				UIHelper.textBoxWidth, UIHelper.textBoxHeight);
+		passBox.setLocation(UIHelper.LoginPasswordBoxOffsetX, UIHelper.LoginPasswordBoxOffsetY);
 		passBox.addKeyListener(passBoxKeyListener);
 	}
 	
@@ -354,8 +352,8 @@ public class LoginUIHandler extends UIHandler
 
 		ui.getFrame().setVisible(true);
 		
-		// DEBUG redirect login to main.
-		// getDispatcher().attach(new MainUIHandler());
+		// TODO DEBUG redirect login to main.
+		getDispatcher().attach(new MainUIHandler());
 	}
 
 	@Override

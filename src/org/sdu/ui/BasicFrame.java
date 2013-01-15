@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8006 Jan. 9, 2013.
+ * @version 0.1 rev 8007 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -77,6 +77,24 @@ public class BasicFrame extends JFrame
 		if(width < minFrameWidth) width = minFrameWidth;
 		if(height < minFrameHeight) height = minFrameHeight;
 		super.setSize(width, height);
+	}
+	
+	/**
+	 * Set title location.
+	 */
+	public void setTitleLocation(int x, int y)
+	{
+		titleOffsetX = x;
+		titleOffsetY = y;
+	}
+	
+	/**
+	 * Set subtitle location.
+	 */
+	public void setSubtitleLocation(int x, int y)
+	{
+		subtitleOffsetX = x;
+		subtitleOffsetY = y;
 	}
 	
 	/**
