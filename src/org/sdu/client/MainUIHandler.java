@@ -17,7 +17,7 @@ import org.sdu.ui.TextBox;
 /**
  * MainUIHandler class handles UI events in main frame.
  * 
- * @version 0.1 rev 8000 Jan. 6, 2013.
+ * @version 0.1 rev 8001 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class MainUIHandler extends UIHandler

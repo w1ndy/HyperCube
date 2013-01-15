@@ -22,7 +22,7 @@ import org.sdu.ui.UIHelper;
 /**
  * LoginUIHandler handles UI events in login frame.
  * 
- * @version 0.1 rev 8009 Jan. 15, 2013.
+ * @version 0.1 rev 8010 Jan. 15, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class LoginUIHandler extends UIHandler
