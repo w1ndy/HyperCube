@@ -15,31 +15,33 @@ import java.util.HashMap;
  */
 public class process {
 	private static ByteBuffer indata;
-	private static DatabaseInterface db1;
-	private static Session ss;
+	private static DatabaseInterface db;
+	private static Session s;
 	private static HashMap<String,Session> SessionMap;
 	private static HashMap<Session,String> UserMap;
-	public static void Push(ByteBuffer p,DatabaseInterface db,Session s){
+	public static void Push(ByteBuffer p,DatabaseInterface db,Session s,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap){
 		indata = p;
-		ss = s;
-		db1 = db;
+		process.s = s;
+		process.db = db;
+		process.SessionMap = SessionMap;
+		process.UserMap = UserMap;
 	}
 	
-	public static Packet GetData(){
+	public static Packet GetData() throws Exception{
 		PacketDataPro ProD = new PacketDataPro(indata);
 		switch(ProD.GetFInst())
 		{
 		case 0x01: 
 			 if(ProD.GetSInst() == 0x01) 
-			 {return login.Push(ProD,db1,SessionMap,UserMap,ss);}
+			 {return login.Push(ProD,db,SessionMap,UserMap,s);}
 		case 0x02: 
 			 if(ProD.GetSInst() == 0x01) 
-			 {return logout.Push(ProD,db1,SessionMap,UserMap,ss);}
+			 {return logout.Push(ProD,db,SessionMap,UserMap,s);}
 		case 0x03: {
 			 if(ProD.GetSInst() == 0x01)
-			 {return trans.PushforNotification(ProD,db1,UserMap,ss);}
+			 {return trans.PushforNotification(ProD,db,UserMap,s);}
 			 if(ProD.GetSInst() == 0x04)
-			 {return trans.PushforFriendList(ProD, db1, UserMap, ss);}
+			 {return trans.PushforFriendList(ProD, db, UserMap, s);}
 		}
 		//default : return Warming....;
 		}

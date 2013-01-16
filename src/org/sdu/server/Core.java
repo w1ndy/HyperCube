@@ -5,6 +5,7 @@ package org.sdu.server;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 
 import org.sdu.server.DatabaseInterface;
 import org.sdu.database.Database;
@@ -21,9 +22,10 @@ import org.sdu.util.DebugFramework;
 public class Core extends SessionHandler {
 	public static final int port = 21071;
 	public static final DebugFramework debugger = DebugFramework.getFramework();
-	static DatabaseInterface db;
-	
+	private static HashMap<String,Session> SessionMap;
+	private static HashMap<Session,String> UserMap;
 	private NetworkServer server;
+	private DatabaseInterface db;
 	
 	/* (non-Javadoc)
 	 * @see org.sdu.net.SessionHandler#onAcceptingSession(java.nio.channels.SocketChannel)
@@ -39,12 +41,12 @@ public class Core extends SessionHandler {
 	 */
 	@Override
 	public void onSessionAccepted(Session s) {
-		try {
-			debugger.print("Session from " + s.getChannel().getRemoteAddress() + " accepted.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			debugger.print("Session from " + s.getChannel().getRemoteAddress() + " accepted.");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -53,12 +55,12 @@ public class Core extends SessionHandler {
 	 */
 	@Override
 	public void onSessionClosed(Session s) {
-		try {
-			debugger.print("Session from " + s.getChannel().getRemoteAddress() + " closed.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			//debugger.print("Session from " + s.getChannel().getRemoteAddress() + " closed.");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -67,12 +69,12 @@ public class Core extends SessionHandler {
 	 */
 	@Override
 	public void onUnregisteredSession(SocketChannel c) {
-		try {
-			debugger.print("Session from " + c.getRemoteAddress() + " failed to register.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			//debugger.print("Session from " + c.getRemoteAddress() + " failed to register.");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -82,8 +84,13 @@ public class Core extends SessionHandler {
 	@Override
 	public void onPacketReceived(Session s, Packet p) {
 		
-		process.Push(p.getData(),db,s);// Process
-		s.post(process.GetData());// Send back the Packet
+		process.Push(p.getData(),db,s,SessionMap,UserMap);// Process
+		try {
+			s.post(process.GetData());
+		} catch (Exception e) {
+			if (e.getMessage().equals("Unknow"))
+			e.printStackTrace();
+		}// Send back the Packet
 
 	}
 
@@ -108,20 +115,22 @@ public class Core extends SessionHandler {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		debugger.setLogFileName("EchoServerTest.log");
-		new Core();
-		db.close();
-	}
-	public Core()
+	public Core(DatabaseInterface db1) throws Exception
 	{
+		db = db1;
 		try {
 			db = new Database();
 		} catch (Exception e) {
-			debugger.print("Failed to connect with database");
+			throw new Exception("DB");
 		}
 		server = new NetworkServer(this, port);
 		server.start(true);
 		
+	}
+	public void CloseServer() throws Exception
+	{
+		if (server.isRunning() == true){
+		server.stop();}else
+		{throw new Exception("Already Shutdown");}
 	}
 }

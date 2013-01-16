@@ -15,7 +15,7 @@ import org.sdu.server.PacketDataPro;
  *
  */
 public class login {
-	public static Packet Push(PacketDataPro ProD, DatabaseInterface db,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap,Session s) {
+	public static Packet Push(PacketDataPro ProD, DatabaseInterface db,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap,Session s) throws Exception {
 		byte version[] = ProD.GetParamB();
 			 String username = ProD.GetParam();
 			 String password = ProD.GetParam();
@@ -47,7 +47,7 @@ public class login {
 				}
 			} catch (Exception e) {
 				Pack.SetData(Val.Check_F, Val.Unknow, Val.Login, Val.LoginCheck);
-				e.printStackTrace();
+				throw new Exception("Unknow");
 			}
 		} else {
 			Pack.SetData(Val.Check_F, Val.UnSupportVer, Val.Login,Val.LoginCheck);
