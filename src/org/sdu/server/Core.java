@@ -5,8 +5,11 @@ package org.sdu.server;
 
 import java.nio.channels.SocketChannel;
 import java.util.Hashtable;
+import java.util.Observer;
 
 import org.sdu.server.DatabaseInterface;
+import org.sdu.server.UI.ServerDataObserver;
+import org.sdu.server.UI.TrackDataObserver;
 import org.sdu.database.Database;
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -25,6 +28,9 @@ public class Core extends SessionHandler {
 	private static Hashtable<Session,String> UserMap;
 	private NetworkServer server;
 	private DatabaseInterface db;
+	private Observer ServerMan;
+	private ServerDataObserver d;
+	private TrackDataObserver d1;
 	
 	/* (non-Javadoc)
 	 * @see org.sdu.net.SessionHandler#onAcceptingSession(java.nio.channels.SocketChannel)
@@ -88,7 +94,9 @@ public class Core extends SessionHandler {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			process Pro = new process();
+			d = new ServerDataObserver();
+			d1 = new TrackDataObserver();
+			process Pro = new process(d,d1);
 			Pro.Push(p.getData(),db,s,SessionMap,UserMap);// Process
 		try {
 //			for (int i = 0; i<Pro.GetData().getLength();i++)
@@ -138,6 +146,7 @@ public class Core extends SessionHandler {
 		server.start(false);
 		
 	}
+
 	public void CloseServer() throws Exception
 	{
 		if (server.isRunning() == true){

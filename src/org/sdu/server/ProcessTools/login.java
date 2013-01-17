@@ -2,7 +2,6 @@ package org.sdu.server.ProcessTools;
 
 import java.util.Hashtable;
 import java.util.Observable;
-
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
 import org.sdu.server.DatabaseInterface;
@@ -10,12 +9,16 @@ import org.sdu.server.ID_Manager;
 import org.sdu.server.Val;
 import org.sdu.server.PacketDataBuilder;
 import org.sdu.server.PacketDataPro;
+import org.sdu.server.UI.ServerDataObserver;
 /**
  * This Model check the version,username and password and return a Packet
  * @author Celr
  *
  */
 public class login extends Observable{
+	public login(ServerDataObserver d){
+		this.addObserver(d);
+	}
 	public Packet Push(PacketDataPro ProD, DatabaseInterface db,Hashtable<String,Session> SessionMap,Hashtable<Session,String> UserMap,Session s) throws Exception {
 		byte version[] = ProD.GetParamB();
 			 String username = ProD.GetParam();
@@ -24,8 +27,8 @@ public class login extends Observable{
 		if ((version[0] == Val.F_version) && (version[1] == Val.S_version)) {
 			try {
 				if (db.checkPassword(username, password)) {
-					if (ProD.GetParamB()[0] == 0){db.setVisible(username,false);}
-					else{db.setVisible(username,true);}					
+					//if (ProD.GetParamB()[0] == 0){db.setVisible(username,false);}
+					//else{db.setVisible(username,true);}					
 					Pack.SetData(Val.Check_T,Val.Blank, Val.Login, Val.LoginCheck);
 					Pack.SetParamS(ID_Manager.setID(username));
 					SessionMap.put(username,s);
@@ -58,9 +61,9 @@ public class login extends Observable{
 				}
 			} catch (Exception e) {
 				Pack.SetData(Val.Check_F, Val.Unknow, Val.Login, Val.LoginCheck);
+				e.printStackTrace();
 				setChanged();
 				notifyObservers(new String[]{username,"无","无","登录失败：未知错误"});
-				e.printStackTrace();
 				throw new Exception("Unknow");
 			}
 		} else {

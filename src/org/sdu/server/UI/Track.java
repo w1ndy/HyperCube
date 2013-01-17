@@ -9,35 +9,43 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 
 public class Track extends Shell {
 	private Table table;
-
+	private TrackDataObserver d;
+	private Label label;
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		try {
-			Display display = Display.getDefault();
-			Track shell = new Track(display);
-			shell.open();
-			shell.layout();
-			while (!shell.isDisposed()) {
-				if (!display.readAndDispatch()) {
-					display.sleep();
+		Display display = Display.getDefault();
+		Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
+			public void run() {
+				try {
+					Display display = Display.getDefault();
+					Track shell = new Track(display);
+					shell.open();
+					shell.layout();
+					while (!shell.isDisposed()) {
+						if (!display.readAndDispatch()) {
+							display.sleep();
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
 
 	/**
@@ -53,7 +61,7 @@ public class Track extends Shell {
 		group.setText("实时信息");
 		
 		table = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
-		table.setBounds(10, 22, 690, 394);
+		table.setBounds(10, 22, 690, 388);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
@@ -66,14 +74,18 @@ public class Track extends Shell {
 		tableColumn_1.setText("请求");
 		
 		TableColumn tableColumn_2 = new TableColumn(table, SWT.NONE);
-		tableColumn_2.setWidth(100);
+		tableColumn_2.setWidth(409);
 		tableColumn_2.setText("内容");
+		
+		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
+		tblclmnNewColumn.setWidth(72);
+		tblclmnNewColumn.setText("状态");
 		
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBounds(715, 3, 137, 65);
 		composite.setLayout(null);
 		
-		Label label = new Label(composite, SWT.NONE);
+		label = new Label(composite, SWT.NONE);
 		label.setBounds(5, 5, 48, 14);
 		label.setText("数据流量");
 		
@@ -144,4 +156,7 @@ public class Track extends Shell {
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
-}
+
+	
+	}
+
