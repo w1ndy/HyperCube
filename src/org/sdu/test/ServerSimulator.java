@@ -98,9 +98,10 @@ public class ServerSimulator extends SessionHandler
 				break;
 			case 0x03:
 				if(p.getData().get(1) == 0x06) {
-					buf = ByteBuffer.allocate(10);
-					buf.put(new byte[] { 0, 0, 3, 6, 5, 0, 0x16, 'h', 't', 't', 'p', ':', '/', '/', '1', '2', '7', '.', '0',
-							'.', '0', '.', '1', '/', '1', '.', 'j', 'p', 'g'});
+					byte[] addr = new byte[] { 0, 0, 3, 6, 5, 0, 0x16, 'h', 't', 't', 'p', ':', '/', '/', '1', '2', '7', '.', '0',
+							'.', '0', '.', '1', '/', '1', '.', 'j', 'p', 'g'};
+					buf = ByteBuffer.allocate(addr.length);
+					buf.put(addr);
 					buf.flip();
 					s.post(new Packet(buf));
 				}
