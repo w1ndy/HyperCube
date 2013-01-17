@@ -11,3 +11,6 @@
 # Log Files #
 *.log
 *.stackdump
+
+# Application Temp #
+users

@@ -11,7 +11,7 @@ import org.sdu.util.DebugFramework;
  */
 public class PacketGetAvatar extends Packet{
 
-	public PacketGetAvatar(String signature,String id){
+	public PacketGetAvatar(String id){
 		try {
 			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainSend, Command.cmdGetAvatar,
 					id.getBytes("UTF-8"));

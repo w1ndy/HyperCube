@@ -1,12 +1,11 @@
 package org.sdu.client;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -25,6 +24,7 @@ import org.sdu.ui.PanelSwitcher;
 import org.sdu.ui.PushMessage;
 import org.sdu.ui.RefreshablePanel;
 import org.sdu.ui.TextBox;
+import org.sdu.ui.UIHelper;
 
 import com.sun.awt.AWTUtilities;
 
@@ -42,6 +42,7 @@ public class MainUIHandler extends UIHandler
 	private DashboardPanel panel;
 	private ClientFrame frame;
 	private UserInfo info;
+	private TrayIcon trayIcon;
 	
 	public MainUIHandler(UserInfo info)
 	{
@@ -51,8 +52,24 @@ public class MainUIHandler extends UIHandler
 		createPanelSwitcher();
 		createDashboardPanel();
 		createFriendPanel();
+		createTrayIcon();
 	}
 	
+	private void createTrayIcon()
+	{
+		try {
+			if(!SystemTray.isSupported()) {
+				throw new Exception("System tray not supported.");
+			}
+			trayIcon = new TrayIcon((Image)UIHelper.getResource("ui.common.icon"), "HyperCube");
+			trayIcon.setImageAutoSize(true);
+			SystemTray.getSystemTray().add(trayIcon);
+		} catch (Exception e) {
+			e.printStackTrace();
+			trayIcon = null;
+		}
+	}
+
 	private void createFriendPanel()
 	{
 		JPanel p = new JPanel();
@@ -101,9 +118,8 @@ public class MainUIHandler extends UIHandler
 
 	private void createUserAvatarBox()
 	{
-		userAvatarBox = new AvatarBox(true);
+		userAvatarBox = info.getUserAvatar();
 		userAvatarBox.setLocation(15, 15);
-		userAvatarBox.setAvatar(info.getUserAvatar());
 	}
 	
 	private void createSignatureTextBox()
@@ -159,14 +175,15 @@ public class MainUIHandler extends UIHandler
 	public void onAttach(ClientUI ui)
 	{
 		frame = getFrame();
-		
+
+		frame.startExpanding(680);
 		frame.setTitle(info.getNickName());
 		frame.setSubtitle("");
-		frame.startExpanding(680);
 		frame.add(userAvatarBox);
 		frame.add(signatureTextBox);
 		frame.add(switcher);
 		frame.setTitleLocation(110, 17);
+		frame.setLocation(frame.getX() + 300, frame.getY() - 250);
 		// TODO Initialize main frame.
 	}
 

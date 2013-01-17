@@ -2,9 +2,11 @@ package org.sdu.client;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import javax.imageio.ImageIO;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 
@@ -65,6 +67,15 @@ public class LoginUIHandler extends UIHandler
 					return false;
 				}
 			}
+			File f = new File("users/" + userBox.getText() + "/avatar.jpg");
+			if(f.exists()) {
+				try {
+					avatarBox.setAvatar(ImageIO.read(f));
+					avatarBox.repaint();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 			return true;
 		}
 	};
@@ -74,6 +85,11 @@ public class LoginUIHandler extends UIHandler
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				passBox.requestFocus();
+			} else {
+				if(avatarBox.getAvatar() != null) {
+					avatarBox.setAvatar(null);
+					avatarBox.repaint();
+				}
 			}
 		}
 
@@ -306,12 +322,12 @@ public class LoginUIHandler extends UIHandler
 	private void onSuccessfulLogin(Session s, String sessionId)
 	{
 		log("Login succeeded.");
-		getFrame().stopProgressBar();
-		info = new UserInfo(userBox.getText(), sessionId);
+		info = new UserInfo(userBox.getText(), sessionId, avatarBox.isInvisible());
 		fetchRequestCount = info.sendFetchRequest(s);
 		if(fetchRequestCount == 0) {
 			getDispatcher().attach(new MainUIHandler(info));
 		}
+		isLoggedin = true;
 	}
 	
 	private void onFailedLogin(Session s, byte errorCode)
@@ -370,7 +386,8 @@ public class LoginUIHandler extends UIHandler
 		synchronized(fetchLock) {
 			fetchRequestCount += k;
 			fetchRequestCount--;
-			if(fetchRequestCount < 0) {
+			if(fetchRequestCount <= 0) {
+				getFrame().stopProgressBar();
 				getDispatcher().attach(new MainUIHandler(info));
 			}
 		}
@@ -406,10 +423,11 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().add(registerLink);
 		ui.getFrame().add(notifier);
 
+		ui.getFrame().setLocationRelativeTo(null);
 		ui.getFrame().setVisible(true);
 		
 		// TODO DEBUG redirect login to main.
-		//getDispatcher().attach(new MainUIHandler(fetchInfo()));
+		// getDispatcher().attach(new MainUIHandler(new UserInfo("201200301244", "")));
 	}
 
 	@Override
