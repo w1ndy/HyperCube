@@ -49,12 +49,16 @@ public class ServerMan {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 					try {
-						core = new Core(db);
+						if (core == null){core = new Core();
 						MessageBox message = new MessageBox(shell,SWT.OK);
 						message.setMessage("服务器已运行");
 		                message.setText("服务器已运行");
-		                message.open();
-					} catch (Exception e1) {	
+		                message.open();}else
+		                {MessageBox message = new MessageBox(shell,SWT.OK);
+						message.setMessage("服务器已经在运行，请勿重复开启");
+		                message.setText("错误");
+		                message.open();}
+					} catch (Exception e1) {
 						if (e1.getMessage().equals("DB")){
 							MessageBox message = new MessageBox(shell,SWT.OK);
 							message.setMessage("服务器连接数据库失败");

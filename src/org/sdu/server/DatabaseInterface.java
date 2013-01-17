@@ -2,6 +2,8 @@ package org.sdu.server;
 
 import java.net.InetAddress;
 
+import org.sdu.database.Message;
+
 public interface DatabaseInterface {
 	/**
 	 * Set user Online
@@ -54,23 +56,15 @@ public interface DatabaseInterface {
 	 * @param id
 	 * @throws Exception
 	 */
-	public String[] getMessage(String Message,String id) throws Exception;
+	public void setMessage(String Message,String from,String receiver,boolean notification,boolean read) throws Exception;
+	/**
+	 * Get  Messages for user
+	 * @param Message
+	 * @param id
+	 * @throws Exception
+	 */
+	public Message[] getMessage(String id) throws Exception;
 	
-	/**
-	 * Send a Notification to user 
-	 * @param Notification
-	 * @param id
-	 * @throws Exception
-	 */
-	public void setNotification(String Notification,String id) throws Exception;
-	/**
-	 * 
-	 * @param id
-	 * @param timestamp
-	 * @return The Notifications whose time bigger than the given time
-	 * @throws Exception
-	 */
-	public String[] getNotification(String id,long timestamp) throws Exception;
 	/**
 	 * return the account is freeze or not
 	 * @param id
@@ -135,16 +129,30 @@ public interface DatabaseInterface {
 	public String[] getUserGroup(String SQL_Query) throws Exception;
 	/**
 	 * 
-	 * @param id 
-	 * @param Data the Data for the Message
-	 * @param read The Message is read or not
+	 * @param id
+	 * @param Data
 	 * @throws Exception
 	 */
-	public void chatdatabackup(String id,String Data,boolean read) throws Exception;
-	
-	
-
-	
+	public void setStatus(String id,String Data) throws Exception;
+	/**
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
+	public String getStatus(String id) throws Exception;
+	/**
+	 * 
+	 * @param id
+	 * @param URL
+	 * @throws Exception
+	 */
+	public void setHeadImage(String id,String URL) throws Exception;
+	/**
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
+	public String getHeadImage(String id) throws Exception;
 	/**
 	 * Close the connection to database
 	 */

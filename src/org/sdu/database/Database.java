@@ -130,45 +130,38 @@ public class Database implements DatabaseInterface {
 	public void setOnline(String id, boolean visible, InetAddress IP)
 			throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
-
-	@Override
-	public void setNotification(String Notification, String id)
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String[] getUserGroup(String SQL_Query) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Override
 	public void setVisible(String id) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void setInvisible(String id) throws Exception {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String[] getNotification(String id, long timestamp) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
 	public void setFreeze(String id) throws Exception {
 		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void setMessage(String Message, String from, String receiver,
+			boolean notification, boolean read) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Message[] getMessage(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -184,15 +177,34 @@ public class Database implements DatabaseInterface {
 	}
 
 	@Override
-	public String[] getMessage(String Message, String id) throws Exception {
+	public String[] getUserGroup(String SQL_Query) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void chatdatabackup(String id, String Data, boolean read)
-			throws Exception {
+	public void setStatus(String id, String Data) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getStatus(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setHeadImage(String id, String URL) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getHeadImage(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

@@ -82,7 +82,12 @@ public class Core extends SessionHandler {
 	 */
 	@Override
 	public void onPacketReceived(Session s, Packet p) {
-		
+			try {
+				db = new Database();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		process.Push(p.getData(),db,s,SessionMap,UserMap);// Process
 		try {
 			for (int i = 0; i<process.GetData().getLength();i++)
@@ -117,17 +122,16 @@ public class Core extends SessionHandler {
 	/**
 	 * @param args
 	 */
-	public Core(DatabaseInterface db1) throws Exception
-	{
+	public Core() throws Exception
+	{		
+		try {
+				db = new Database();
+			} catch (Exception e1) {
+				throw new Exception("DB");
+		}
 		SessionMap = new Hashtable<String,Session>();
 		UserMap = new Hashtable<Session,String>();
 		//Init for more;
-		db = db1;
-		try {
-			db = new Database();
-		} catch (Exception e) {
-			throw new Exception("DB");
-		}
 		server = new NetworkServer(this, port);
 		server.start(false);
 		

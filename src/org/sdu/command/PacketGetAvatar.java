@@ -11,9 +11,10 @@ import org.sdu.util.DebugFramework;
  */
 public class PacketGetAvatar extends Packet{
 
-	public PacketGetAvatar(String signature){
+	public PacketGetAvatar(String signature,String id){
 		try {
-			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainSend, Command.cmdGetAvatar);
+			dataBuffer = PacketBufferFactory.makePacket(Command.cmdMainSend, Command.cmdGetAvatar,
+					id.getBytes("UTF-8"));
 		} catch(Exception e) {
 			DebugFramework.getFramework().print("Encoding not found: " + e);
 		}
