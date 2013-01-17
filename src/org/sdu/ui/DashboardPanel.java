@@ -59,7 +59,7 @@ public class DashboardPanel extends JPanel
 	{
 		c.addMouseListener(mouseListener);
 		c.addMouseMotionListener(mouseMotionListener);
-		return super.add(c);
+		return super.add(c, 0);
 	}
 	
 	@Override

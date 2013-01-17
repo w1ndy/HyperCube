@@ -68,6 +68,11 @@ public class MainUIHandler extends UIHandler
 		msg.setTitle("标题");
 		msg.setContent("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息");
 		panel.add(msg);
+
+		msg = new PushMessage();
+		msg.setTitle("Title");
+		msg.setContent("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息");
+		panel.add(msg);
 		
 		switcher.addPanel(new RefreshablePanel(panel) {
 			private static final long serialVersionUID = 1L;
