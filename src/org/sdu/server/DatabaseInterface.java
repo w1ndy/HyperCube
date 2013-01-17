@@ -1,7 +1,5 @@
 package org.sdu.server;
 
-import java.net.InetAddress;
-
 import org.sdu.database.Message;
 
 public interface DatabaseInterface {
@@ -11,7 +9,7 @@ public interface DatabaseInterface {
 	 * @param visible
 	 * @throws Exception
 	 */
-	public void setOnline(String id, boolean visible,InetAddress IP) throws Exception;
+	public void setOnline(String id, boolean visible) throws Exception;
 	/**
 	 * Set user Offline
 	 * @param id
@@ -30,13 +28,7 @@ public interface DatabaseInterface {
 	 * @param id
 	 * @throws Exception
 	 */
-	public void setVisible(String id) throws Exception;
-	/**
-	 * Set a user to Invisible
-	 * @param id
-	 * @throws Exception
-	 */
-	public void setInvisible(String id) throws Exception;
+	public void setVisible(String id,boolean visible) throws Exception;
 	/**
 	 * Get user Visible or not
 	 * @param id
@@ -49,7 +41,7 @@ public interface DatabaseInterface {
 	 * @param id
 	 * @throws Exception
 	 */
-	public void setFreeze(String id) throws Exception;
+	public void setFreeze(String id,boolean freeze) throws Exception;
 	/**
 	 * Get  Messages for user
 	 * @param Message
@@ -71,7 +63,7 @@ public interface DatabaseInterface {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean Freeze(String id) throws Exception;
+	public boolean getFreeze(String id) throws Exception;
 	/**
 	 * Delete exist user
 	 * @param id
@@ -153,6 +145,13 @@ public interface DatabaseInterface {
 	 * @throws Exception
 	 */
 	public String getHeadImage(String id) throws Exception;
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public String getRealName(String id) throws Exception;
 	/**
 	 * Close the connection to database
 	 */

@@ -40,8 +40,8 @@ public final class Val {
 		public final static	byte SendNotificationA = 0x01;
 		public final static	byte SendNotificationR = 0x02;
 		
-		public final static	byte SendImage = 0x03;
-		public final static	byte SendStateData = 0x04;
+		public final static	byte SendImage = 0x06;
+		public final static	byte SendStatusData = 0x04;
 	public final static	byte SendFriendList = 0x05;
 		public final static	byte SendFriendName = 0x01;
 		public final static	byte SendFriendDetail = 0x02;
