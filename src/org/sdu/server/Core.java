@@ -3,9 +3,8 @@
  */
 package org.sdu.server;
 
-import java.io.IOException;
 import java.nio.channels.SocketChannel;
-import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.sdu.server.DatabaseInterface;
 import org.sdu.database.Database;
@@ -22,8 +21,8 @@ import org.sdu.util.DebugFramework;
 public class Core extends SessionHandler {
 	public static final int port = 21071;
 	public static final DebugFramework debugger = DebugFramework.getFramework();
-	private static HashMap<String,Session> SessionMap;
-	private static HashMap<Session,String> UserMap;
+	private static Hashtable<String,Session> SessionMap;
+	private static Hashtable<Session,String> UserMap;
 	private NetworkServer server;
 	private DatabaseInterface db;
 	
@@ -120,8 +119,9 @@ public class Core extends SessionHandler {
 	 */
 	public Core(DatabaseInterface db1) throws Exception
 	{
-		SessionMap = new HashMap<String,Session>();
-		UserMap = new HashMap<Session,String>();
+		SessionMap = new Hashtable<String,Session>();
+		UserMap = new Hashtable<Session,String>();
+		//Init for more;
 		db = db1;
 		try {
 			db = new Database();

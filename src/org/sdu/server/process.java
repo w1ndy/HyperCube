@@ -6,7 +6,7 @@ import org.sdu.net.Session;
 import org.sdu.server.ProcessTools.*;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
+import java.util.Hashtable;
 /**
  * process for Incoming Packet and return the request data
  * post Packet to target
@@ -17,9 +17,9 @@ public class process {
 	private static ByteBuffer indata;
 	private static DatabaseInterface db;
 	private static Session s;
-	private static HashMap<String,Session> SessionMap;
-	private static HashMap<Session,String> UserMap;
-	public static void Push(ByteBuffer p,DatabaseInterface db,Session s,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap){
+	private static Hashtable<String,Session> SessionMap;
+	private static Hashtable<Session,String> UserMap;
+	public static void Push(ByteBuffer p,DatabaseInterface db,Session s,Hashtable<String,Session> SessionMap,Hashtable<Session,String> UserMap){
 		indata = p;
 		process.s = s;
 		process.db = db;

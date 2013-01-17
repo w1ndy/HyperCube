@@ -1,6 +1,6 @@
 package org.sdu.server.ProcessTools;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -13,7 +13,7 @@ import org.sdu.server.Val;
 public class trans {
 	public static byte[] timestamp;
 	public static long times;
-	public static Packet PushforNotification(PacketDataPro ProD, DatabaseInterface db,HashMap<Session,String> UserMap,Session s) {
+	public static Packet PushforNotification(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		timestamp = ProD.GetParamB();
 		times = (timestamp[0]<<56)+(timestamp[1]<<48)+(timestamp[2]<<40)
@@ -27,7 +27,7 @@ public class trans {
 		}
 		return Pack.GetData();
 	}
-	public static Packet PushforFriendList(PacketDataPro ProD, DatabaseInterface db,HashMap<Session,String> UserMap,Session s) {
+	public static Packet PushforFriendList(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Pack.SetData(Val.Check_T,Val.SendFriendList,Val.SendFriendName);
 		try {
@@ -37,7 +37,7 @@ public class trans {
 		}
 		return Pack.GetData();
 	}
-	public static Packet PushforFriendDetail(PacketDataPro ProD, DatabaseInterface db,HashMap<Session,String> UserMap,Session s) {
+	public static Packet PushforFriendDetail(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Pack.SetData(Val.Check_T,Val.SendFriendList,Val.SendFriendDetail);
 		//TODO unfinished
