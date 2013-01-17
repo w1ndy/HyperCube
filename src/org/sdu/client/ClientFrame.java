@@ -18,7 +18,7 @@ import org.sdu.ui.UIHelper;
 /**
  * ClientFrame class handles basic stuffs in frame.
  * 
- * @version 0.1 rev 8003 Jan. 6, 2013.
+ * @version 0.1 rev 8004 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class ClientFrame extends BasicFrame
@@ -61,7 +61,7 @@ public class ClientFrame extends BasicFrame
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(getHeight() < targetHeight) {
-				setSize(getWidth(), getHeight() + 25);
+				setSize(getWidth(), getHeight() + 55);
 				progressor.setBounds(UIHelper.progressBarLoginOffsetX, getHeight() - 9,
 						UIHelper.progressBarWidth, UIHelper.progressBarHeight);
 			} else {

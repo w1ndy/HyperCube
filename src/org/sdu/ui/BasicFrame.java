@@ -17,10 +17,12 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.sun.awt.AWTUtilities;
+
 /**
  * Basic class implements the basic UI.
  * 
- * @version 0.1 rev 8007 Jan. 15, 2013.
+ * @version 0.1 rev 8007 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class BasicFrame extends JFrame
@@ -310,9 +312,9 @@ public class BasicFrame extends JFrame
 		makeMovable();
 		
 		setUndecorated(true);
-		setBackground(new Color(0, 0, 0, 0));
+		AWTUtilities.setWindowOpaque(this, false);
 
-		setContentPane(new JPanel() {
+		setContentPane(new JPanel(null) {
 			private static final long serialVersionUID = 1L;
 			private Color bk = new Color(((BufferedImage)imageFrame).getRGB(UIHelper.frameBlockSize, UIHelper.frameBlockSize));
 			
@@ -320,6 +322,7 @@ public class BasicFrame extends JFrame
 			public void paintComponent(Graphics g)
 			{
 				Graphics2D g2d = (Graphics2D)g;
+				//System.out.println("Frame redrawing...");
 				drawBasicFrame(g2d, bk);
 				if(imageTitle != null) {
 					g2d.drawImage(imageTitle, titleOffsetX, titleOffsetY, this);
