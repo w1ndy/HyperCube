@@ -118,9 +118,8 @@ public class MainUIHandler extends UIHandler
 
 	private void createUserAvatarBox()
 	{
-		userAvatarBox = new AvatarBox(true);
+		userAvatarBox = info.getUserAvatar();
 		userAvatarBox.setLocation(15, 15);
-		userAvatarBox.setAvatar(info.getUserAvatar());
 	}
 	
 	private void createSignatureTextBox()

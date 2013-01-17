@@ -3,7 +3,6 @@ package org.sdu.client;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -68,6 +67,15 @@ public class LoginUIHandler extends UIHandler
 					return false;
 				}
 			}
+			File f = new File("users/" + userBox.getText() + "/avatar.jpg");
+			if(f.exists()) {
+				try {
+					avatarBox.setAvatar(ImageIO.read(f));
+					avatarBox.repaint();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 			return true;
 		}
 	};
@@ -76,15 +84,6 @@ public class LoginUIHandler extends UIHandler
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				File f = new File("users/" + userBox.getText() + "/avatar.jpg");
-				if(f.exists()) {
-					try {
-						avatarBox.setAvatar(ImageIO.read(f));
-						avatarBox.repaint();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
 				passBox.requestFocus();
 			} else {
 				if(avatarBox.getAvatar() != null) {
@@ -323,7 +322,7 @@ public class LoginUIHandler extends UIHandler
 	private void onSuccessfulLogin(Session s, String sessionId)
 	{
 		log("Login succeeded.");
-		info = new UserInfo(userBox.getText(), sessionId);
+		info = new UserInfo(userBox.getText(), sessionId, avatarBox.isInvisible());
 		fetchRequestCount = info.sendFetchRequest(s);
 		if(fetchRequestCount == 0) {
 			getDispatcher().attach(new MainUIHandler(info));

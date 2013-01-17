@@ -1,6 +1,5 @@
 package org.sdu.test;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
