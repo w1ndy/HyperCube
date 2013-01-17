@@ -6,13 +6,14 @@ import org.sdu.net.Session;
 import org.sdu.net.SessionHandler;
 import org.sdu.util.DebugFramework;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
  * A echo server test.
  * 
- * @version 0.1 rev 8005 Jan. 1, 2013.
+ * @version 0.1 rev 8006 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class EchoServerTest extends SessionHandler
@@ -34,7 +35,11 @@ public class EchoServerTest extends SessionHandler
 	public EchoServerTest()
 	{
 		server = new NetworkServer(this, port);
-		server.start(true);
+		try {
+			server.start(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -83,7 +88,7 @@ public class EchoServerTest extends SessionHandler
 			while(buf.hasRemaining()) {
 				System.out.printf("0x%02X ", buf.get());
 			}
-			//s.post(p);
+			s.post(p);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

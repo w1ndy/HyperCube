@@ -1,5 +1,6 @@
 package org.sdu.net;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -10,7 +11,7 @@ import org.sdu.util.DebugFramework;
  * NetworkServer class listens on a specified port, accepting and processing
  * the incoming connections.
  * 
- * @version 0.1 rev 8002 Dec. 31, 2012.
+ * @version 0.1 rev 8003 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class NetworkServer implements Runnable
@@ -28,6 +29,7 @@ public class NetworkServer implements Runnable
 	/**
 	 * Initialize a NetworkServer object listening on given port with a
 	 * SessionHandler receiving events.
+	 * @throws IOException 
 	 */
 	public NetworkServer(SessionHandler handler, int port)
 	{
@@ -40,13 +42,18 @@ public class NetworkServer implements Runnable
 	
 	/**
 	 * Start the server in blocking or non-blocking mode.
+	 * @throws IOException 
 	 */
-	public boolean start(boolean isBlocking)
+	public boolean start(boolean isBlocking) throws IOException
 	{
 		if(isRunning) {
 			debug.print("Another instance is running.");
 			return false;
 		}
+
+		channelServer = ServerSocketChannel.open();
+		channelServer.configureBlocking(true);
+		channelServer.bind(new InetSocketAddress(port));
 		
 		isRunning = true;
 		if(isBlocking)
@@ -61,7 +68,14 @@ public class NetworkServer implements Runnable
 	 */
 	public void stop()
 	{
-		isRunning = false;
+		if(isRunning) {
+			try {
+				isRunning = false;
+				channelServer.close();
+			} catch (Exception e) {
+				System.out.println("Error while closing server: " + e);
+			}
+		}
 	}
 	
 	/**
@@ -78,9 +92,6 @@ public class NetworkServer implements Runnable
 	@Override
 	public void run() {
 		try {
-			channelServer = ServerSocketChannel.open();
-			channelServer.configureBlocking(true);
-			channelServer.bind(new InetSocketAddress(port));
 			pool.start(handler);
 			while(isRunning) {
 				SocketChannel c = channelServer.accept();
@@ -97,12 +108,19 @@ public class NetworkServer implements Runnable
 			}
 		} catch(Exception e) {
 			System.out.println("Unexpected fatal error: " + e);
+			isRunning = false;
 			try {
-				pool.stop();
-				if(channelServer != null) channelServer.close();
-			} catch (Throwable t) {}
+				channelServer.close();
+			} catch (Exception e1) {}
+		} finally {
+			try {
+				if(pool.isRunning())
+					pool.stop();
+				handler.onShutdown();
+			} catch (Exception e) {
+				System.out.println("Unexpected fatal error: " + e);
+			}
 		}
-		handler.onShutdown();
 	}
 	
 	/**

@@ -6,18 +6,20 @@ import java.io.IOException;
  * DispatcherPool manages dispatchers by a heap, and extract the one
  * with minimized connection count for each session.
  * 
- * @version 0.1 rev 8000 Dec. 30, 2012.
+ * @version 0.1 rev 8001 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
 public class DispatcherPool
 {
 	private Dispatcher[] pool;
+	private boolean bRunning;
 	
 	/**
 	 * Initialize a DispatcherPool object with specified size.
 	 */
 	public DispatcherPool(int size)
 	{
+		bRunning = false;
 		pool = new Dispatcher[size];
 		
 		for(int i = 0; i < size; i++) {
@@ -33,6 +35,7 @@ public class DispatcherPool
 		for(Dispatcher d : pool) {
 			d.start(h);
 		}
+		bRunning = true;
 	}
 	
 	/**
@@ -40,6 +43,7 @@ public class DispatcherPool
 	 */
 	public void stop() throws IOException
 	{
+		bRunning = false;
 		for(Dispatcher d : pool) {
 			d.stop();
 		}
@@ -62,5 +66,13 @@ public class DispatcherPool
 			}
 		}
 		return d;
+	}
+	
+	/**
+	 * Is pool running.
+	 */
+	public boolean isRunning()
+	{
+		return bRunning;
 	}
 }
