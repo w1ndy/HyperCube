@@ -8,7 +8,7 @@
 	<entry name="ui.common.icon" type="image">ui/common/icon.png</entry>
 	<entry name="ui.status.notify" type="image">ui/status/notify.png</entry>
 	<entry name="ui.main.refresh" type="image">ui/main/refresh.png</entry>
-	<entry name="ui.main.active" type="image">ui/main/active.png</entry>
+	<entry name="ui.main.active" type="image">ui/main/active_expand.png</entry>
 	<entry name="ui.main.inactive" type="image">ui/main/inactive.png</entry>
 	
 	<entry name="ui.font.title" type="font">
