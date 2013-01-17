@@ -27,8 +27,8 @@ public class login {
 					else{db.setVisible(username);}
 					Pack.SetData(Val.Check_T, Val.Login, Val.LoginCheck);
 					Pack.SetParamS(ID_Manager.setID(username));
-					SessionMap.put(username, s);
-					UserMap.put(s, username);
+					SessionMap.put(username,s);
+					UserMap.put(s,username);
 				} else {
 					if (!db.checkExist(username)){
 						Pack.SetData(Val.Check_F, Val.NotExist, Val.Login,Val.LoginCheck);
@@ -47,6 +47,7 @@ public class login {
 				}
 			} catch (Exception e) {
 				Pack.SetData(Val.Check_F, Val.Unknow, Val.Login, Val.LoginCheck);
+				e.printStackTrace();
 				throw new Exception("Unknow");
 			}
 		} else {

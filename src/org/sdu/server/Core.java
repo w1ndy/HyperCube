@@ -86,6 +86,9 @@ public class Core extends SessionHandler {
 		
 		process.Push(p.getData(),db,s,SessionMap,UserMap);// Process
 		try {
+			for (int i = 0; i<process.GetData().getLength();i++)
+			{System.out.print(process.GetData().getDataArray()[i]);
+			System.out.print(' ');}
 			s.post(process.GetData());
 		} catch (Exception e) {
 			if (e.getMessage().equals("Unknow"))
@@ -117,6 +120,8 @@ public class Core extends SessionHandler {
 	 */
 	public Core(DatabaseInterface db1) throws Exception
 	{
+		SessionMap = new HashMap<String,Session>();
+		UserMap = new HashMap<Session,String>();
 		db = db1;
 		try {
 			db = new Database();
@@ -124,7 +129,7 @@ public class Core extends SessionHandler {
 			throw new Exception("DB");
 		}
 		server = new NetworkServer(this, port);
-		server.start(true);
+		server.start(false);
 		
 	}
 	public void CloseServer() throws Exception
