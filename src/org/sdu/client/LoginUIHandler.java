@@ -427,7 +427,7 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().setVisible(true);
 		
 		// TODO DEBUG redirect login to main.
-		// getDispatcher().attach(new MainUIHandler(new UserInfo("201200301244", "")));
+		// getDispatcher().attach(new MainUIHandler(new UserInfo("201200301244", "", true)));
 	}
 
 	@Override

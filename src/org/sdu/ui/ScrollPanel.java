@@ -53,7 +53,6 @@ public class ScrollPanel extends JPanel
 					}
 					panel.setLocation(0, -offset);
 					repaint();
-					System.out.println(getRemainingPageHeight());
 				}
 			}
 		});
