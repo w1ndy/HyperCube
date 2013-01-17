@@ -9,5 +9,12 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="org.eclipse.swt"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.core.databinding_1.4.1.v20120521-2329.jar" sourcepath="D:/eclipse/plugins/org.eclipse.core.databinding_1.4.1.v20120521-2329.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20120523-1955.jar" sourcepath="D:/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20120523-1955.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.core.databinding.observable_1.4.1.v20120521-2329.jar" sourcepath="D:/eclipse/plugins/org.eclipse.core.databinding.observable_1.4.1.v20120521-2329.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.core.databinding.property_1.4.100.v20120523-1955.jar" sourcepath="D:/eclipse/plugins/org.eclipse.core.databinding.property_1.4.100.v20120523-1955.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.jface.databinding_1.6.0.v20120521-2329.jar" sourcepath="D:/eclipse/plugins/org.eclipse.jface.databinding_1.6.0.v20120521-2329.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.equinox.common_3.6.100.v20120522-1841.jar" sourcepath="D:/eclipse/plugins/org.eclipse.equinox.common_3.6.100.v20120522-1841.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/com.ibm.icu_4.4.2.v20110823.jar" sourcepath="D:/eclipse/plugins/com.ibm.icu_4.4.2.v20110823.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
