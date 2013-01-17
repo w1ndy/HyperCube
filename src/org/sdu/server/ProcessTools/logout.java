@@ -12,7 +12,7 @@ import org.sdu.server.Val;
 public class logout {
 	public static Packet Push(PacketDataPro ProD,DatabaseInterface db,Hashtable<String,Session> SessionMap,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
-		Pack.SetData(Val.Check_F,Val.Logout);
+		Pack.SetData(Val.Check_F,Val.Blank,Val.Logout,Val.LogoutReply);
 		SessionMap.remove(UserMap.get(s));
 		UserMap.remove(s);
 		return Pack.GetData();

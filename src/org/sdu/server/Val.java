@@ -13,9 +13,6 @@ public final class Val {
 	/**
 	 *  Flag Code
 	 */
-	public final static byte Check_T = 0x00;
-	public final static byte Check_F = 0x01;
-	public final static	byte Unknow = 0x00;
 	public final static byte UnSupportVer = 0x01;
 	public final static	byte WrongPass = 0x02;
 	public final static	byte UnReg = 0x03;
@@ -24,16 +21,39 @@ public final class Val {
 	public final static	byte AlreadyExist = 0x01;
 	public final static	byte NoAuthority = 0x02;
 	public final static	byte NotExist = 0x01;
-	public final static	byte Login = 0x01;
-	public final static	byte Logout = 0x02;
-	public final static	byte LoginCheck =0x01;
-	public final static	byte DataTrans = 0x03;
-	public final static	byte SendNotificationA = 0x01;
-	public final static	byte SendNotificationR = 0x02;
-	public final static	byte SendMessage = 0x03;
-	public final static	byte SendFriendList = 0x05;
-	public final static	byte SendFriendName = 0x01;
-	public final static	byte SendFriendDetail = 0x02;
+	public final static	byte NoNewMess = 0x01;
+	
+	//For All
+	public final static byte Check_T = 0x00;
+	public final static byte Check_F = 0x01;
+	public final static	byte Unknow = 0x00;
 	public final static byte Blank = 0x00;
+	/**
+	 * Inst Code
+	 */
+	//STC
+	public final static	byte Login = 0x01;
+		public final static	byte LoginCheck =0x01;
+	public final static	byte Logout = 0x02;
+		public final static	byte LogoutReply = 0x01;
+	public final static	byte DataTrans = 0x03;
+		public final static	byte SendNotificationA = 0x01;
+		public final static	byte SendNotificationR = 0x02;
+		
+		public final static	byte SendImage = 0x03;
+		public final static	byte SendStateData = 0x04;
+	public final static	byte SendFriendList = 0x05;
+		public final static	byte SendFriendName = 0x01;
+		public final static	byte SendFriendDetail = 0x02;
+	
+
+	
+
+
+	//public final static	byte SendMessage = 0x03;
+	
+
+	
+
 	
 }
