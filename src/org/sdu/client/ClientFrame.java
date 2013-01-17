@@ -57,11 +57,11 @@ public class ClientFrame extends BasicFrame
 		public void setEnabled(boolean arg0) {}
 	};
 	
-	private Timer timerRollingExpand = new Timer(10, new ActionListener() {
+	private Timer timerRollingExpand = new Timer(20, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(getHeight() < targetHeight) {
-				setSize(getWidth(), getHeight() + 55);
+				setSize(getWidth(), getHeight() + 45);
 				progressor.setBounds(UIHelper.progressBarLoginOffsetX, getHeight() - 9,
 						UIHelper.progressBarWidth, UIHelper.progressBarHeight);
 			} else {

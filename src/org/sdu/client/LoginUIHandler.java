@@ -424,10 +424,11 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().add(registerLink);
 		ui.getFrame().add(notifier);
 
+		ui.getFrame().setLocationRelativeTo(null);
 		ui.getFrame().setVisible(true);
 		
 		// TODO DEBUG redirect login to main.
-		//getDispatcher().attach(new MainUIHandler(fetchInfo()));
+		getDispatcher().attach(new MainUIHandler(new UserInfo("201200301244", "")));
 	}
 
 	@Override
