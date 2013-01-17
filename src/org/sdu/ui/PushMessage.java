@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -27,9 +29,9 @@ public class PushMessage extends JComponent
 	
 	private boolean isUnread = true;
 	private boolean isExpanded = false;
-	private String title = null;
-	private String content = null;
-	private String omitted = null;
+	private String title = "", author = "";
+	private Date date = null;
+	private ArrayList<String> multiline = null;
 	private FontMetrics fontMetrics = null;
 	private Image imageActive, imageInactive;
 	private int currentHeight, contentHeight;
@@ -130,22 +132,42 @@ public class PushMessage extends JComponent
 	{
 		g.setFont((Font)UIHelper.getResource("ui.font.msgtitle"));
 		if(title == null || title.length() == 0)
-			g.drawString("无标题", 20, 26);
+			g.drawString("无标题", 20, 28);
 		else
 			g.drawString(title, 20, 26);
 		if(!timerExpand.isRunning() && !timerCollapse.isRunning()) {
+			g.setFont((Font)UIHelper.getResource("ui.font.text"));
 			if(!isExpanded) {
-				g.setFont((Font)UIHelper.getResource("ui.font.text"));
-				if(omitted == null || omitted.length() == 0)
-					g.drawString("无内容", 20, 46);
-				else {
-					if(omitted.length() != content.length())
-						g.drawString(omitted + "....", 21, 46);
+				if(multiline == null || multiline.size() == 0) {
+					g.drawString("无内容", 20, 50);
+				} else {
+					if(multiline.size() != 1)
+						g.drawString(multiline.get(0) + "....", 21, 50);
 					else
-						g.drawString(omitted, 21, 46);
+						g.drawString(multiline.get(0), 21, 50);
 				}
 				g.setColor(UIHelper.darkColor);
 				g.drawString("更多内容", 20, 75);
+			} else {
+				if(multiline == null || multiline.size() == 0) {
+					g.drawString("无内容", 20, 50);
+				} else {
+					int i;
+					for(i = 0; i < multiline.size(); i++) {
+						g.drawString(multiline.get(i), 20, 50 + 22 * i);
+					}
+					g.setColor(UIHelper.darkColor);
+					
+					String sign = "Posted by ";
+					if(author == "")
+						sign += "Annoymous";
+					else
+						sign += author;
+					if(date != null)
+						sign += " @ " + date;
+					
+					g.drawString(sign, 20, 60 + 22 * i);
+				}
 			}
 		}
 	}
@@ -177,20 +199,31 @@ public class PushMessage extends JComponent
 		return "";
 	}
 	
-	public String getTitle() {
-		return title;
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getContent() {
-		return content;
+	public void setContent(String content) {		
+		if(multiline == null)
+			multiline = new ArrayList<String>();
+		
+		int s = 0;
+		for(int i = 1; i <= content.length(); i++) {
+			String str = content.substring(s, i);
+			if(fontMetrics.stringWidth(str) > 220) {
+				multiline.add(str);
+				s = i;
+			}
+		}
+		multiline.add(content.substring(s));
+		contentHeight = 22 * multiline.size() + 90;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
-		this.omitted = omitString(content, 215);
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }
