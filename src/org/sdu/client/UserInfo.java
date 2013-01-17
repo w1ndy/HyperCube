@@ -6,6 +6,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.sdu.command.PacketResolver;
+import org.sdu.net.Packet;
+import org.sdu.net.Session;
+
 /**
  * UserInfo class manages current user's information.
  * 
@@ -17,9 +21,19 @@ public class UserInfo
 	private Image avatar;
 	private String nickname, signature;
 	
-	public UserInfo()
+	public UserInfo(String userId, String sessionId)
 	{
 		generateDebugInfo();
+	}
+	
+	public int sendFetchRequest(Session s)
+	{
+		return 0;
+	}
+	
+	public int recvFetchRequest(Session s, Packet p, PacketResolver resolver)
+	{
+		return 0;
 	}
 	
 	private void generateDebugInfo()
