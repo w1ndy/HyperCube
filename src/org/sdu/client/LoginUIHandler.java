@@ -2,6 +2,7 @@ package org.sdu.client;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import javax.swing.InputVerifier;
@@ -32,6 +33,12 @@ public class LoginUIHandler extends UIHandler
 	private PasswordBox passBox;
 	private HyperLink registerLink;
 	private StatusNotifier notifier;
+	
+	private boolean isLoggedin = false;
+	private UserInfo info;
+	
+	private Object fetchLock = new Object();
+	private int fetchRequestCount = 0;
 	
 	private InputVerifier userBoxVerifier = new InputVerifier() {
 		private boolean check(String str)
@@ -296,38 +303,87 @@ public class LoginUIHandler extends UIHandler
 	@Override
 	public void onUnregisteredSession(SocketChannel c) {}
 
+	private void onSuccessfulLogin(Session s, String sessionId)
+	{
+		log("Login succeeded.");
+		getFrame().stopProgressBar();
+		info = new UserInfo(userBox.getText(), sessionId);
+		fetchRequestCount = info.sendFetchRequest(s);
+		if(fetchRequestCount == 0) {
+			getDispatcher().attach(new MainUIHandler(info));
+		}
+	}
+	
+	private void onFailedLogin(Session s, byte errorCode)
+	{
+		switch(errorCode)
+		{
+		case 0x01:
+			cancelLogin(CancelReason.UnsupportedVersion);
+			break;
+		case 0x02:
+			cancelLogin(CancelReason.IncorrectPassword);
+			break;
+		case 0x03:
+			cancelLogin(CancelReason.UnregisteredUser);
+			break;
+		case 0x04:
+			cancelLogin(CancelReason.FrozenUser);
+			break;
+		case 0x05:
+			cancelLogin(CancelReason.AlreadyOnline);
+			break;
+		case 0x00:
+		default:
+			cancelLogin(CancelReason.UnknownError);
+			break;
+		}
+		s.close();
+	}
+	
+	private void processLoginPacket(Session s, Packet p, PacketResolver resolver)
+	{
+		if(resolver.getStatusMain() == 0) {
+			PacketResolver.par param = resolver.getList().get(0);
+			byte[] buffer = new byte[param.length];
+			String id = null;
+			
+			try {
+				ByteBuffer buf = p.getData();
+				buf.position(param.pos);
+				buf.get(buffer);
+				id = new String(buffer, "UTF-8");
+			} catch(Exception e) {
+				e.printStackTrace();
+				cancelLogin(CancelReason.UnknownError);
+				s.close();
+			}
+			onSuccessfulLogin(s, id);
+		} else {
+			onFailedLogin(s, resolver.getInstSub());
+		}
+	}
+	
+	private void processFetchPacket(Session s, Packet p, PacketResolver resolver)
+	{
+		int k = info.recvFetchRequest(s, p, resolver);
+		synchronized(fetchLock) {
+			fetchRequestCount += k;
+			fetchRequestCount--;
+			if(fetchRequestCount < 0) {
+				getDispatcher().attach(new MainUIHandler(info));
+			}
+		}
+	}
+	
 	@Override
 	public void onPacketReceived(Session s, Packet p)
 	{
 		PacketResolver resolver = new PacketResolver(p);
-		if(resolver.getStatusMain() == 0) {
-			log("Login succeeded.");
-			getFrame().stopProgressBar();
-			getDispatcher().attach(new MainUIHandler(fetchInfo()));
+		if(!isLoggedin) {
+			processLoginPacket(s, p, resolver);
 		} else {
-			switch(resolver.getStatusSub())
-			{
-			case 0x01:
-				cancelLogin(CancelReason.UnsupportedVersion);
-				break;
-			case 0x02:
-				cancelLogin(CancelReason.IncorrectPassword);
-				break;
-			case 0x03:
-				cancelLogin(CancelReason.UnregisteredUser);
-				break;
-			case 0x04:
-				cancelLogin(CancelReason.FrozenUser);
-				break;
-			case 0x05:
-				cancelLogin(CancelReason.AlreadyOnline);
-				break;
-			case 0x00:
-			default:
-				cancelLogin(CancelReason.UnknownError);
-				break;
-			}
-			s.close();
+			processFetchPacket(s, p, resolver);
 		}
 	}
 
@@ -364,10 +420,5 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().remove(userBox);
 		ui.getFrame().remove(passBox);
 		ui.getFrame().remove(registerLink);
-	}
-	
-	public UserInfo fetchInfo()
-	{
-		return new UserInfo();
 	}
 }
