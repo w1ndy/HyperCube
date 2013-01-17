@@ -10,26 +10,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.sdu.server.Core;
-import org.sdu.server.DatabaseInterface;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.core.databinding.beans.PojoProperties;
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.core.databinding.Binding;
 
 public class ServerMan {
-	private Binding ServerData1;
 	private static Table table;
 	private static  ServerDataObserver d;
 	static Core core;
@@ -39,12 +25,9 @@ public class ServerMan {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Display display = Display.getDefault();
-		Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
-			public void run() {
 				Display display = Display.getDefault();
 				final Shell shell = new Shell(SWT.CLOSE | SWT.MIN | SWT.TITLE);
-				shell.setSize(461, 496);
+				shell.setSize(482, 501);
 				shell.setText("服务器管理程序");
 				
 				Label label = new Label(shell, SWT.NONE);
@@ -111,7 +94,7 @@ public class ServerMan {
 				label_1.setText("在线动态");
 				
 				table = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
-				table.setBounds(10, 96, 435, 362);
+				table.setBounds(10, 96, 456, 367);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
 				
@@ -146,7 +129,7 @@ public class ServerMan {
 				TableItem item14=new TableItem(table,SWT.NONE); 
 				TableItem item15=new TableItem(table,SWT.NONE); 
 				TableItem item16=new TableItem(table,SWT.NONE);
-				d = new ServerDataObserver(item1,display);
+				d = new ServerDataObserver(item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,display);
 				shell.open();
 				shell.layout();
 				while (!shell.isDisposed()) {
@@ -155,11 +138,5 @@ public class ServerMan {
 					}
 				}
 			}
-		});
 	}
-	protected DataBindingContext initDataBindings() {
-		DataBindingContext bindingContext = new DataBindingContext();
-		//
-		return bindingContext;
-	}
-}
+	

@@ -42,6 +42,7 @@ public class ServerDataObserver implements Observer{
 
 		@Override
 		public void run() {
+			if(item1.getText().equals(""))
 			item1.setText((String[]) arg);
 			
 		}
