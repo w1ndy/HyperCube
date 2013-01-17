@@ -44,9 +44,11 @@ public class PanelSwitcher extends JComponent
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			dragStart = e.getLocationOnScreen();
-			panelOffset = 0;
-			trackUnchecked = true;
+			if(getHeight() - e.getY() > switcherHeight) {
+				dragStart = e.getLocationOnScreen();
+				panelOffset = 0;
+				trackUnchecked = true;
+			}
 		}
 
 		@Override
@@ -144,6 +146,16 @@ public class PanelSwitcher extends JComponent
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
 				int offsetX = (int) ((getWidth() - panels.size() * 22 + 7) * 0.5f);
 				int offsetY = getHeight() - (int) ((PanelSwitcher.this.switcherHeight + 15) * 0.5f);
 				int dx = arg0.getPoint().x - offsetX, dy = arg0.getPoint().y - offsetY;
@@ -158,17 +170,7 @@ public class PanelSwitcher extends JComponent
 						else
 							backwardRestoreTimer.start();
 					}
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
+				}}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {}

@@ -12,6 +12,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
 
 import javax.swing.JTextField;
+import javax.swing.text.Caret;
 
 /**
  * TextBox class implements a TextField with description.
@@ -213,7 +214,6 @@ public class TextBox extends JTextField implements TranslucentComponent
 		if(b == false) {
 			FontMetrics metrics = this.getFontMetrics((Font)UIHelper.getResource("ui.font.text"));
 			if(metrics.stringWidth(getText()) > getWidth()) {
-				this.setCaretPosition(0);
 				saved = getText();
 				for(int i = 1; i < saved.length(); i++) {
 					if(metrics.stringWidth(saved.substring(0, i)) > getWidth() - 20) {
@@ -229,5 +229,13 @@ public class TextBox extends JTextField implements TranslucentComponent
 			}
 		}
 		super.setEditable(b);
+	}
+	
+	public String getOriginalText()
+	{
+		if(saved == null)
+			return getText();
+		else 
+			return saved;
 	}
 }

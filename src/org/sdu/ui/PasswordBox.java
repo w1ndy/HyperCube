@@ -62,6 +62,8 @@ public class PasswordBox extends JPasswordField implements TranslucentComponent
 	
 	private void initialize()
 	{
+
+		setSize(UIHelper.DefaultTextBoxWidth, UIHelper.DefaultTextBoxHeight);
 		border = new RectBorder(UIHelper.darkColor);
 		super.setBorder(border);
 		super.setFont((Font)UIHelper.getResource("ui.font.text"));
