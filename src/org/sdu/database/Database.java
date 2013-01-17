@@ -146,11 +146,6 @@ public class Database implements DatabaseInterface {
 		return null;
 	}
 
-	@Override
-	public void setMessage(String Message, String id) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void setVisible(String id) throws Exception {
@@ -160,12 +155,6 @@ public class Database implements DatabaseInterface {
 
 	@Override
 	public void setInvisible(String id) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void chatdatabackup(String id, String Data) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
@@ -192,5 +181,18 @@ public class Database implements DatabaseInterface {
 	public String[] getFriendList(String id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String[] getMessage(String Message, String id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void chatdatabackup(String id, String Data, boolean read)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

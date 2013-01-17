@@ -1,6 +1,6 @@
 package org.sdu.server.ProcessTools;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
@@ -15,7 +15,7 @@ import org.sdu.server.PacketDataPro;
  *
  */
 public class login {
-	public static Packet Push(PacketDataPro ProD, DatabaseInterface db,HashMap<String,Session> SessionMap,HashMap<Session,String> UserMap,Session s) throws Exception {
+	public static Packet Push(PacketDataPro ProD, DatabaseInterface db,Hashtable<String,Session> SessionMap,Hashtable<Session,String> UserMap,Session s) throws Exception {
 		byte version[] = ProD.GetParamB();
 			 String username = ProD.GetParam();
 			 String password = ProD.GetParam();
@@ -25,10 +25,11 @@ public class login {
 				if (db.checkPassword(username, password)) {
 					if (ProD.GetParamB()[0] == 0){db.setInvisible(username);}
 					else{db.setVisible(username);}
-					Pack.SetData(Val.Check_T, Val.Login, Val.LoginCheck);
+					Pack.SetData(Val.Check_T,Val.Blank, Val.Login, Val.LoginCheck);
 					Pack.SetParamS(ID_Manager.setID(username));
-					SessionMap.put(username,s);
-					UserMap.put(s,username);
+					synchronized("Map")
+					{SessionMap.put(username,s);
+					UserMap.put(s,username);}
 				} else {
 					if (!db.checkExist(username)){
 						Pack.SetData(Val.Check_F, Val.NotExist, Val.Login,Val.LoginCheck);
