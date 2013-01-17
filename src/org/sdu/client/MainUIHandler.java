@@ -1,18 +1,32 @@
 package org.sdu.client;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.nio.channels.SocketChannel;
 
+import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 
 import org.sdu.net.Packet;
 import org.sdu.net.Session;
 import org.sdu.ui.AvatarBox;
+import org.sdu.ui.DashboardPanel;
+import org.sdu.ui.PanelSwitcher;
+import org.sdu.ui.PushMessage;
+import org.sdu.ui.RefreshablePanel;
 import org.sdu.ui.TextBox;
+
+import com.sun.awt.AWTUtilities;
 
 /**
  * MainUIHandler class handles UI events in main frame.
@@ -22,35 +36,88 @@ import org.sdu.ui.TextBox;
  */
 public class MainUIHandler extends UIHandler
 {
-	public AvatarBox userAvatarBox;
-	public TextBox signatureTextBox;
+	private AvatarBox userAvatarBox;
+	private TextBox signatureTextBox;
+	private PanelSwitcher switcher;
+	private DashboardPanel panel;
+	private ClientFrame frame;
+	private UserInfo info;
 	
-	public MainUIHandler()
+	public MainUIHandler(UserInfo info)
 	{
+		this.info = info;
 		createUserAvatarBox();
 		createSignatureTextBox();
+		createPanelSwitcher();
+		createDashboardPanel();
+		createFriendPanel();
 	}
 	
-	public void createUserAvatarBox()
+	private void createFriendPanel()
+	{
+		JPanel p = new JPanel();
+		p.setBackground(Color.LIGHT_GRAY);
+		switcher.addPanel(p);
+	}
+
+	private void createDashboardPanel()
+	{
+		panel = new DashboardPanel();
+
+		PushMessage msg = new PushMessage();
+		msg.setTitle("标题");
+		msg.setContent("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息");
+		panel.add(msg);
+		
+		switcher.addPanel(new RefreshablePanel(panel) {
+			private static final long serialVersionUID = 1L;
+			
+			ActionListener finisher = new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					finishRefresh();
+				}
+			};
+			Timer stopRefresh = new Timer(2000, finisher);
+			@Override
+			public void onRefresh()
+			{
+				stopRefresh.setRepeats(false);
+				stopRefresh.start();
+			}
+		});
+	}
+
+	private void createPanelSwitcher()
+	{
+		switcher = new PanelSwitcher(35);
+		switcher.setBounds(5, 110, 300, 560);
+	}
+
+	private void createUserAvatarBox()
 	{
 		userAvatarBox = new AvatarBox(true);
 		userAvatarBox.setLocation(15, 15);
+		userAvatarBox.setAvatar(info.getUserAvatar());
 	}
 	
-	public void createSignatureTextBox()
+	private void createSignatureTextBox()
 	{
 		signatureTextBox = new TextBox(Color.BLACK, Color.BLACK);
-		signatureTextBox.setLocation(115, 73);
+		signatureTextBox.setLocation(115, 69);
 		signatureTextBox.setOpaque(false);
-		signatureTextBox.setText("这是签名档。");
+		signatureTextBox.setText(info.getSignature());
+		signatureTextBox.setToolTipText(signatureTextBox.getOriginalText());
 		signatureTextBox.setEditable(false);
 		
 		final Border b = signatureTextBox.getBorder();
 		signatureTextBox.setBorder(null);
+		signatureTextBox.setFocusable(false);
 		
 		signatureTextBox.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				signatureTextBox.setFocusable(true);
 				signatureTextBox.requestFocus();
 				signatureTextBox.setEditable(true);
 				signatureTextBox.setBorder(b);
@@ -69,8 +136,11 @@ public class MainUIHandler extends UIHandler
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					signatureTextBox.setFocusable(false);
 					signatureTextBox.setEditable(false);
 					signatureTextBox.setBorder(null);
+					signatureTextBox.setToolTipText(signatureTextBox.getOriginalText());
+					AWTUtilities.setWindowOpaque(frame, false);
 				}
 			}
 			@Override
@@ -83,13 +153,14 @@ public class MainUIHandler extends UIHandler
 	@Override
 	public void onAttach(ClientUI ui)
 	{
-		ClientFrame frame = getFrame();
+		frame = getFrame();
 		
-		frame.setTitle("Arthas");
+		frame.setTitle(info.getNickName());
 		frame.setSubtitle("");
 		frame.startExpanding(680);
 		frame.add(userAvatarBox);
 		frame.add(signatureTextBox);
+		frame.add(switcher);
 		frame.setTitleLocation(110, 17);
 		// TODO Initialize main frame.
 	}

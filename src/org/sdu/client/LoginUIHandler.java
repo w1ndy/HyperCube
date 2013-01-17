@@ -303,7 +303,7 @@ public class LoginUIHandler extends UIHandler
 		if(resolver.getStatusMain() == 0) {
 			log("Login succeeded.");
 			getFrame().stopProgressBar();
-			getDispatcher().attach(new MainUIHandler());
+			getDispatcher().attach(new MainUIHandler(fetchInfo()));
 		} else {
 			switch(resolver.getStatusSub())
 			{
@@ -353,7 +353,7 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().setVisible(true);
 		
 		// TODO DEBUG redirect login to main.
-		getDispatcher().attach(new MainUIHandler());
+		getDispatcher().attach(new MainUIHandler(fetchInfo()));
 	}
 
 	@Override
@@ -364,5 +364,10 @@ public class LoginUIHandler extends UIHandler
 		ui.getFrame().remove(userBox);
 		ui.getFrame().remove(passBox);
 		ui.getFrame().remove(registerLink);
+	}
+	
+	public UserInfo fetchInfo()
+	{
+		return new UserInfo();
 	}
 }
