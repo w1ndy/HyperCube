@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.widgets.ProgressBar;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.ToolBar;
 
 public class ServerMan {
 	public static DatabaseInterface db;
@@ -30,8 +32,8 @@ public class ServerMan {
 	 */
 	public static void main(String[] args) {
 		Display display = Display.getDefault();
-		final Shell shell = new Shell();
-		shell.setSize(450, 300);
+		final Shell shell = new Shell(SWT.CLOSE | SWT.MIN | SWT.TITLE);
+		shell.setSize(461, 496);
 		shell.setText("服务器管理程序");
 		
 		Label label = new Label(shell, SWT.NONE);
@@ -41,10 +43,10 @@ public class ServerMan {
 		
 		Group group = new Group(shell, SWT.NONE);
 		group.setText("开启与关闭");
-		group.setBounds(110, 10, 260, 50);
+		group.setBounds(110, 10, 260, 61);
 		
 		Button button = new Button(group, SWT.NONE);
-		button.setBounds(10, 0, 94, 28);
+		button.setBounds(10, 22, 94, 28);
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -71,12 +73,13 @@ public class ServerMan {
 		button.setText("启动服务器");
 		
 		Button button_1 = new Button(group, SWT.NONE);
-		button_1.setBounds(142, 0, 94, 28);
+		button_1.setBounds(144, 22, 94, 28);
 		button_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
 					core.CloseServer();
+					core = null;
 					MessageBox message = new MessageBox(shell,SWT.OK);
 					message.setMessage("服务器已关闭");
 	                message.setText("服务器已关闭");
@@ -98,10 +101,11 @@ public class ServerMan {
 		label_1.setText("在线动态");
 		
 		table = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
-		table.setBounds(10, 96, 430, 93);
+//		table.
+			
+		table.setBounds(10, 96, 435, 362);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setWidth(146);
 		tableColumn.setText("学号");

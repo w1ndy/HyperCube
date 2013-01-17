@@ -88,12 +88,13 @@ public class Core extends SessionHandler {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		process.Push(p.getData(),db,s,SessionMap,UserMap);// Process
+			process Pro = new process();
+			Pro.Push(p.getData(),db,s,SessionMap,UserMap);// Process
 		try {
-			for (int i = 0; i<process.GetData().getLength();i++)
-			{System.out.print(process.GetData().getDataArray()[i]);
-			System.out.print(' ');}
-			s.post(process.GetData());
+//			for (int i = 0; i<Pro.GetData().getLength();i++)
+//			{System.out.print(Pro.GetData().getDataArray()[i]);
+//			System.out.print(' ');}
+			s.post(Pro.GetData());
 		} catch (Exception e) {
 			if (e.getMessage().equals("Unknow"))
 			e.printStackTrace();
@@ -129,6 +130,7 @@ public class Core extends SessionHandler {
 			} catch (Exception e1) {
 				throw new Exception("DB");
 		}
+		
 		SessionMap = new Hashtable<String,Session>();
 		UserMap = new Hashtable<Session,String>();
 		//Init for more;

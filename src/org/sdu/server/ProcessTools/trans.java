@@ -12,9 +12,9 @@ import org.sdu.server.Val;
 
 
 public class trans {
-	public static byte[] timestamp;
-	public static long times;
-	public static Packet PushforNotification(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) throws Exception {
+	public byte[] timestamp;
+	public long times;
+	public Packet PushforNotification(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) throws Exception {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Message[] messa = db.getMessage(UserMap.get(s));
 		if (messa.length == 0) {
@@ -28,30 +28,43 @@ public class trans {
 			Pack.SetParamS(messa[i].message);}
 		return Pack.GetData();
 	}
-	public static Packet PushforFriendList(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
+//	public static Packet PushforFriendList(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
+//		PacketDataBuilder Pack = new PacketDataBuilder();
+//		Pack.SetData(Val.Check_T,Val.Blank,Val.SendFriendList,Val.SendFriendName);
+//		try {
+//			Pack.SetParamS(db.getFriendList(UserMap.get(s)));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return Pack.GetData();
+//	}
+//	public static Packet PushforFriendDetail(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
+//		PacketDataBuilder Pack = new PacketDataBuilder();
+//		Pack.SetData(Val.Check_T,Val.Blank,Val.SendFriendList,Val.SendFriendDetail);
+//		username = 
+//		Pack.SetParamS(db.)
+//		return Pack.GetData();
+//	}
+	public Packet PushforState(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
-		Pack.SetData(Val.Check_T,Val.Blank,Val.SendFriendList,Val.SendFriendName);
+		Pack.SetData(Val.Check_T,Val.Blank,Val.DataTrans,Val.SendStatusData);
 		try {
-			Pack.SetParamS(db.getFriendList(UserMap.get(s)));
+			Pack.SetParamS(db.getStatus(UserMap.get(s)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return Pack.GetData();
 	}
-	public static Packet PushforFriendDetail(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
+	public Packet PushforImage(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
-		Pack.SetData(Val.Check_T,Val.Blank,Val.SendFriendList,Val.SendFriendDetail);
-		//TODO unfinished
-		return Pack.GetData();
-	}
-	public static Packet PushforState(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
-		PacketDataBuilder Pack = new PacketDataBuilder();
-		Pack.SetData(Val.Check_T,Val.Blank,Val.DataTrans,Val.SendStateData);
+		Pack.SetData(Val.Check_T,Val.Blank,Val.DataTrans,Val.SendImage);
 		try {
-			Pack.SetParamS(db.    (UserMap.get(s)));
+			Pack.SetParamS(db.getHeadImage(UserMap.get(s)));
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return Pack.GetData();
+
 	}
 }
