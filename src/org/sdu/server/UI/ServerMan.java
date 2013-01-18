@@ -45,7 +45,8 @@ public class ServerMan {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 							try {
-								if (core == null){core = new Core();
+								if (core == null){
+									core = new Core();
 								MessageBox message = new MessageBox(shell,SWT.OK);
 								message.setMessage("服务器已运行");
 				                message.setText("服务器已运行");
@@ -73,6 +74,8 @@ public class ServerMan {
 					public void widgetSelected(SelectionEvent e) {
 						try {
 							core.CloseServer();
+							core = null;
+							item1.setText("");
 							MessageBox message = new MessageBox(shell,SWT.OK);
 							message.setMessage("服务器已关闭");
 	                message.setText("服务器已关闭");
@@ -129,7 +132,7 @@ public class ServerMan {
 				TableItem item14=new TableItem(table,SWT.NONE); 
 				TableItem item15=new TableItem(table,SWT.NONE); 
 				TableItem item16=new TableItem(table,SWT.NONE);
-				d = new ServerDataObserver(item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,display);
+				d = new ServerDataObserver(item1,display);
 				shell.open();
 				shell.layout();
 				while (!shell.isDisposed()) {

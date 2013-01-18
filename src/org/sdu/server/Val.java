@@ -22,7 +22,7 @@ public final class Val {
 	public final static	byte AlreadyOnline = 0x05;
 	public final static	byte AlreadyExist = 0x01;
 	public final static	byte NoAuthority = 0x02;
-	public final static	byte NotExist = 0x01;
+	public final static	byte NotExist = 0x03;
 	public final static	byte NoNewMess = 0x01;
 	
 	//For All
@@ -42,7 +42,7 @@ public final class Val {
 		public final static	byte SendNotificationA = 0x01;
 		public final static	byte SendNotificationR = 0x02;
 		public final static	byte ChangeStatusReply = 0x03;
-		public final static	byte QueryUserData = 0x04;
+		public final static	byte QueryUserData = 0x06;
 		
 	
 

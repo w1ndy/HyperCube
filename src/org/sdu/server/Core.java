@@ -98,15 +98,20 @@ public class Core extends SessionHandler {
 			d1 = new TrackDataObserver();
 			process Pro = new process(d,d1);
 			Pro.Push(p.getData(),db,s,SessionMap,UserMap);// Process
-		try {
- 			for (int i = 0; i<Pro.GetData().getLength();i++)
-    		{System.out.print(Pro.GetData().getDataArray()[i]);
-     		System.out.print(' ');}
-			s.post(Pro.GetData());
-		} catch (Exception e) {
-			if (e.getMessage().equals("Unknow"))
-			e.printStackTrace();
-		}// Send back the Packet
+//		try {
+// 			for (int i = 0; i<Pro.GetData().getLength();i++)
+//    		{System.out.print(Pro.GetData().getDataArray()[i]);
+//    		System.out.print(' ');}
+			try {
+				s.post(Pro.GetData());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//		} catch (Exception e) {
+//			if (e.getMessage().equals("Unknow"))
+//			e.printStackTrace();
+//		}// Send back the Packet
 
 	}
 

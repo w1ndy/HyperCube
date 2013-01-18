@@ -15,16 +15,16 @@ import org.sdu.server.UI.TrackDataObserver;
 public class trans extends Observable{
 	public byte[] timestamp;
 	public long times;
-	public trans(TrackDataObserver d) {
-		this.addObserver(d);
-	}
+//	public trans(TrackDataObserver d) {
+//		this.addObserver(d);
+//	}
 	public Packet PushforNotification(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) throws Exception {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Message[] messa = db.getMessage(UserMap.get(s));
 		if (messa.length == 0) {
 			Pack.SetData(Val.Check_F,Val.NoNewMess,Val.DataTrans,Val.SendNotificationR);
-			setChanged();
-			notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知","无","无最新通知"});
+	//		setChanged();
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知","无","无最新通知"});
 			return Pack.GetData();
 			
 		}
@@ -35,22 +35,22 @@ public class trans extends Observable{
 			Pack.SetParamS(messa[i].message);
 			dat = dat+messa[i].from+" : "+messa[i].message+"   ";
 			}
-			setChanged();
-			notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知",dat,"新通知"});
+		//	setChanged();
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知",dat,"新通知"});
 		return Pack.GetData();
 	}
 	public Packet ChangeStatus(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Pack.SetData(Val.Check_T,Val.Check_T,Val.DataTrans,Val.ChangeStatusReply);
-		setChanged();
-		try {
-			notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"改变签名",db.getStatus(UserMap.get(s)),"成功"});
-		} catch (Exception e) {
+	//	setChanged();
+		//try {
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"改变签名",db.getStatus(UserMap.get(s)),"成功"});
+		//} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return Pack.GetData();
-	}
+		//	e.printStackTrace();
+		//}
+		return Pack.GetData();}
+	//}
 	public Packet QueryUserData(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
 		PacketDataBuilder Pack = new PacketDataBuilder();
 		Pack.SetData(Val.Check_T,Val.Blank,Val.DataTrans,Val.QueryUserData);
@@ -62,8 +62,8 @@ public class trans extends Observable{
 			if (!db.getOnline(username)){Pack.SetParamB(Val.Offline);}
 			Pack.SetParamS(db.getStatus(username));
 			Pack.SetParamS(db.getHeadImage(username));
-			setChanged();
-			notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"查询用户信息","查询的昵称为："+db.getNickname(UserMap.get(s)),"成功"});
+	//		setChanged();
+	//		notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"查询用户信息","查询的昵称为："+db.getNickname(UserMap.get(s)),"成功"});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

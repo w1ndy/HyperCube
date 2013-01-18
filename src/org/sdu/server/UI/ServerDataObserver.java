@@ -17,24 +17,6 @@ public class ServerDataObserver implements Observer{
 	public ServerDataObserver() {
 		// TODO Auto-generated constructor stub
 	}
-	public static String[] ServerData1 = {"","","",""};
-	public static String[] ServerData2 = {"","","",""};
-	public static String[] ServerData3 = {"","","",""};
-	public static String[] ServerData4 = {"","","",""};
-	public static String[] ServerData5 = {"","","",""};
-	public static String[] ServerData6 = {"","","",""};
-	public static String[] ServerData7 = {"","","",""};
-	public static String[] ServerData8 = {"","","",""};
-	public static String[] ServerData9 = {"","","",""};
-	public static String[] ServerData10 = {"","","",""};
-	public static String[] ServerData11 = {"","","",""};
-	public static String[] ServerData12 = {"","","",""};
-	public static String[] ServerData13 = {"","","",""};
-	public static String[] ServerData14 = {"","","",""};
-	public static String[] ServerData15 = {"","","",""};
-	public static String[] ServerData16 = {"","","",""};
-	public static String[] ServerData17 = {"","","",""};
-	
 	
 	@Override
 	public void update(Observable o, final Object arg) {
@@ -42,7 +24,6 @@ public class ServerDataObserver implements Observer{
 
 		@Override
 		public void run() {
-			if(item1.getText().equals(""))
 			item1.setText((String[]) arg);
 			
 		}

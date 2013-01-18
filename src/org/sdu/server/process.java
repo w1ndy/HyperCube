@@ -32,7 +32,7 @@ public class process {
 		this.d = d;
 		logMod = new login(d);
 		logoutMod = new logout(d);
-		tranMod = new trans(d1);
+		tranMod = new trans();
 	}
 
 	public void Push(ByteBuffer p,DatabaseInterface db,Session s,Hashtable<String,Session> SessionMap,Hashtable<Session,String> UserMap){
