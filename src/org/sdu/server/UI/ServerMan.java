@@ -14,6 +14,11 @@ import org.sdu.server.Core;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.core.databinding.Binding;
 
 public class ServerMan {
 	private static Table table;
@@ -26,14 +31,17 @@ public class ServerMan {
 	 */
 	public static void main(String[] args) {
 				Display display = Display.getDefault();
+		Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
+			public void run() {
+				Display display = Display.getDefault();
 				final Shell shell = new Shell(SWT.CLOSE | SWT.MIN | SWT.TITLE);
 				shell.setSize(482, 501);
-				shell.setText("服务器管理程序");
+				shell.setText("服务器管理程�);
 				
 				Label label = new Label(shell, SWT.NONE);
 				label.setAlignment(SWT.CENTER);
 				label.setBounds(10, 10, 94, 14);
-				label.setText("服务器管理");
+				label.setText("服务器管�);
 				
 				Group group = new Group(shell, SWT.NONE);
 				group.setText("开启与关闭");
@@ -52,7 +60,7 @@ public class ServerMan {
 				                message.setText("服务器已运行");
 				                message.open();}else
 				                {MessageBox message = new MessageBox(shell,SWT.OK);
-								message.setMessage("服务器已经在运行，请勿重复开启");
+								message.setMessage("服务器已经在运行，请勿重复开�);
 				                message.setText("错误");
 				                message.open();}
 							} catch (Exception e1) {
@@ -65,7 +73,7 @@ public class ServerMan {
 							}
 					}
 				});
-				button.setText("启动服务器");
+				button.setText("启动服务�);
 				
 				Button button_1 = new Button(group, SWT.NONE);
 				button_1.setBounds(144, 22, 94, 28);
@@ -83,18 +91,19 @@ public class ServerMan {
 						} catch (Exception e1) {
 							MessageBox message = new MessageBox(shell,SWT.OK);
 							message.setMessage("服务器未运行");
+					
 	                message.setText("错误");
 	                message.open();
 						}
 						
 					}
 				});
-				button_1.setText("关闭服务器");
+				button_1.setText("关闭服务�);
 				
 				Label label_1 = new Label(shell, SWT.NONE);
 				label_1.setAlignment(SWT.CENTER);
 				label_1.setBounds(10, 76, 59, 14);
-				label_1.setText("在线动态");
+				label_1.setText("在线动�);
 				
 				table = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
 				table.setBounds(10, 96, 456, 367);
@@ -140,6 +149,13 @@ public class ServerMan {
 						display.sleep();
 					}
 				}
+			}
+		});
+	}
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		return bindingContext;
 			}
 	}
 	

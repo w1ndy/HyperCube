@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JComponent;
@@ -30,7 +31,7 @@ public class PushMessage extends JComponent
 	private boolean isUnread = true;
 	private boolean isExpanded = false;
 	private String title = "", author = "";
-	private Date date = null;
+	private Calendar date = null;
 	private ArrayList<String> multiline = null;
 	private FontMetrics fontMetrics = null;
 	private Image imageActive, imageInactive;
@@ -158,13 +159,15 @@ public class PushMessage extends JComponent
 					}
 					g.setColor(UIHelper.darkColor);
 					
-					String sign = "Posted by ";
-					if(author == "")
-						sign += "Annoymous";
+					String sign;
+					if(date == null)
+						sign = String.format("Posted by %s",
+								(author == "") ? "Annoymous" : author);
 					else
-						sign += author;
-					if(date != null)
-						sign += " @ " + date;
+						sign = String.format("Posted by %s @ %04d-%02d-%02d %02d:%02d",
+								(author == "") ? "Annoymous" : author,
+								date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH),
+								date.get(Calendar.HOUR), date.get(Calendar.MINUTE));
 					
 					g.drawString(sign, 20, 60 + 22 * i);
 				}
@@ -208,11 +211,17 @@ public class PushMessage extends JComponent
 			multiline = new ArrayList<String>();
 		
 		int s = 0;
-		for(int i = 1; i <= content.length(); i++) {
-			String str = content.substring(s, i);
-			if(fontMetrics.stringWidth(str) > 220) {
-				multiline.add(str);
-				s = i;
+		for(int i = 1; i < content.length(); i++) {
+			if(content.charAt(i) == '\n') {
+				multiline.add(content.substring(s, i));
+				s = i + 1;
+				i = s;
+			} else {
+				String str = content.substring(s, i);
+				if(fontMetrics.stringWidth(str) > 220) {
+					multiline.add(str);
+					s = i;
+				}
 			}
 		}
 		multiline.add(content.substring(s));
@@ -223,7 +232,7 @@ public class PushMessage extends JComponent
 		this.author = author;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(Calendar date) {
 		this.date = date;
 	}
 }

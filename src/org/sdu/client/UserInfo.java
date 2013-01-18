@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.Observable;
 
 import javax.imageio.ImageIO;
 
@@ -23,7 +22,7 @@ import org.sdu.ui.AvatarBox;
  * @version 0.1 rev 8000 Jan. 17, 2013.
  * Copyright (c) HyperCube Dev Team.
  */
-public class UserInfo extends Observable
+public class UserInfo
 {
 	private AvatarBox avatar;
 	private String nickname, signature, userId, sessionId;

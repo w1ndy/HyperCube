@@ -11,6 +11,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.nio.channels.SocketChannel;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -82,13 +85,37 @@ public class MainUIHandler extends UIHandler
 		panel = new DashboardPanel();
 
 		PushMessage msg = new PushMessage();
-		msg.setTitle("标题");
-		msg.setContent("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息");
+		msg.setTitle("The Scientist");
+		msg.setContent(
+				"Come up to meet you, tell you I'm sorry\n" +
+				"You don't know how lovely you are\n" +
+				"I had to find you, tell you I need you\n" +
+				"Tell you I set you apart\n" +
+				"Tell me your secrets and ask me your questions\n" +
+				"Oh let's go back to the start\n" +
+				"Running in circles, coming up tails\n" +
+				"Heads on a science apart\n" +
+				"Nobody said it was easy\n" +
+				"Oh it's such a shame for us to part\n" +
+				"Nobody said it was easy\n" +
+				"No one ever said that it would be this hard\n" +
+				"Oh take me back to the start.");
+		msg.setAuthor("Coldplay");
+		msg.setDate(new GregorianCalendar(2002, 8, 27));
 		panel.add(msg);
 
 		msg = new PushMessage();
-		msg.setTitle("Title");
-		msg.setContent("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息");
+		msg.setTitle("Viva la vida");
+		msg.setContent(
+				"I hear Jerusalem's bells are ringing\n" +
+				"Roman Cavalry choirs are singing\n" +
+				"Be my mirror my sword and shield\n" +
+				"My missionaries in a foreign field\n" +
+				"For some reason I can not explain\n" +
+				"Once you go there was never, never an honest word\n" +
+				"That was when I ruled the world");
+		msg.setAuthor("Coldplay");
+		msg.setDate(new GregorianCalendar(2008, 6, 17));
 		panel.add(msg);
 		
 		switcher.addPanel(new RefreshablePanel(panel) {

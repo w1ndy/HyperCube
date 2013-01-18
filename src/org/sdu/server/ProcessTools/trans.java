@@ -24,11 +24,12 @@ public class trans extends Observable{
 		if (messa.length == 0) {
 			Pack.SetData(Val.Check_F,Val.NoNewMess,Val.DataTrans,Val.SendNotificationR);
 	//		setChanged();
-		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知","无","无最新通知"});
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"鎷夊彇閫氱煡","鏃,"鏃犳渶鏂伴€氱煡"});
 			return Pack.GetData();
 			
 		}
 		Pack.SetData(Val.Check_T,Val.Blank,Val.DataTrans,Val.SendNotificationR);
+			String dat = "";
 			String dat = "";
 			for (int i = 0;i<messa.length;i++){
 			Pack.SetParamS(messa[i].from);
@@ -36,7 +37,19 @@ public class trans extends Observable{
 			dat = dat+messa[i].from+" : "+messa[i].message+"   ";
 			}
 		//	setChanged();
-		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"拉取通知",dat,"新通知"});
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"鎷夊彇閫氱煡",dat,"鏂伴€氱煡"});
+		return Pack.GetData();
+	}
+	public Packet ChangeStatus(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
+		PacketDataBuilder Pack = new PacketDataBuilder();
+		Pack.SetData(Val.Check_T,Val.Check_T,Val.DataTrans,Val.ChangeStatusReply);
+		setChanged();
+		try {
+			notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"鏀瑰彉绛惧悕",db.getStatus(UserMap.get(s)),"鎴愬姛"});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return Pack.GetData();
 	}
 	public Packet ChangeStatus(PacketDataPro ProD, DatabaseInterface db,Hashtable<Session,String> UserMap,Session s) {
@@ -44,7 +57,7 @@ public class trans extends Observable{
 		Pack.SetData(Val.Check_T,Val.Check_T,Val.DataTrans,Val.ChangeStatusReply);
 	//	setChanged();
 		//try {
-		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"改变签名",db.getStatus(UserMap.get(s)),"成功"});
+		//	notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"鏀瑰彉绛惧悕",db.getStatus(UserMap.get(s)),"鎴愬姛"});
 		//} catch (Exception e) {
 			// TODO Auto-generated catch block
 		//	e.printStackTrace();
@@ -63,7 +76,7 @@ public class trans extends Observable{
 			Pack.SetParamS(db.getStatus(username));
 			Pack.SetParamS(db.getHeadImage(username));
 	//		setChanged();
-	//		notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"查询用户信息","查询的昵称为："+db.getNickname(UserMap.get(s)),"成功"});
+	//		notifyObservers(new String[]{db.getRealName(UserMap.get(s)),"鏌ヨ鐢ㄦ埛淇℃伅","鏌ヨ鐨勬樀绉颁负锛+db.getNickname(UserMap.get(s)),"鎴愬姛"});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
