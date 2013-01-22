@@ -7,7 +7,7 @@ import org.sdu.server.DatabaseInterface;
 /**
  * Access database.
  * 
- * @version 0.1 rev 8009 Jan. 18, 2013
+ * @version 0.1 rev 8010 Jan. 22, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class Database implements DatabaseInterface {
@@ -255,5 +255,32 @@ public class Database implements DatabaseInterface {
 		else
 			flag = 0;
 		return flag;
+	}
+
+	public String[] getEnumList(int x, int y) {
+		String[] list;
+		try {
+			ResultSet rs = statement.executeQuery("show columns from "
+					+ stuTable + " like '" + List.COLUMN_NAME[x][y] + "'");
+			rs.next();
+			String enums = rs.getString("Type");
+			int position = 0, count = 0;
+			while ((position = enums.indexOf('\'', position)) > 0) {
+				position = enums.indexOf('\'', position + 1) + 1;
+				count++;
+			}
+			position = 0;
+			list = new String[count + 1];
+			list[0] = "";
+			for (int i = 1; i <= count; i++) {
+				position = enums.indexOf('\'', position);
+				int secondPosition = enums.indexOf('\'', position + 1);
+				list[i] = enums.substring(position + 1, secondPosition);
+				position = secondPosition + 1;
+			}
+		} catch (Exception e) {
+			list = new String[0];
+		}
+		return list;
 	}
 }

@@ -1,11 +1,11 @@
 package org.sdu.test;
 
-import org.sdu.database.Database;
+import org.sdu.database.*;
 
 /**
  * Test database components.
  * 
- * @version 0.1 rev 8000 Jan. 4, 2013
+ * @version 0.1 rev 8001 Jan. 22, 2013
  * Copyright (c) HyperCube Dev Team
  */
 public class DatabaseTest {
@@ -16,7 +16,8 @@ public class DatabaseTest {
 	 */
 	public static void main(String[] args) throws Exception {
 		Database db = new Database();
-		System.out.println(db.checkPassword("test", "test"));
+		Filter f = new Filter(db);
+		f.setVisible(true);
 		db.close();
 	}
 }
