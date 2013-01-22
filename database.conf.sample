@@ -1,8 +1,8 @@
 [database_address]
-211.87.219.40
+cc941201.gicp.net
 
 [webserver_address]
-211.87.219.40
+cc941201.gicp.net:21071
 
 [user]
 hypercube
