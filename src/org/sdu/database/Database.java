@@ -23,7 +23,7 @@ public class Database implements DatabaseInterface {
 		Configure.read();
 
 		// Connect to database
-		Class.forName("com.mysql.jdbc.Driver");
+		Class.forName("com.mariadb.jdbc.Driver");
 		String url = "jdbc:mysql://" + Configure.databaseAddress + "/"
 				+ mainDatabase + "?characterEncoding=utf8";
 		conn = DriverManager.getConnection(url, Configure.user,
